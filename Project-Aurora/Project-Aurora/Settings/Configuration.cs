@@ -172,8 +172,8 @@ namespace Aurora.Settings
         */
 
         //Logitech range is 100-199
-        [Description("Logitech - G910")]
-        Cheerpipe_rig = 10000,
+        [Description("Cheerpipe Rig")]
+        Cheerpipe_rig = 199,
 
         //Logitech range is 100-199
         [Description("Logitech - G910")]

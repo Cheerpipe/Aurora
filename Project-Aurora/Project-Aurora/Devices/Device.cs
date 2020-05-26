@@ -1372,7 +1372,7 @@ namespace Aurora.Devices
         /// Calculator Key
         /// </summary>
         [Description("Led strip 1 LED 11")]
-        LEDSTRIPLIGHT1_11 = 61,
+        LEDSTRIPLIGHT1_11 = 611,
 
         ///<summary>
         /// Calculator Key
@@ -1669,7 +1669,7 @@ namespace Aurora.Devices
         /// Calculator Key
         /// </summary>
         [Description("Led strip 1 LED 60")]
-        LEDSTRIPLIGHT1_60 = 600,
+        LEDSTRIPLIGHT1_60 = 660,
 
         ///<summary>
         /// Calculator Key
@@ -1760,7 +1760,7 @@ namespace Aurora.Devices
         /// Calculator Key
         /// </summary>
         [Description("Led strip 2 LED 11")]
-        LEDSTRIPLIGHT2_11 = 71,
+        LEDSTRIPLIGHT2_11 = 711,
 
         ///<summary>
         /// Calculator Key
@@ -1893,7 +1893,7 @@ namespace Aurora.Devices
         /// Calculator Key
         /// </summary>
         [Description("Led strip 2 LED 33")]
-        LEDSTRIPLIGHT2_33 = 633,
+        LEDSTRIPLIGHT2_33 = 733,
 
         ///<summary>
         /// Calculator Key
@@ -2057,7 +2057,7 @@ namespace Aurora.Devices
         /// Calculator Key
         /// </summary>
         [Description("Led strip 2 LED 60")]
-        LEDSTRIPLIGHT2_60 = 700,
+        LEDSTRIPLIGHT2_60 = 760,
 
         ///<summary>
         /// Calculator Key
@@ -2076,6 +2076,72 @@ namespace Aurora.Devices
         /// </summary>
         [Description("Led strip 2 LED 63")]
         LEDSTRIPLIGHT2_63 = 763,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 0")]
+        MBAREA_0 = 800,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 1")]
+        MBAREA_1 = 801,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 2")]
+        MBAREA_2 = 802,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 3")]
+        MBAREA_3 = 803,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 4")]
+        MBAREA_4 = 804,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 5")]
+        MBAREA_5 = 805,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 6")]
+        MBAREA_6 = 806,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 7")]
+        MBAREA_7 = 807,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 8")]
+        MBAREA_8 = 808,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 9")]
+        MBAREA_9 = 809,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Mainboard area 10")]
+        MBAREA_10 = 810,
 
         /// <summary>
         /// None
