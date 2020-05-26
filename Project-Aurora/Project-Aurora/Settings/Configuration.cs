@@ -173,6 +173,10 @@ namespace Aurora.Settings
 
         //Logitech range is 100-199
         [Description("Logitech - G910")]
+        Cheerpipe_rig = 10000,
+
+        //Logitech range is 100-199
+        [Description("Logitech - G910")]
         Logitech_G910 = 100,
         [Description("Logitech - G410")]
         Logitech_G410 = 101,

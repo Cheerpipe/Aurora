@@ -688,7 +688,11 @@ namespace Aurora.Settings
 
             var layoutConfigPath = "";
 
-            if (keyboard_preference == PreferredKeyboard.Logitech_G910)
+
+                
+            if (keyboard_preference == PreferredKeyboard.Cheerpipe_rig)
+                    layoutConfigPath = Path.Combine(layoutsPath, "Cheerpipe_rig.json");
+                if (keyboard_preference == PreferredKeyboard.Logitech_G910)
                 layoutConfigPath = Path.Combine(layoutsPath, "logitech_g910.json");
             else if (keyboard_preference == PreferredKeyboard.Logitech_G810)
                 layoutConfigPath = Path.Combine(layoutsPath, "logitech_g810.json");
