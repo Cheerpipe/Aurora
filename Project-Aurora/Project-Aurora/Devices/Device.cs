@@ -132,7 +132,7 @@ namespace Aurora.Devices
         /// </summary>
         [Description("Tilde")]
         TILDE = 17,
-        
+
         /// <summary>
         /// One key
         /// </summary>
@@ -1174,7 +1174,7 @@ namespace Aurora.Devices
         /// </summary>
         [Description("Additional Light 27")]
         ADDITIONALLIGHT27 = 188,
-        
+
         /// <summary>
         /// Additional Light 28
         /// </summary>
@@ -1300,6 +1300,782 @@ namespace Aurora.Devices
         /// </summary>
         [Description("Calculator")]
         CALC = 216,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 0")]
+        LEDSTRIPLIGHT1_0 = 600,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 1")]
+        LEDSTRIPLIGHT1_1 = 601,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 2")]
+        LEDSTRIPLIGHT1_2 = 602,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 3")]
+        LEDSTRIPLIGHT1_3 = 603,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 4")]
+        LEDSTRIPLIGHT1_4 = 604,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 5")]
+        LEDSTRIPLIGHT1_5 = 605,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 6")]
+        LEDSTRIPLIGHT1_6 = 606,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 7")]
+        LEDSTRIPLIGHT1_7 = 607,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 8")]
+        LEDSTRIPLIGHT1_8 = 608,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 9")]
+        LEDSTRIPLIGHT1_9 = 609,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 10")]
+        LEDSTRIPLIGHT1_10 = 610,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 11")]
+        LEDSTRIPLIGHT1_11 = 61,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 12")]
+        LEDSTRIPLIGHT1_12 = 612,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 13")]
+        LEDSTRIPLIGHT1_13 = 613,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 14")]
+        LEDSTRIPLIGHT1_14 = 614,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 15")]
+        LEDSTRIPLIGHT1_15 = 615,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 16")]
+        LEDSTRIPLIGHT1_16 = 616,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 17")]
+        LEDSTRIPLIGHT1_17 = 617,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 18")]
+        LEDSTRIPLIGHT1_18 = 618,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 19")]
+        LEDSTRIPLIGHT1_19 = 619,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 20")]
+        LEDSTRIPLIGHT1_20 = 620,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 21")]
+        LEDSTRIPLIGHT1_21 = 621,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 22")]
+        LEDSTRIPLIGHT1_22 = 622,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 23")]
+        LEDSTRIPLIGHT1_23 = 623,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 24")]
+        LEDSTRIPLIGHT1_24 = 624,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 25")]
+        LEDSTRIPLIGHT1_25 = 625,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 26")]
+        LEDSTRIPLIGHT1_26 = 626,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 27")]
+        LEDSTRIPLIGHT1_27 = 627,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 28")]
+        LEDSTRIPLIGHT1_28 = 628,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 29")]
+        LEDSTRIPLIGHT1_29 = 629,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 30")]
+        LEDSTRIPLIGHT1_30 = 630,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 31")]
+        LEDSTRIPLIGHT1_31 = 631,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 32")]
+        LEDSTRIPLIGHT1_32 = 632,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 33")]
+        LEDSTRIPLIGHT1_33 = 633,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 34")]
+        LEDSTRIPLIGHT1_34 = 634,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 35")]
+        LEDSTRIPLIGHT1_35 = 635,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 36")]
+        LEDSTRIPLIGHT1_36 = 636,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 37")]
+        LEDSTRIPLIGHT1_37 = 637,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 38")]
+        LEDSTRIPLIGHT1_38 = 638,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 39")]
+        LEDSTRIPLIGHT1_39 = 639,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 40")]
+        LEDSTRIPLIGHT1_40 = 640,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 41")]
+        LEDSTRIPLIGHT1_41 = 641,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 42")]
+        LEDSTRIPLIGHT1_42 = 642,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 43")]
+        LEDSTRIPLIGHT1_43 = 643,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 44")]
+        LEDSTRIPLIGHT1_44 = 644,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 45")]
+        LEDSTRIPLIGHT1_45 = 645,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 46")]
+        LEDSTRIPLIGHT1_46 = 646,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 47")]
+        LEDSTRIPLIGHT1_47 = 647,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 48")]
+        LEDSTRIPLIGHT1_48 = 648,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 49")]
+        LEDSTRIPLIGHT1_49 = 649,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 50")]
+        LEDSTRIPLIGHT1_50 = 650,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 51")]
+        LEDSTRIPLIGHT1_51 = 651,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 52")]
+        LEDSTRIPLIGHT1_52 = 652,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 53")]
+        LEDSTRIPLIGHT1_53 = 653,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 54")]
+        LEDSTRIPLIGHT1_54 = 654,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 55")]
+        LEDSTRIPLIGHT1_55 = 655,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 56")]
+        LEDSTRIPLIGHT1_56 = 656,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 57")]
+        LEDSTRIPLIGHT1_57 = 657,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 58")]
+        LEDSTRIPLIGHT1_58 = 658,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 59")]
+
+        LEDSTRIPLIGHT1_59 = 659,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 60")]
+        LEDSTRIPLIGHT1_60 = 600,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 61")]
+        LEDSTRIPLIGHT1_61 = 661,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 62")]
+        LEDSTRIPLIGHT1_62 = 662,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 1 LED 63")]
+        LEDSTRIPLIGHT1_63 = 663,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 0")]
+        LEDSTRIPLIGHT2_0 = 700,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 1")]
+        LEDSTRIPLIGHT2_1 = 701,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 2")]
+        LEDSTRIPLIGHT2_2 = 702,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 3")]
+        LEDSTRIPLIGHT2_3 = 703,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 4")]
+        LEDSTRIPLIGHT2_4 = 704,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 5")]
+        LEDSTRIPLIGHT2_5 = 705,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 6")]
+        LEDSTRIPLIGHT2_6 = 706,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 7")]
+        LEDSTRIPLIGHT2_7 = 707,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 8")]
+        LEDSTRIPLIGHT2_8 = 708,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 9")]
+        LEDSTRIPLIGHT2_9 = 709,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 10")]
+        LEDSTRIPLIGHT2_10 = 710,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 11")]
+        LEDSTRIPLIGHT2_11 = 71,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 12")]
+        LEDSTRIPLIGHT2_12 = 712,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 13")]
+        LEDSTRIPLIGHT2_13 = 713,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 14")]
+        LEDSTRIPLIGHT2_14 = 714,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 15")]
+        LEDSTRIPLIGHT2_15 = 715,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 16")]
+        LEDSTRIPLIGHT2_16 = 716,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 17")]
+        LEDSTRIPLIGHT2_17 = 717,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 18")]
+        LEDSTRIPLIGHT2_18 = 718,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 19")]
+        LEDSTRIPLIGHT2_19 = 719,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 20")]
+        LEDSTRIPLIGHT2_20 = 720,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 21")]
+        LEDSTRIPLIGHT2_21 = 721,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 22")]
+        LEDSTRIPLIGHT2_22 = 722,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 23")]
+        LEDSTRIPLIGHT2_23 = 723,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 24")]
+        LEDSTRIPLIGHT2_24 = 724,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 25")]
+        LEDSTRIPLIGHT2_25 = 725,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 26")]
+        LEDSTRIPLIGHT2_26 = 726,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 27")]
+        LEDSTRIPLIGHT2_27 = 727,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 28")]
+        LEDSTRIPLIGHT2_28 = 728,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 29")]
+        LEDSTRIPLIGHT2_29 = 729,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 30")]
+        LEDSTRIPLIGHT2_30 = 730,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 31")]
+        LEDSTRIPLIGHT2_31 = 731,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 32")]
+        LEDSTRIPLIGHT2_32 = 732,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 33")]
+        LEDSTRIPLIGHT2_33 = 633,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 34")]
+        LEDSTRIPLIGHT2_34 = 734,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 35")]
+        LEDSTRIPLIGHT2_35 = 735,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 36")]
+        LEDSTRIPLIGHT2_36 = 736,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 37")]
+        LEDSTRIPLIGHT2_37 = 737,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 38")]
+        LEDSTRIPLIGHT2_38 = 738,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 39")]
+        LEDSTRIPLIGHT2_39 = 739,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 40")]
+        LEDSTRIPLIGHT2_40 = 740,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 41")]
+        LEDSTRIPLIGHT2_41 = 741,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 42")]
+        LEDSTRIPLIGHT2_42 = 742,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 43")]
+        LEDSTRIPLIGHT2_43 = 743,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 44")]
+        LEDSTRIPLIGHT2_44 = 744,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 45")]
+        LEDSTRIPLIGHT2_45 = 745,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 46")]
+        LEDSTRIPLIGHT2_46 = 746,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 47")]
+        LEDSTRIPLIGHT2_47 = 747,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 48")]
+        LEDSTRIPLIGHT2_48 = 748,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 49")]
+        LEDSTRIPLIGHT2_49 = 749,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 50")]
+        LEDSTRIPLIGHT2_50 = 750,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 51")]
+        LEDSTRIPLIGHT2_51 = 751,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 52")]
+        LEDSTRIPLIGHT2_52 = 752,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 53")]
+        LEDSTRIPLIGHT2_53 = 753,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 54")]
+        LEDSTRIPLIGHT2_54 = 754,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 55")]
+        LEDSTRIPLIGHT2_55 = 755,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 56")]
+        LEDSTRIPLIGHT2_56 = 756,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 57")]
+        LEDSTRIPLIGHT2_57 = 757,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 58")]
+        LEDSTRIPLIGHT2_58 = 758,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 59")]
+
+        LEDSTRIPLIGHT2_59 = 759,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 60")]
+        LEDSTRIPLIGHT2_60 = 700,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 61")]
+        LEDSTRIPLIGHT2_61 = 761,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 62")]
+        LEDSTRIPLIGHT2_62 = 762,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 63")]
+        LEDSTRIPLIGHT2_63 = 763,
 
         /// <summary>
         /// None
