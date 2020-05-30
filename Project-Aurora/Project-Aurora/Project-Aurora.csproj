@@ -262,9 +262,6 @@
     <Compile Include="Profiles\TModLoader\Control_TModLoader.xaml.cs">
       <DependentUpon>Control_TModLoader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Scripts\Devices\ExternalPipesCommandListener.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Scripts\Devices\NZXTHueAmbientDesktop.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
