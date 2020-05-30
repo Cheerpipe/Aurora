@@ -379,6 +379,12 @@ namespace Aurora
                     Global.logger.Info("Initiating command restore");
                     System.Windows.Application.Current.Dispatcher.Invoke(() => ((ConfigUI)System.Windows.Application.Current.MainWindow).ShowWindow());
                     break;
+                case "restart_devices":
+                    Global.dev_manager.Shutdown();
+                    break;
+                case "close":
+                    System.Windows.Application.Current.Shutdown();
+                    break;
             }
         }
     }

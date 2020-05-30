@@ -2143,6 +2143,97 @@ namespace Aurora.Devices
         [Description("Mainboard area 10")]
         MBAREA_10 = 810,
 
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 1")]
+        DLEDSTRIP_1 = 811,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 2")]
+        DLEDSTRIP_2 = 812,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 3")]
+        DLEDSTRIP_3 = 813,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 4")]
+        DLEDSTRIP_4 = 814,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 5")]
+        DLEDSTRIP_5 = 815,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 6")]
+        DLEDSTRIP_6 = 816,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 7")]
+        DLEDSTRIP_7 = 817,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 8")]
+        DLEDSTRIP_8 = 818,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 9")]
+        DLEDSTRIP_9 = 819,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 10")]
+        DLEDSTRIP_10 = 820,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 11")]
+        DLEDSTRIP_11 = 821,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 12")]
+        DLEDSTRIP_12 = 822,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 13")]
+        DLEDSTRIP_13 = 823,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 14")]
+        DLEDSTRIP_14 = 824,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 15")]
+        DLEDSTRIP_15 = 825,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 16")]
+        DLEDSTRIP_16 = 826,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 17")]
+        DLEDSTRIP_17 = 827,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 18")]
+        DLEDSTRIP_18 = 828,
+
         /// <summary>
         /// None
         /// </summary>

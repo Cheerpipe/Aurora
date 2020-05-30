@@ -262,6 +262,18 @@
     <Compile Include="Profiles\TModLoader\Control_TModLoader.xaml.cs">
       <DependentUpon>Control_TModLoader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scripts\Devices\ExternalPipesCommandListener.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Scripts\Devices\NZXTHueAmbientDesktop.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Scripts\Devices\NZXTHueAmbientDisplay.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Scripts\Devices\RgbFusion.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Settings\Control_LayerList.xaml.cs">
       <DependentUpon>Control_LayerList.xaml</DependentUpon>
     </Compile>
