@@ -125,11 +125,11 @@ public class RGBFusion
 							SendArgs(new byte[] 
 							{  
 								1,
-								10,
+								10, //Motherboard device ID
 								Convert.ToByte(key.Value.R * key.Value.R / 255),
 								Convert.ToByte(key.Value.G * key.Value.G / 255),
 								Convert.ToByte(key.Value.B * key.Value.B / 255),
-								Convert.ToByte(deviceMap[d].led)
+								Convert.ToByte(deviceMap[d].led) //number between 0 and 9. 8 can also be VGA and 9 RAM if you don't use specific driver for devices.
 							});
 						}						
 						if (deviceMap[d].led==8) // GPU
@@ -149,23 +149,23 @@ public class RGBFusion
 							SendArgs(new byte[] 
 							{  
 								1,
-								30,
+								30, //RAM device ID
 								Convert.ToByte(key.Value.R * key.Value.R / 255),
 								Convert.ToByte(key.Value.G * key.Value.G / 255),
 								Convert.ToByte(key.Value.B * key.Value.B / 255),
-								Convert.ToByte(0)
+								Convert.ToByte(0) // ALways 0 for now. Working in DIM and single LED control
 							});
 						}
-						else if (deviceMap[d].led>=10) // DLED PIN HEADER
+						else if (deviceMap[d].led>=10) // DLED PIN HEADER																																								
 						{
 							SendArgs(new byte[] 
 							{  
-								1,
-								20,
+								1, // COmmand Set
+								20, // Device ID for DLED pin header
 								Convert.ToByte(key.Value.R * key.Value.R / 255),
 								Convert.ToByte(key.Value.G * key.Value.G / 255),
 								Convert.ToByte(key.Value.B * key.Value.B / 255),
-								Convert.ToByte(deviceMap[d].led-10)
+								Convert.ToByte(deviceMap[d].led-10) // LED ID 0-17
 							});
 						}
 						
