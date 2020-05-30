@@ -156,7 +156,7 @@ public class RGBFusion
 								Convert.ToByte(0)
 							});
 						}
-						else if (deviceMap[d].led>=10) // RAM
+						else if (deviceMap[d].led>=10) // DLED PIN HEADER
 						{
 							SendArgs(new byte[] 
 							{  
