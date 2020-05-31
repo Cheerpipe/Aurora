@@ -173,7 +173,7 @@ namespace Aurora.Devices.RGBFusion
                     if ((int)key.Key < 800 || (int)key.Key > 899)
                         continue;
 
-                    if (key.Key == DeviceKeys.MBAREA_6/*key.Key == DeviceKeys.MBAREA_6 || key.Key == DeviceKeys.DLEDSTRIP_18*/)
+                    if (key.Key == DeviceKeys.MBAREA_6 || key.Key == DeviceKeys.DLEDSTRIP_18 )
                     {
                         if (_deviceChanged)
                             SendArgs(new byte[] { 2, 0, 0, 0, 0, 0 });

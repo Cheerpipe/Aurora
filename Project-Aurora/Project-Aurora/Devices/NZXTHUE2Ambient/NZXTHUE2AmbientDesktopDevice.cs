@@ -220,7 +220,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                 {
                     if ((int)key.Key < 600 || (int)key.Key > 699)
                         continue;
-                    if (key.Key == DeviceKeys.LEDSTRIPLIGHT1_0)
+                    if (key.Key == DeviceKeys.LEDSTRIPLIGHT1_55)
                     {
                         if (_deviceChanged)
                             SendArgs(new byte[] { 4, 0, 0, 0, 0 });
