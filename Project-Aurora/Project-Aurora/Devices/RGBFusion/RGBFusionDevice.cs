@@ -175,7 +175,7 @@ namespace Aurora.Devices.RGBFusion
                     if ((int)key.Key < 800 || (int)key.Key > 828)
                         continue;
 
-                    if (key.Key == DeviceKeys.MBAREA_6 || key.Key == DeviceKeys.DLEDSTRIP_18 )
+                    if (key.Key == DeviceKeys.MBAREA_6 || key.Key == DeviceKeys.DLEDSTRIP_18)
                     {
                         if (_deviceChanged)
                             SendArgs(new byte[] { 2, 0, 0, 0, 0, 0 });
@@ -241,6 +241,7 @@ namespace Aurora.Devices.RGBFusion
                                 deviceMap[d] = new DeviceMapState(deviceMap[d].led, key.Value, deviceMap[d].deviceKey);
                                 _deviceChanged = true;
                             }
+                            break;
                         }
                     }
                 }

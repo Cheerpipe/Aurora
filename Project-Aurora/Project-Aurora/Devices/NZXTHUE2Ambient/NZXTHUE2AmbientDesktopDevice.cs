@@ -236,6 +236,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                             SendColorToDevice(key.Value, deviceMap[d].led);
                             deviceMap[d] = new DeviceMapState(deviceMap[d].led, key.Value, deviceMap[d].deviceKey);
                             _deviceChanged = true;
+                            break;
                         }
                     }
                 }
