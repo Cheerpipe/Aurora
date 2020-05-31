@@ -83,33 +83,33 @@ namespace Aurora.Devices.RGBFusion
         private static Color _initialColor = Color.FromArgb(0, 0, 0);
 
         private List<DeviceMapState> deviceMap = new List<DeviceMapState>
-    {
-		//           MB Area/LEd			   Aurora DeviceKey
-		new DeviceMapState(1, _initialColor, DeviceKeys.MBAREA_6),
-        new DeviceMapState(2, _initialColor, DeviceKeys.MBAREA_3),
-        new DeviceMapState(3, _initialColor, DeviceKeys.MBAREA_2),
-        new DeviceMapState(6, _initialColor, DeviceKeys.MBAREA_4),
-        new DeviceMapState(8, _initialColor, DeviceKeys.MBAREA_1),
-        new DeviceMapState(9, _initialColor, DeviceKeys.MBAREA_5),
-        new DeviceMapState(10, _initialColor, DeviceKeys.DLEDSTRIP_1),
-        new DeviceMapState(11, _initialColor, DeviceKeys.DLEDSTRIP_2),
-        new DeviceMapState(12, _initialColor, DeviceKeys.DLEDSTRIP_3),
-        new DeviceMapState(13, _initialColor, DeviceKeys.DLEDSTRIP_4),
-        new DeviceMapState(14, _initialColor, DeviceKeys.DLEDSTRIP_5),
-        new DeviceMapState(15, _initialColor, DeviceKeys.DLEDSTRIP_6),
-        new DeviceMapState(16, _initialColor, DeviceKeys.DLEDSTRIP_7),
-        new DeviceMapState(17, _initialColor, DeviceKeys.DLEDSTRIP_8),
-        new DeviceMapState(18, _initialColor, DeviceKeys.DLEDSTRIP_9),
-        new DeviceMapState(19, _initialColor, DeviceKeys.DLEDSTRIP_10),
-        new DeviceMapState(20, _initialColor, DeviceKeys.DLEDSTRIP_11),
-        new DeviceMapState(21, _initialColor, DeviceKeys.DLEDSTRIP_12),
-        new DeviceMapState(22, _initialColor, DeviceKeys.DLEDSTRIP_13),
-        new DeviceMapState(23, _initialColor, DeviceKeys.DLEDSTRIP_14),
-        new DeviceMapState(24, _initialColor, DeviceKeys.DLEDSTRIP_15),
-        new DeviceMapState(25, _initialColor, DeviceKeys.DLEDSTRIP_16),
-        new DeviceMapState(26, _initialColor, DeviceKeys.DLEDSTRIP_17),
-        new DeviceMapState(27, _initialColor, DeviceKeys.DLEDSTRIP_18)
-    };
+        {
+		    //           MB Area/LEd			   Aurora DeviceKey
+		    new DeviceMapState(1, _initialColor, DeviceKeys.MBAREA_6),
+            new DeviceMapState(2, _initialColor, DeviceKeys.MBAREA_3),
+            new DeviceMapState(3, _initialColor, DeviceKeys.MBAREA_2),
+            new DeviceMapState(6, _initialColor, DeviceKeys.MBAREA_4),
+            new DeviceMapState(8, _initialColor, DeviceKeys.MBAREA_1),
+            new DeviceMapState(9, _initialColor, DeviceKeys.MBAREA_5),
+            new DeviceMapState(10, _initialColor, DeviceKeys.DLEDSTRIP_1),
+            new DeviceMapState(11, _initialColor, DeviceKeys.DLEDSTRIP_2),
+            new DeviceMapState(12, _initialColor, DeviceKeys.DLEDSTRIP_3),
+            new DeviceMapState(13, _initialColor, DeviceKeys.DLEDSTRIP_4),
+            new DeviceMapState(14, _initialColor, DeviceKeys.DLEDSTRIP_5),
+            new DeviceMapState(15, _initialColor, DeviceKeys.DLEDSTRIP_6),
+            new DeviceMapState(16, _initialColor, DeviceKeys.DLEDSTRIP_7),
+            new DeviceMapState(17, _initialColor, DeviceKeys.DLEDSTRIP_8),
+            new DeviceMapState(18, _initialColor, DeviceKeys.DLEDSTRIP_9),
+            new DeviceMapState(19, _initialColor, DeviceKeys.DLEDSTRIP_10),
+            new DeviceMapState(20, _initialColor, DeviceKeys.DLEDSTRIP_11),
+            new DeviceMapState(21, _initialColor, DeviceKeys.DLEDSTRIP_12),
+            new DeviceMapState(22, _initialColor, DeviceKeys.DLEDSTRIP_13),
+            new DeviceMapState(23, _initialColor, DeviceKeys.DLEDSTRIP_14),
+            new DeviceMapState(24, _initialColor, DeviceKeys.DLEDSTRIP_15),
+            new DeviceMapState(25, _initialColor, DeviceKeys.DLEDSTRIP_16),
+            new DeviceMapState(26, _initialColor, DeviceKeys.DLEDSTRIP_17),
+            new DeviceMapState(27, _initialColor, DeviceKeys.DLEDSTRIP_18)
+        };
 
         bool _deviceChanged = true;
 
@@ -193,9 +193,9 @@ namespace Aurora.Devices.RGBFusion
                                 {
                                 1,
                                 10, //Motherboard device ID
-								Convert.ToByte(key.Value.R * key.Value.R / 255),
-                                Convert.ToByte(key.Value.G * key.Value.G / 255),
-                                Convert.ToByte(key.Value.B * key.Value.B / 255),
+								Convert.ToByte(key.Value.R * key.Value.A / 255),
+                                Convert.ToByte(key.Value.G * key.Value.A / 255), 
+                                Convert.ToByte(key.Value.B * key.Value.A / 255),
                                 Convert.ToByte(deviceMap[d].led) //number between 0 and 9. 8 can also be VGA and 9 RAM if you don't use specific driver for devices.																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		
 								});
                             }
@@ -205,9 +205,9 @@ namespace Aurora.Devices.RGBFusion
                                 {
                                 1,
                                 40,
-                                Convert.ToByte(key.Value.R * key.Value.R / 255),
-                                Convert.ToByte(key.Value.G * key.Value.G / 255),
-                                Convert.ToByte(key.Value.B * key.Value.B / 255),
+                                Convert.ToByte(key.Value.R * key.Value.A / 255),
+                                Convert.ToByte(key.Value.G * key.Value.A / 255),
+                                Convert.ToByte(key.Value.B * key.Value.A / 255),
                                 Convert.ToByte(0)
                                 });
                             }
@@ -217,9 +217,9 @@ namespace Aurora.Devices.RGBFusion
                                 {
                                 1,
                                 30, //RAM device ID
-								Convert.ToByte(key.Value.R * key.Value.R / 255),
-                                Convert.ToByte(key.Value.G * key.Value.G / 255),
-                                Convert.ToByte(key.Value.B * key.Value.B / 255),
+								Convert.ToByte(key.Value.R * key.Value.A / 255),
+                                Convert.ToByte(key.Value.G * key.Value.A / 255),
+                                Convert.ToByte(key.Value.B * key.Value.A / 255),
                                 Convert.ToByte(0) // ALways 0 for now. Working in DIM and single LED control
 								});
                             }
@@ -229,9 +229,9 @@ namespace Aurora.Devices.RGBFusion
                                 {
                                 1, // COmmand Set
 								20, // Device ID for DLED pin header
-								Convert.ToByte(key.Value.R * key.Value.R / 255),
-                                Convert.ToByte(key.Value.G * key.Value.G / 255),
-                                Convert.ToByte(key.Value.B * key.Value.B / 255),
+								Convert.ToByte(key.Value.R * key.Value.A / 255),
+                                Convert.ToByte(key.Value.G * key.Value.A / 255),
+                                Convert.ToByte(key.Value.B * key.Value.A / 255),
                                 Convert.ToByte(deviceMap[d].led-10) // LED ID 0-17
 								});
                             }
