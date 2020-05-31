@@ -1688,7 +1688,7 @@ namespace Aurora.Devices
         /// </summary>
         [Description("Led strip 1 LED 63")]
         LEDSTRIPLIGHT1_63 = 663,
-
+        /*
 
         ///<summary>
         /// Calculator Key
@@ -2076,7 +2076,7 @@ namespace Aurora.Devices
         /// </summary>
         [Description("Led strip 2 LED 63")]
         LEDSTRIPLIGHT2_63 = 763,
-
+        */
         ///<summary>
         /// Calculator Key
         /// </summary>

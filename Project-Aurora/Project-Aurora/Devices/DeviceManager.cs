@@ -96,6 +96,8 @@ namespace Aurora.Devices
 
         public DeviceManager()
         {
+            //FELIPE
+            //Register only my devices
             devices.Add(new DeviceContainer(new Devices.Logitech.LogitechDevice()));         // Logitech Device
             devices.Add(new DeviceContainer(new Devices.RGBFusion.RGBFusionDevice()));        // RGBFusion Bridge
             devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2AmbientDisplayDevice()));        // HUE 2 Display

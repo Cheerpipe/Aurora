@@ -170,7 +170,9 @@ namespace Aurora.Devices.RGBFusion
             {
                 foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                 {
-                    if ((int)key.Key < 800 || (int)key.Key > 899)
+                    //FELIPE
+                    //Check range of RGBFusion.
+                    if ((int)key.Key < 800 || (int)key.Key > 828)
                         continue;
 
                     if (key.Key == DeviceKeys.MBAREA_6 || key.Key == DeviceKeys.DLEDSTRIP_18 )

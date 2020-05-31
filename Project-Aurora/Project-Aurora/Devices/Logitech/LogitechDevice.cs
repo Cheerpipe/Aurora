@@ -368,7 +368,13 @@ namespace Aurora.Devices.Logitech
                 {
                     foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                     {
+                        //FELIPE
+                        //If not in KB range, continue;
+                        if ((int)key.Key >= 600)
+                            continue;
+
                         if (e.Cancel) return false;
+
 
                         Logitech_keyboardBitmapKeys localKey = ToLogitechBitmap(key.Key);
 
@@ -463,6 +469,11 @@ namespace Aurora.Devices.Logitech
 
                     foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                     {
+                        //FELIPE
+                        //If not in KB range, continue;
+                        if ((int)key.Key >= 600)
+                            continue;
+
                         if (e.Cancel) return false;
 
                         Logitech_keyboardBitmapKeys localKey = ToLogitechBitmap(key.Key);

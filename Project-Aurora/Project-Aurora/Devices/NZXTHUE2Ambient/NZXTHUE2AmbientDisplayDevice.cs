@@ -216,7 +216,9 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                 {
-                    if ((int)key.Key < 600 || (int)key.Key > 699)
+                    //FELIPE
+                    //Check NZXT HUE2 Range
+                    if ((int)key.Key < 600 || (int)key.Key > 663)
                         continue;
 
                     if (key.Key == DeviceKeys.LEDSTRIPLIGHT1_55)
