@@ -12,38 +12,89 @@ using System.Threading;
 using CSScriptLibrary;
 using Aurora.Settings;
 using System.ComponentModel;
+using Aurora.Utils;
+using Mono.CSharp;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Aurora.Devices.RGBFusion
 {
     public class RGBFusionDevice : Device
     {
-        private string devicename = "RGB Fusion";
-        private bool isConnected;
-        private long lastUpdateTime = 0;
-        private System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+        private string _devicename = "RGB Fusion";
+        private bool _isConnected;
+        private long _lastUpdateTime = 0;
+        private Stopwatch _ellapsedTimeWatch = new Stopwatch();
+        private VariableRegistry _variableRegistry = null;
+
+        private string _RGBFusionDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\GIGABYTE\\RGBFusion\\";
+        private string _RGBFusionExeName = "RGBFusion.exe";
+        private string _RGBFusionBridgeExeName = "RGBFusionAuroraListener.exe";
+        private List<DeviceMapState> _deviceMap;
+        private Color _initialColor = Color.FromArgb(0, 0, 0);
+        private string _defaultProfileFileName = "pro1.xml";
+        private string[] _RGBFusionBridgeFiles = new string[]
+        {
+            "RGBFusionAuroraListener.exe",
+            "LedLib2.dll",
+            "RGBFusionBridge.dll"
+        };
 
         public bool Initialize()
         {
             try
             {
-                //TODO: Check if RGBFusionsetcolor is up and fire if off
                 try
                 {
                     Shutdown();
                 }
                 catch { }
-                Process.Start(@"C:\Program Files (x86)\GIGABYTE\RGBFusion\RGBFusionAuroraListener.exe", @"--kingstondriver --aorusvgadriver --dleddriver --ignoreled:0,4,5,7,8,9");
-                isConnected = true;
+
+                if (!IsRGBFusionInstalled())
+                {
+                    Global.logger.Error("RGBFusion is not installed.");
+                    return false;
+                }
+                if (IsRGBFusionRunning())
+                {
+                    Global.logger.Error("RGBFusion should be closed before run RGBFusion Bridge.");
+                    return false;
+                }
+                if (!IsRGBFusinMainProfileCreated())
+                {
+                    Global.logger.Error("RGBFusion main profile file is not created. Run RGBFusion for at least one time.");
+                    return false;
+                }
+                if (!IsRGBFusionBridgeInstalled())
+                {
+                    Global.logger.Warn("RGBFusion Bridge is not installed. Installing.");
+                    try
+                    {
+                        InstallRGBFusionBridge();
+                    }
+                    catch
+                    {
+                        Global.logger.Error("An error has occurred  while installing RGBFusion Bridge.");
+                        return false;
+                    }
+                    return false;
+                }
+
+                //Start RGBFusion Bridge
+                Global.logger.Info("Starting RGBFusion Bridge.");
+                Process.Start(_RGBFusionDirectory + _RGBFusionBridgeExeName, @"--kingstondriver --aorusvgadriver --dleddriver --ignoreled:0,4,5,7,8,9");
+                UpdateDeviceMap();
+                _isConnected = true;
                 return true;
             }
-            catch (Exception exc)
+            catch
             {
-                isConnected = false;
+                Global.logger.Error("RGBFusion Bridge cannot be initialized.");
+                _isConnected = false;
                 return false;
             }
         }
 
-        public void SendArgs(byte[] args)
+        public void SendCommandToRGBFusion(byte[] args)
         {
             using (var pipe = new NamedPipeClientStream(".", "RGBFusionAuroraListener", PipeDirection.Out))
             using (var stream = new BinaryWriter(pipe))
@@ -56,15 +107,14 @@ namespace Aurora.Devices.RGBFusion
         public void Reset()
         {
             Shutdown();
-            Thread.Sleep(1000);
             Initialize();
         }
 
         public void Shutdown()
         {
-            SendArgs(new byte[] { 5, 0, 0, 0, 0, 0 });
-            Thread.Sleep(1000);
-            isConnected = false;
+            SendCommandToRGBFusion(new byte[] { 5, 0, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
+            Thread.Sleep(1000); // Time to shutdown leds and close listener application.
+            _isConnected = false;
         }
 
         private struct DeviceMapState
@@ -80,57 +130,64 @@ namespace Aurora.Devices.RGBFusion
             }
         }
 
-        private static Color _initialColor = Color.FromArgb(0, 0, 0);
-
-        private List<DeviceMapState> deviceMap = new List<DeviceMapState>
+        private void UpdateDeviceMap()
         {
-		    //           MB Area/LEd			   Aurora DeviceKey
-		    new DeviceMapState(1, _initialColor, DeviceKeys.MBAREA_6),
-            new DeviceMapState(2, _initialColor, DeviceKeys.MBAREA_3),
-            new DeviceMapState(3, _initialColor, DeviceKeys.MBAREA_2),
-            new DeviceMapState(6, _initialColor, DeviceKeys.MBAREA_4),
-            new DeviceMapState(8, _initialColor, DeviceKeys.MBAREA_1),
-            new DeviceMapState(9, _initialColor, DeviceKeys.MBAREA_5),
-            new DeviceMapState(10, _initialColor, DeviceKeys.DLEDSTRIP_1),
-            new DeviceMapState(11, _initialColor, DeviceKeys.DLEDSTRIP_2),
-            new DeviceMapState(12, _initialColor, DeviceKeys.DLEDSTRIP_3),
-            new DeviceMapState(13, _initialColor, DeviceKeys.DLEDSTRIP_4),
-            new DeviceMapState(14, _initialColor, DeviceKeys.DLEDSTRIP_5),
-            new DeviceMapState(15, _initialColor, DeviceKeys.DLEDSTRIP_6),
-            new DeviceMapState(16, _initialColor, DeviceKeys.DLEDSTRIP_7),
-            new DeviceMapState(17, _initialColor, DeviceKeys.DLEDSTRIP_8),
-            new DeviceMapState(18, _initialColor, DeviceKeys.DLEDSTRIP_9),
-            new DeviceMapState(19, _initialColor, DeviceKeys.DLEDSTRIP_10),
-            new DeviceMapState(20, _initialColor, DeviceKeys.DLEDSTRIP_11),
-            new DeviceMapState(21, _initialColor, DeviceKeys.DLEDSTRIP_12),
-            new DeviceMapState(22, _initialColor, DeviceKeys.DLEDSTRIP_13),
-            new DeviceMapState(23, _initialColor, DeviceKeys.DLEDSTRIP_14),
-            new DeviceMapState(24, _initialColor, DeviceKeys.DLEDSTRIP_15),
-            new DeviceMapState(25, _initialColor, DeviceKeys.DLEDSTRIP_16),
-            new DeviceMapState(26, _initialColor, DeviceKeys.DLEDSTRIP_17),
-            new DeviceMapState(27, _initialColor, DeviceKeys.DLEDSTRIP_18)
-        };
+            if (_deviceMap == null)
+                _deviceMap = new List<DeviceMapState>();
+            _deviceMap.Clear();
+            //_deviceMap.Add(new DeviceMapState(255, _initialColor, Global.Configuration.VarRegistry.GetVariable<DeviceKeys>($"{_devicename}_devicekey"))); // Led 255 is equal to set all areas at the same time.
+            _deviceMap.Add(new DeviceMapState(1, _initialColor, DeviceKeys.MBAREA_6));
+            _deviceMap.Add(new DeviceMapState(2, _initialColor, DeviceKeys.MBAREA_3));
+            _deviceMap.Add(new DeviceMapState(3, _initialColor, DeviceKeys.MBAREA_2));
+            _deviceMap.Add(new DeviceMapState(6, _initialColor, DeviceKeys.MBAREA_4));
+            _deviceMap.Add(new DeviceMapState(8, _initialColor, DeviceKeys.MBAREA_1));
+            _deviceMap.Add(new DeviceMapState(9, _initialColor, DeviceKeys.MBAREA_5));
+            _deviceMap.Add(new DeviceMapState(10, _initialColor, DeviceKeys.DLEDSTRIP_1));
+            _deviceMap.Add(new DeviceMapState(11, _initialColor, DeviceKeys.DLEDSTRIP_2));
+            _deviceMap.Add(new DeviceMapState(12, _initialColor, DeviceKeys.DLEDSTRIP_3));
+            _deviceMap.Add(new DeviceMapState(13, _initialColor, DeviceKeys.DLEDSTRIP_4));
+            _deviceMap.Add(new DeviceMapState(14, _initialColor, DeviceKeys.DLEDSTRIP_5));
+            _deviceMap.Add(new DeviceMapState(15, _initialColor, DeviceKeys.DLEDSTRIP_6));
+            _deviceMap.Add(new DeviceMapState(16, _initialColor, DeviceKeys.DLEDSTRIP_7));
+            _deviceMap.Add(new DeviceMapState(17, _initialColor, DeviceKeys.DLEDSTRIP_8));
+            _deviceMap.Add(new DeviceMapState(18, _initialColor, DeviceKeys.DLEDSTRIP_9));
+            _deviceMap.Add(new DeviceMapState(19, _initialColor, DeviceKeys.DLEDSTRIP_10));
+            _deviceMap.Add(new DeviceMapState(20, _initialColor, DeviceKeys.DLEDSTRIP_11));
+            _deviceMap.Add(new DeviceMapState(21, _initialColor, DeviceKeys.DLEDSTRIP_12));
+            _deviceMap.Add(new DeviceMapState(22, _initialColor, DeviceKeys.DLEDSTRIP_13));
+            _deviceMap.Add(new DeviceMapState(23, _initialColor, DeviceKeys.DLEDSTRIP_14));
+            _deviceMap.Add(new DeviceMapState(24, _initialColor, DeviceKeys.DLEDSTRIP_15));
+            _deviceMap.Add(new DeviceMapState(25, _initialColor, DeviceKeys.DLEDSTRIP_16));
+            _deviceMap.Add(new DeviceMapState(26, _initialColor, DeviceKeys.DLEDSTRIP_17));
+            _deviceMap.Add(new DeviceMapState(27, _initialColor, DeviceKeys.DLEDSTRIP_18));
+        }
 
         bool _deviceChanged = true;
 
         public VariableRegistry GetRegisteredVariables()
         {
-            return new VariableRegistry();
+            if (_variableRegistry == null)
+            {
+                var devKeysEnumAsEnumerable = System.Enum.GetValues(typeof(DeviceKeys)).Cast<DeviceKeys>();
+                _variableRegistry = new VariableRegistry();
+                _variableRegistry.Register($"{_devicename}_devicekey", DeviceKeys.Peripheral_Logo, "Key to Use", devKeysEnumAsEnumerable.Max(), devKeysEnumAsEnumerable.Min());
+            }
+            return _variableRegistry;
         }
 
         public string GetDeviceName()
         {
-            return devicename;
+            return _devicename;
         }
 
         public string GetDeviceDetails()
         {
-            return devicename + (isConnected ? ": Connected" : ": Not connected");
+            return _devicename + (_isConnected ? ": Connected" : ": Not connected");
         }
 
         public string GetDeviceUpdatePerformance()
         {
-            return (IsConnected() ? lastUpdateTime + " ms" : "");
+            return (IsConnected() ? _lastUpdateTime + " ms" : "");
         }
 
         public bool Reconnect()
@@ -146,17 +203,17 @@ namespace Aurora.Devices.RGBFusion
 
         public bool IsConnected()
         {
-            return isConnected;
+            return _isConnected;
         }
 
         public bool IsKeyboardConnected()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool IsPeripheralConnected()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public bool UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
@@ -170,38 +227,30 @@ namespace Aurora.Devices.RGBFusion
             {
                 foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                 {
-                    //FELIPE
                     //Check range of RGBFusion.
                     if ((int)key.Key < 800 || (int)key.Key > 828)
                         continue;
 
-                    if (key.Key == DeviceKeys.MBAREA_6 || key.Key == DeviceKeys.DLEDSTRIP_18)
-                    {
-                        if (_deviceChanged)
-                            SendArgs(new byte[] { 2, 0, 0, 0, 0, 0 });
 
-                        _deviceChanged = false;
-                    }
-
-                    for (byte d = 0; d < deviceMap.Count; d++)
+                    for (byte d = 0; d < _deviceMap.Count; d++)
                     {
-                        if ((deviceMap[d].deviceKey == key.Key) && (key.Value != deviceMap[d].color))
+                        if ((_deviceMap[d].deviceKey == key.Key) && (key.Value != _deviceMap[d].color))
                         {
-                            if (deviceMap[d].led < 8) // MB
+                            if (_deviceMap[d].led < 8) // MB
                             {
-                                SendArgs(new byte[]
+                                SendCommandToRGBFusion(new byte[]
                                 {
                                 1,
                                 10, //Motherboard device ID
 								Convert.ToByte(key.Value.R * key.Value.A / 255),
-                                Convert.ToByte(key.Value.G * key.Value.A / 255), 
+                                Convert.ToByte(key.Value.G * key.Value.A / 255),
                                 Convert.ToByte(key.Value.B * key.Value.A / 255),
-                                Convert.ToByte(deviceMap[d].led) //number between 0 and 9. 8 can also be VGA and 9 RAM if you don't use specific driver for devices.																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		
+                                Convert.ToByte(_deviceMap[d].led) //number between 0 and 9. 8 can also be VGA and 9 RAM if you don't use specific driver for devices.																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		
 								});
                             }
-                            if (deviceMap[d].led == 8) // GPU
+                            if (_deviceMap[d].led == 8) // GPU
                             {
-                                SendArgs(new byte[]
+                                SendCommandToRGBFusion(new byte[]
                                 {
                                 1,
                                 40,
@@ -211,9 +260,9 @@ namespace Aurora.Devices.RGBFusion
                                 Convert.ToByte(0)
                                 });
                             }
-                            else if (deviceMap[d].led == 9) // RAM
+                            else if (_deviceMap[d].led == 9) // RAM
                             {
-                                SendArgs(new byte[]
+                                SendCommandToRGBFusion(new byte[]
                                 {
                                 1,
                                 30, //RAM device ID
@@ -223,26 +272,33 @@ namespace Aurora.Devices.RGBFusion
                                 Convert.ToByte(0) // ALways 0 for now. Working in DIM and single LED control
 								});
                             }
-                            else if (deviceMap[d].led >= 10) // DLED PIN HEADER																																								
+                            else if (_deviceMap[d].led >= 10) // DLED PIN HEADER																																								
                             {
-                                SendArgs(new byte[]
+                                SendCommandToRGBFusion(new byte[]
                                 {
                                 1, // COmmand Set
 								20, // Device ID for DLED pin header
 								Convert.ToByte(key.Value.R * key.Value.A / 255),
                                 Convert.ToByte(key.Value.G * key.Value.A / 255),
                                 Convert.ToByte(key.Value.B * key.Value.A / 255),
-                                Convert.ToByte(deviceMap[d].led-10) // LED ID 0-17
+                                Convert.ToByte(_deviceMap[d].led-10) // LED ID 0-17
 								});
                             }
 
-                            if ((deviceMap[d].deviceKey == key.Key) && (key.Value != deviceMap[d].color))
+                            if (key.Value != _deviceMap[d].color)
                             {
-                                deviceMap[d] = new DeviceMapState(deviceMap[d].led, key.Value, deviceMap[d].deviceKey);
+                                _deviceMap[d] = new DeviceMapState(_deviceMap[d].led, key.Value, _deviceMap[d].deviceKey);
                                 _deviceChanged = true;
                             }
                             break;
                         }
+                    }
+
+                    if (key.Key == _deviceMap.Max(k => k.deviceKey))
+                    {
+                        if (_deviceChanged)
+                            SendCommandToRGBFusion(new byte[] { 2, 0, 0, 0, 0, 0 });
+                        _deviceChanged = false;
                     }
                 }
                 if (e.Cancel)
@@ -259,14 +315,58 @@ namespace Aurora.Devices.RGBFusion
 
         public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
         {
-            watch.Restart();
-
+            //UpdateDeviceMap();
+            _ellapsedTimeWatch.Restart();
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
-
-            watch.Stop();
-            lastUpdateTime = watch.ElapsedMilliseconds;
-
+            _ellapsedTimeWatch.Stop();
+            _lastUpdateTime = _ellapsedTimeWatch.ElapsedMilliseconds;
             return update_result;
         }
+        #region RGBFusion Specific Methods
+        private bool IsRGBFusionInstalled()
+        {
+            string RGBFusionDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\GIGABYTE\\RGBFusion\\";
+            bool result = (Directory.Exists(RGBFusionDirectory));
+            return result;
+        }
+
+        private bool IsRGBFusionRunning()
+        {
+            return Process.GetProcessesByName(_RGBFusionExeName).Length > 0;
+        }
+
+        private bool IsRGBFusinMainProfileCreated()
+        {
+
+            string defaulprofileFullpath = _RGBFusionDirectory + _defaultProfileFileName;
+            bool result = (File.Exists(defaulprofileFullpath));
+            return result;
+        }
+
+        private bool IsRGBFusionBridgeInstalled()
+        {
+            string rgbFusionBridgeFullpath = _RGBFusionDirectory + _RGBFusionBridgeExeName;
+            bool result = (File.Exists(rgbFusionBridgeFullpath));
+            return result;
+        }
+
+        private bool InstallRGBFusionBridge()
+        {
+            foreach (string fileName in _RGBFusionBridgeFiles)
+            {
+                try
+                {
+                    File.Copy("RGBFusionBridge\\" + fileName, _RGBFusionDirectory + fileName, true);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        #endregion 
     }
 }
