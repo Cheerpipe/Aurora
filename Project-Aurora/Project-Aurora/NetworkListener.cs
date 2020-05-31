@@ -380,7 +380,7 @@ namespace Aurora
                     System.Windows.Application.Current.Dispatcher.Invoke(() => ((ConfigUI)System.Windows.Application.Current.MainWindow).ShowWindow());
                     break;
                 case "restart_devices":
-                    Global.dev_manager.Shutdown();
+                    Global.dev_manager.ResetDevices();
                     break;
                 case "close":
                     System.Windows.Application.Current.Shutdown();
