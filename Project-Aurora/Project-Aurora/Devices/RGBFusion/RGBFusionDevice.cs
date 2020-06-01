@@ -45,7 +45,7 @@ namespace Aurora.Devices.RGBFusion
             {
                 try
                 {
-                   Shutdown();
+                    Shutdown();
                 }
                 catch { }
 
@@ -112,7 +112,7 @@ namespace Aurora.Devices.RGBFusion
 
         public void Shutdown()
         {
-            SendCommandToRGBFusion(new byte[] { 5, 0, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
+            SendCommandToRGBFusion(new byte[] { 1, 5, 0, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
             Thread.Sleep(1000); // Time to shutdown leds and close listener application.
             _isConnected = false;
         }
@@ -222,7 +222,7 @@ namespace Aurora.Devices.RGBFusion
             {
                 return false;
             }
-
+            byte commandIndex = 0;
             try
             {
                 foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
@@ -237,8 +237,17 @@ namespace Aurora.Devices.RGBFusion
                         {
                             if (_deviceMap[d].led < 8) // MB
                             {
+                                commandIndex++;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 2] = 10;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 6] = Convert.ToByte(_deviceMap[d].led);
+                                /*
                                 SendCommandToRGBFusion(new byte[]
                                 {
+                                1,
                                 1,
                                 10, //Motherboard device ID
 								Convert.ToByte(key.Value.R * key.Value.A / 255),
@@ -246,11 +255,21 @@ namespace Aurora.Devices.RGBFusion
                                 Convert.ToByte(key.Value.B * key.Value.A / 255),
                                 Convert.ToByte(_deviceMap[d].led) //number between 0 and 9. 8 can also be VGA and 9 RAM if you don't use specific driver for devices.																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		
 								});
+                                */
                             }
                             if (_deviceMap[d].led == 8) // GPU
                             {
+                                commandIndex++;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 2] = 40;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
+                                /*
                                 SendCommandToRGBFusion(new byte[]
                                 {
+                                1,
                                 1,
                                 40,
                                 Convert.ToByte(key.Value.R * key.Value.A / 255),
@@ -258,11 +277,21 @@ namespace Aurora.Devices.RGBFusion
                                 Convert.ToByte(key.Value.B * key.Value.A / 255),
                                 Convert.ToByte(0)
                                 });
+                                */
                             }
                             else if (_deviceMap[d].led == 9) // RAM
                             {
+                                commandIndex++;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 2] = 30;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
+                                /*
                                 SendCommandToRGBFusion(new byte[]
                                 {
+                                1,
                                 1,
                                 30, //RAM device ID
 								Convert.ToByte(key.Value.R * key.Value.A / 255),
@@ -270,11 +299,22 @@ namespace Aurora.Devices.RGBFusion
                                 Convert.ToByte(key.Value.B * key.Value.A / 255),
                                 Convert.ToByte(0) // ALways 0 for now. Working in DIM and single LED control
 								});
+                                */
                             }
                             else if (_deviceMap[d].led >= 10) // DLED PIN HEADER																																								
                             {
+                                commandIndex++;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 2] = 20;
+                                _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                                _commandDataPacket[(commandIndex - 1) * 6 + 6] = Convert.ToByte(_deviceMap[d].led - 10);
+
+                                /*
                                 SendCommandToRGBFusion(new byte[]
                                 {
+                                1,
                                 1, // COmmand Set
 								20, // Device ID for DLED pin header
 								Convert.ToByte(key.Value.R * key.Value.A / 255),
@@ -282,6 +322,7 @@ namespace Aurora.Devices.RGBFusion
                                 Convert.ToByte(key.Value.B * key.Value.A / 255),
                                 Convert.ToByte(_deviceMap[d].led-10) // LED ID 0-17
 								});
+                                */
                             }
 
                             if (key.Value != _deviceMap[d].color)
@@ -296,7 +337,19 @@ namespace Aurora.Devices.RGBFusion
                     if (key.Key == _deviceMap.Max(k => k.deviceKey))
                     {
                         if (_deviceChanged)
-                            SendCommandToRGBFusion(new byte[] { 2, 0, 0, 0, 0, 0 });
+                        {
+                            //SendCommandToRGBFusion(new byte[] { 1, 2, 0, 0, 0, 0, 0 });
+                            commandIndex++;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 2;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 0;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = 0;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = 0;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = 0;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
+                            _commandDataPacket[0] = commandIndex;
+                            SendCommandToRGBFusion(_commandDataPacket);
+                        }
+                        commandIndex = 0;
                         _deviceChanged = false;
                     }
                 }
@@ -311,6 +364,7 @@ namespace Aurora.Devices.RGBFusion
                 return false;
             }
         }
+        private byte[] _commandDataPacket = new byte[512];
 
         public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
         {

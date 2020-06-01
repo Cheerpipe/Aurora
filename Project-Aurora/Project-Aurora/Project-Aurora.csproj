@@ -57,8 +57,9 @@
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\..\Build\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>C:\Program Files\Aurora\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>

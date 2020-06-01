@@ -207,7 +207,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                 {
-                    if ((int)key.Key < 600 || (int)key.Key > 663)
+                    if ((int)key.Key < 600 || (int)key.Key > 655)
                         continue;
 
                     for (byte d = 0; d < deviceMap.Count; d++)
