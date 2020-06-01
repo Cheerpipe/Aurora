@@ -44,7 +44,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             using (var pipe = new NamedPipeClientStream(".", "HUE2AmbientDeviceController0", PipeDirection.Out))
             using (var stream = new BinaryWriter(pipe))
             {
-                pipe.Connect(timeout: 10);
+                pipe.Connect(100);
                 stream.Write(args);
             }
         }
@@ -68,7 +68,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
         public void Shutdown()
         {
-            SendArgs(new byte[] { 5, 0, 0, 0, 0 });
+            SendArgs(new byte[6] { 1, 5, 0, 0, 0, 0 });
             Thread.Sleep(1000);
             isConnected = false;
         }
@@ -151,18 +151,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         bool _deviceChanged = true;
 
         //Custom method to send the color to the device
-        private void SendColorToDevice(Color color, byte led = 0)
-        {
-            //Check if device's current color is the same, no need to update if they are the same		
-            //0 nothing
-            //1 setledtrx
-            //2 setledall
-            //3 start trx
-            //4 commit trx 
-            //6 shutdown
 
-            SendArgs(new byte[5] { 1, Convert.ToByte(color.R * color.A / 255), Convert.ToByte(color.G * color.A / 255), Convert.ToByte(color.B * color.A / 255), led });
-        }
 
         public VariableRegistry GetRegisteredVariables()
         {
@@ -212,40 +201,55 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
         public bool UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
         {
+            byte commandIndex = 0;
             try
             {
                 foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                 {
-                    //FELIPE
-                    //Check NZXT HUE2 Range
                     if ((int)key.Key < 600 || (int)key.Key > 663)
                         continue;
-
-                    if (key.Key == DeviceKeys.LEDSTRIPLIGHT1_55)
-                    {
-                        if (_deviceChanged)
-                            SendArgs(new byte[] { 4, 0, 0, 0, 0 });
-                        SendArgs(new byte[] { 3, 0, 0, 0, 0 });
-                        _deviceChanged = false;
-                    }
                     for (byte d = 0; d < deviceMap.Count; d++)
                     {
                         if ((deviceMap[d].deviceKey == key.Key) && (key.Value != deviceMap[d].color))
                         {
-                            SendColorToDevice(key.Value, deviceMap[d].led);
+                            commandIndex++;
+                            _commandDataPacket[(commandIndex - 1) * 5 + 1] = 1;
+                            _commandDataPacket[(commandIndex - 1) * 5 + 2] = Convert.ToByte(key.Value.R * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 5 + 3] = Convert.ToByte(key.Value.G * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 5 + 4] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 5 + 5] = deviceMap[d].led;
                             deviceMap[d] = new DeviceMapState(deviceMap[d].led, key.Value, deviceMap[d].deviceKey);
                             _deviceChanged = true;
                             break;
                         }
                     }
+
+                    if (key.Key == deviceMap.Max(k => k.deviceKey))
+                    {
+                        if (_deviceChanged)
+                        {
+                            commandIndex++;
+                            _commandDataPacket[(commandIndex - 1) * 5 + 1] = 4;
+                            _commandDataPacket[(commandIndex - 1) * 5 + 2] = 0;
+                            _commandDataPacket[(commandIndex - 1) * 5 + 3] = 0;
+                            _commandDataPacket[(commandIndex - 1) * 5 + 4] = 0;
+                            _commandDataPacket[(commandIndex - 1) * 5 + 5] = 0;
+                            _commandDataPacket[0] = commandIndex;
+                            SendArgs(_commandDataPacket);
+                        }
+
+                        commandIndex = 0;
+                        _deviceChanged = false;
+                    }
                 }
                 return true;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }
         }
+        private byte[] _commandDataPacket = new byte[512];
 
         public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
         {

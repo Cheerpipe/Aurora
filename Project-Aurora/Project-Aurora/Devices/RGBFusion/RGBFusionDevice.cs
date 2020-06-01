@@ -45,7 +45,7 @@ namespace Aurora.Devices.RGBFusion
             {
                 try
                 {
-                    Shutdown();
+                   Shutdown();
                 }
                 catch { }
 
@@ -230,7 +230,6 @@ namespace Aurora.Devices.RGBFusion
                     //Check range of RGBFusion.
                     if ((int)key.Key < 800 || (int)key.Key > 828)
                         continue;
-
 
                     for (byte d = 0; d < _deviceMap.Count; d++)
                     {

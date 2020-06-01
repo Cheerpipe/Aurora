@@ -348,7 +348,7 @@ namespace Aurora.Profiles
                 {
                     try
                     {
-                        Update();
+                       Update();
                     }
                     catch (Exception exc)
                     {
