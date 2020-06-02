@@ -122,7 +122,6 @@ namespace Aurora.Devices.RGBFusion
             }
 
             Thread.Sleep(1000); // Time to shutdown leds and close listener application.
-            KillProcessByName("RGBFusionAuroraListener");
             _isConnected = false;
         }
 
