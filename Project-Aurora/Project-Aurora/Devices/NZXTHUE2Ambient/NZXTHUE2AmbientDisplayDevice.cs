@@ -76,9 +76,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 //Just in case Bridge is not responding or already closed
             }
-
             Thread.Sleep(1000); // Time to shutdown leds and close listener application.
-            KillProcessByName("NZXTHUEAmbientListener.exe");
             isConnected = false;
         }
 

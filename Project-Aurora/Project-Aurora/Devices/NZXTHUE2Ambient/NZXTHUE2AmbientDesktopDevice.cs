@@ -80,7 +80,6 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
 
             Thread.Sleep(1000); // Time to shutdown leds and close listener application.
-            KillProcessByName("NZXTHUEAmbientListener.exe");
             isConnected = false;
         }
 
