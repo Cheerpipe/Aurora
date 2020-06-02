@@ -112,9 +112,28 @@ namespace Aurora.Devices.RGBFusion
 
         public void Shutdown()
         {
-            SendCommandToRGBFusion(new byte[] { 1, 5, 0, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
+            try
+            {
+                SendCommandToRGBFusion(new byte[] { 1, 5, 0, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
+            }
+            catch
+            {
+                //Just in case Bridge is not responding or already closed
+            }
+
             Thread.Sleep(1000); // Time to shutdown leds and close listener application.
+            KillProcessByName("RGBFusionAuroraListener");
             _isConnected = false;
+        }
+
+        public void KillProcessByName(string processName)
+        {
+            Process cmd = new Process();
+            cmd.StartInfo.FileName = @"C:\Windows\System32\taskkill.exe";
+            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            cmd.StartInfo.Arguments = string.Format(@"/f /im {0}", processName);
+            cmd.Start();
+            cmd.Dispose();
         }
 
         private struct DeviceMapState
