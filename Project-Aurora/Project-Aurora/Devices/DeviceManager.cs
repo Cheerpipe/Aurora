@@ -102,7 +102,7 @@ namespace Aurora.Devices
             devices.Add(new DeviceContainer(new Devices.RGBFusion.RGBFusionDevice()));        // RGBFusion Bridge
             devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2AmbientDisplayDevice()));        // HUE 2 Display
             devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2AmbientDesktopDevice()));        // HUE 2 Desktop
-            //devices.Add(new DeviceContainer(new Devices.Corsair.CorsairDevice()));           // Corsair Device
+           // devices.Add(new DeviceContainer(new Devices.Corsair.CorsairDevice()));           // Corsair Device
             //devices.Add(new DeviceContainer(new Devices.Razer.RazerDevice()));               // Razer Device
             //devices.Add(new DeviceContainer(new Devices.Roccat.RoccatDevice()));             // Roccat Device
             //devices.Add(new DeviceContainer(new Devices.Clevo.ClevoDevice()));               // Clevo Device

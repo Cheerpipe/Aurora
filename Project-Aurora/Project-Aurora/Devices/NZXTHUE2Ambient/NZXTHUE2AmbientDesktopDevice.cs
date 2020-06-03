@@ -17,24 +17,28 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 {
     public class NZXTHUE2AmbientDesktopDevice : Device
     {
-        public string devicename = "NZXT HUE Ambient Desktop";
-        private System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
-        private bool isConnected;
-        private long lastUpdateTime = 0;
+        public string _devicename = "NZXT HUE Ambient Desktop";
+        private System.Diagnostics.Stopwatch _watch = new System.Diagnostics.Stopwatch();
+        private bool _isConnected;
+        private long _lastUpdateTime = 0;
+        private DeviceKeys _commitKey;
+        private Color _initialColor = Color.FromArgb(0, 0, 0);
+        private List<DeviceMapState> _deviceMap;
         public bool Initialize()
         {
             try
             {
+                UpdateDeviceMap();
                 KillProcessByName("NZXT CAM.exe");
                 KillProcessByName("NZXTHUEAmbientListener.exe");
                 Thread.Sleep(500);
                 Process.Start(@"D:\Warez\Utiles\NZXTHUEAmbientListener\NZXTHUEAmbientListener.exe");
-                isConnected = true;
+                _isConnected = true;
                 return true;
             }
             catch (Exception)
             {
-                isConnected = false;
+                _isConnected = false;
                 return false;
             }
         }
@@ -80,7 +84,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
 
             Thread.Sleep(1000); // Time to shutdown leds and close listener application.
-            isConnected = false;
+            _isConnected = false;
         }
 
         private struct DeviceMapState
@@ -95,72 +99,74 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                 this.deviceKey = deviceKeys;
             }
         }
+        private void UpdateDeviceMap()
+        {
+            _deviceMap = new List<DeviceMapState>
+            {
 
-        private static Color _initialColor = Color.FromArgb(0, 0, 0);
-        private List<DeviceMapState> deviceMap = new List<DeviceMapState>
-    {
-	  //             To Area/Key				   From DeviceKey		
-      new DeviceMapState(25, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_9),
-      new DeviceMapState(24, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_8),
-      new DeviceMapState(23, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_7),
-      new DeviceMapState(22, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_6),
-      new DeviceMapState(21, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_5),
-      new DeviceMapState(20, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_4),
-      new DeviceMapState(19, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_3),
-      new DeviceMapState(18, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_2),
-      new DeviceMapState(17, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_1),
-      new DeviceMapState(16, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_0),
+              new DeviceMapState(25, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_9),
+              new DeviceMapState(24, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_8),
+              new DeviceMapState(23, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_7),
+              new DeviceMapState(22, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_6),
+              new DeviceMapState(21, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_5),
+              new DeviceMapState(20, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_4),
+              new DeviceMapState(19, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_3),
+              new DeviceMapState(18, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_2),
+              new DeviceMapState(17, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_1),
+              new DeviceMapState(16, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_0),
 
-      new DeviceMapState(15, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_55),
-      new DeviceMapState(14, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_55),
-      new DeviceMapState(13, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_54),
-      new DeviceMapState(12, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_54),
-      new DeviceMapState(11, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_53),
-      new DeviceMapState(10, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_53),
-      new DeviceMapState(9, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_52),
-      new DeviceMapState(8, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_52),
-      new DeviceMapState(7, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_51),
-      new DeviceMapState(6, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_51),
-      new DeviceMapState(5, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_50),
-      new DeviceMapState(4, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_50),
-      new DeviceMapState(3, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_49),
-      new DeviceMapState(2, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_49),
-      new DeviceMapState(1, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_48),
-      new DeviceMapState(0, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_47),
+              new DeviceMapState(15, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_55),
+              new DeviceMapState(14, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_55),
+              new DeviceMapState(13, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_54),
+              new DeviceMapState(12, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_54),
+              new DeviceMapState(11, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_53),
+              new DeviceMapState(10, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_53),
+              new DeviceMapState(9, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_52),
+              new DeviceMapState(8, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_52),
+              new DeviceMapState(7, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_51),
+              new DeviceMapState(6, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_51),
+              new DeviceMapState(5, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_50),
+              new DeviceMapState(4, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_50),
+              new DeviceMapState(3, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_49),
+              new DeviceMapState(2, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_49),
+              new DeviceMapState(1, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_48),
+              new DeviceMapState(0, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_47),
 
-      new DeviceMapState(51, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_46),
-      new DeviceMapState(50, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_45),
-      new DeviceMapState(49, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_44),
-      new DeviceMapState(48, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_44),
-      new DeviceMapState(47, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_43),
-      new DeviceMapState(46, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_43),
-      new DeviceMapState(45, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_42),
-      new DeviceMapState(44, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_42),
-      new DeviceMapState(43, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_41),
-      new DeviceMapState(42, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_41),
-      new DeviceMapState(41, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_40),
-      new DeviceMapState(40, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_40),
-      new DeviceMapState(39, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_39),
-      new DeviceMapState(38, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_39),
-      new DeviceMapState(37, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_39),
-      new DeviceMapState(36, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_38),
+              new DeviceMapState(51, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_46),
+              new DeviceMapState(50, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_45),
+              new DeviceMapState(49, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_44),
+              new DeviceMapState(48, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_44),
+              new DeviceMapState(47, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_43),
+              new DeviceMapState(46, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_43),
+              new DeviceMapState(45, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_42),
+              new DeviceMapState(44, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_42),
+              new DeviceMapState(43, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_41),
+              new DeviceMapState(42, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_41),
+              new DeviceMapState(41, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_40),
+              new DeviceMapState(40, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_40),
+              new DeviceMapState(39, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_39),
+              new DeviceMapState(38, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_39),
+              new DeviceMapState(37, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_39),
+              new DeviceMapState(36, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_38),
 
-      new DeviceMapState(35, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_37),
-      new DeviceMapState(34, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_36),
-      new DeviceMapState(33, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_35),
-      new DeviceMapState(32, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_34),
-      new DeviceMapState(31, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_33),
-      new DeviceMapState(30, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_32),
-      new DeviceMapState(29, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_31),
-      new DeviceMapState(28, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_30),
-      new DeviceMapState(27, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_29),
-      new DeviceMapState(26, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_28)
-    };
+              new DeviceMapState(35, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_37),
+              new DeviceMapState(34, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_36),
+              new DeviceMapState(33, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_35),
+              new DeviceMapState(32, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_34),
+              new DeviceMapState(31, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_33),
+              new DeviceMapState(30, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_32),
+              new DeviceMapState(29, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_31),
+              new DeviceMapState(28, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_30),
+              new DeviceMapState(27, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_29),
+              new DeviceMapState(26, _initialColor, DeviceKeys.LEDSTRIPLIGHT1_28)
+            };
+            _commitKey = _deviceMap.Max(k => k.deviceKey);
+        }
 
         bool _deviceChanged = true;
 
         //Custom method to send the color to the device
-   
+
         public VariableRegistry GetRegisteredVariables()
         {
             return new VariableRegistry();
@@ -169,17 +175,17 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
         public string GetDeviceName()
         {
-            return devicename;
+            return _devicename;
         }
 
         public string GetDeviceDetails()
         {
-            return devicename + (isConnected ? ": Connected" : ": Not connected");
+            return _devicename + (_isConnected ? ": Connected" : ": Not connected");
         }
 
         public string GetDeviceUpdatePerformance()
         {
-            return (IsConnected() ? lastUpdateTime + " ms" : "");
+            return (IsConnected() ? _lastUpdateTime + " ms" : "");
         }
 
         public bool Reconnect()
@@ -195,7 +201,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
         public bool IsConnected()
         {
-            return isConnected;
+            return _isConnected;
         }
 
         public bool IsKeyboardConnected()
@@ -217,24 +223,25 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                 {
                     if ((int)key.Key < 600 || (int)key.Key > 655)
                         continue;
-
-                    for (byte d = 0; d < deviceMap.Count; d++)
+                    for (byte d = 0; d < _deviceMap.Count; d++)
                     {
-                        if ((deviceMap[d].deviceKey == key.Key) && (key.Value != deviceMap[d].color))
+                        if ((_deviceMap[d].deviceKey == key.Key) && (key.Value != _deviceMap[d].color))
                         {
                             commandIndex++;
                             _commandDataPacket[(commandIndex - 1) * 5 + 1] = 1;
                             _commandDataPacket[(commandIndex - 1) * 5 + 2] = Convert.ToByte(key.Value.R * key.Value.A / 255);
                             _commandDataPacket[(commandIndex - 1) * 5 + 3] = Convert.ToByte(key.Value.G * key.Value.A / 255);
                             _commandDataPacket[(commandIndex - 1) * 5 + 4] = Convert.ToByte(key.Value.B * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 5 + 5] = deviceMap[d].led;
-                            deviceMap[d] = new DeviceMapState(deviceMap[d].led, key.Value, deviceMap[d].deviceKey);
+                            _commandDataPacket[(commandIndex - 1) * 5 + 5] = _deviceMap[d].led;
+                            _deviceMap[d] = new DeviceMapState(_deviceMap[d].led, key.Value, _deviceMap[d].deviceKey);
                             _deviceChanged = true;
-                            break;
+                            // Can't break because map bind more than one light to one key.
+                           // if (key.Key != _commitKey)
+                           //     break;
                         }
                     }
 
-                    if (key.Key == deviceMap.Max(k=>k.deviceKey))
+                    if (key.Key == _commitKey)
                     {
                         if (_deviceChanged)
                         {
@@ -264,12 +271,12 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         private byte[] _commandDataPacket = new byte[512];
         public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
         {
-            watch.Restart();
+            _watch.Restart();
 
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
 
-            watch.Stop();
-            lastUpdateTime = watch.ElapsedMilliseconds;
+            _watch.Stop();
+            _lastUpdateTime = _watch.ElapsedMilliseconds;
 
             return update_result;
         }
