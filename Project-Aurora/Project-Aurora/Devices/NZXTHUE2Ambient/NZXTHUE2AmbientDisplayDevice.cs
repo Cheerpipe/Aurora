@@ -219,7 +219,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                         continue;
                     byte led = deviceMapState.led;
 
-                    if ((key.Value != _deviceMap[key.Key].color))
+                    if (key.Value != _deviceMap[key.Key].color)
                     {
                         commandIndex++;
                         _commandDataPacket[(commandIndex - 1) * 5 + 1] = 1;

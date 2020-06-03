@@ -29,7 +29,7 @@ namespace Aurora.Devices.RGBFusion
         private string _RGBFusionDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\GIGABYTE\\RGBFusion\\";
         private string _RGBFusionExeName = "RGBFusion.exe";
         private string _RGBFusionBridgeExeName = "RGBFusionAuroraListener.exe";
-        private List<DeviceMapState> _deviceMap;
+        private Dictionary<DeviceKeys, DeviceMapState> _deviceMap;
         private Color _initialColor = Color.FromArgb(0, 0, 0);
         private string _defaultProfileFileName = "pro1.xml";
         private string[] _RGBFusionBridgeFiles = new string[]
@@ -138,43 +138,43 @@ namespace Aurora.Devices.RGBFusion
         {
             public byte led;
             public Color color;
-            public DeviceKeys deviceKey;
-            public DeviceMapState(byte led, Color color, DeviceKeys deviceKeys)
+            public DeviceMapState(byte led, Color color)
             {
                 this.led = led;
                 this.color = color;
-                this.deviceKey = deviceKeys;
             }
         }
 
         private void UpdateDeviceMap()
         {
-            _deviceMap = new List<DeviceMapState>();
-            _deviceMap.Add(new DeviceMapState(1, _initialColor, DeviceKeys.MBAREA_6));
-            _deviceMap.Add(new DeviceMapState(2, _initialColor, DeviceKeys.MBAREA_3));
-            _deviceMap.Add(new DeviceMapState(3, _initialColor, DeviceKeys.MBAREA_2));
-            _deviceMap.Add(new DeviceMapState(6, _initialColor, DeviceKeys.MBAREA_4));
-            _deviceMap.Add(new DeviceMapState(8, _initialColor, DeviceKeys.MBAREA_1));
-            _deviceMap.Add(new DeviceMapState(9, _initialColor, DeviceKeys.MBAREA_5));
-            _deviceMap.Add(new DeviceMapState(10, _initialColor, DeviceKeys.DLEDSTRIP_1));
-            _deviceMap.Add(new DeviceMapState(11, _initialColor, DeviceKeys.DLEDSTRIP_2));
-            _deviceMap.Add(new DeviceMapState(12, _initialColor, DeviceKeys.DLEDSTRIP_3));
-            _deviceMap.Add(new DeviceMapState(13, _initialColor, DeviceKeys.DLEDSTRIP_4));
-            _deviceMap.Add(new DeviceMapState(14, _initialColor, DeviceKeys.DLEDSTRIP_5));
-            _deviceMap.Add(new DeviceMapState(15, _initialColor, DeviceKeys.DLEDSTRIP_6));
-            _deviceMap.Add(new DeviceMapState(16, _initialColor, DeviceKeys.DLEDSTRIP_7));
-            _deviceMap.Add(new DeviceMapState(17, _initialColor, DeviceKeys.DLEDSTRIP_8));
-            _deviceMap.Add(new DeviceMapState(18, _initialColor, DeviceKeys.DLEDSTRIP_9));
-            _deviceMap.Add(new DeviceMapState(19, _initialColor, DeviceKeys.DLEDSTRIP_10));
-            _deviceMap.Add(new DeviceMapState(20, _initialColor, DeviceKeys.DLEDSTRIP_11));
-            _deviceMap.Add(new DeviceMapState(21, _initialColor, DeviceKeys.DLEDSTRIP_12));
-            _deviceMap.Add(new DeviceMapState(22, _initialColor, DeviceKeys.DLEDSTRIP_13));
-            _deviceMap.Add(new DeviceMapState(23, _initialColor, DeviceKeys.DLEDSTRIP_14));
-            _deviceMap.Add(new DeviceMapState(24, _initialColor, DeviceKeys.DLEDSTRIP_15));
-            _deviceMap.Add(new DeviceMapState(25, _initialColor, DeviceKeys.DLEDSTRIP_16));
-            _deviceMap.Add(new DeviceMapState(26, _initialColor, DeviceKeys.DLEDSTRIP_17));
-            _deviceMap.Add(new DeviceMapState(27, _initialColor, DeviceKeys.DLEDSTRIP_18));
-            _commitKey = _deviceMap.Max(k => k.deviceKey);
+
+
+            _deviceMap = new Dictionary<DeviceKeys, DeviceMapState>();
+            _deviceMap.Add(DeviceKeys.MBAREA_6, new DeviceMapState(1, _initialColor));
+            _deviceMap.Add(DeviceKeys.MBAREA_3, new DeviceMapState(2, _initialColor));
+            _deviceMap.Add(DeviceKeys.MBAREA_2, new DeviceMapState(3, _initialColor));
+            _deviceMap.Add(DeviceKeys.MBAREA_4, new DeviceMapState(6, _initialColor));
+            _deviceMap.Add(DeviceKeys.MBAREA_1, new DeviceMapState(8, _initialColor));
+            _deviceMap.Add(DeviceKeys.MBAREA_5, new DeviceMapState(9, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_1, new DeviceMapState(10, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_2, new DeviceMapState(11, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_3, new DeviceMapState(12, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_4, new DeviceMapState(13, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_5, new DeviceMapState(14, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_6, new DeviceMapState(15, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_7, new DeviceMapState(16, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_8, new DeviceMapState(17, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_9, new DeviceMapState(18, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_10, new DeviceMapState(19, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_11, new DeviceMapState(20, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_12, new DeviceMapState(21, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_13, new DeviceMapState(22, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_14, new DeviceMapState(23, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_15, new DeviceMapState(24, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_16, new DeviceMapState(25, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_17, new DeviceMapState(26, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_18, new DeviceMapState(27, _initialColor));
+            _commitKey = _deviceMap.Keys.Max();
         }
 
         bool _deviceChanged = true;
@@ -242,63 +242,55 @@ namespace Aurora.Devices.RGBFusion
             {
                 foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                 {
-                    //Check range of RGBFusion.
-                    if ((int)key.Key < 800 || (int)key.Key > 828)
+                    if (!_deviceMap.TryGetValue(key.Key, out DeviceMapState deviceMapState))
                         continue;
+                    byte led = deviceMapState.led;
 
-                    for (byte d = 0; d < _deviceMap.Count; d++)
+
+                    if (key.Value != _deviceMap[key.Key].color)
                     {
-                        if ((_deviceMap[d].deviceKey == key.Key) && (key.Value != _deviceMap[d].color))
+                        if (led < 8) // MB
                         {
-                            if (_deviceMap[d].led < 8) // MB
-                            {
-                                commandIndex++;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 2] = 10;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 6] = Convert.ToByte(_deviceMap[d].led);
-                            }
-                            if (_deviceMap[d].led == 8) // GPU
-                            {
-                                commandIndex++;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 2] = 40;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
-                            }
-                            else if (_deviceMap[d].led == 9) // RAM
-                            {
-                                commandIndex++;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 2] = 30;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
-                            }
-                            else if (_deviceMap[d].led >= 10) // DLED PIN HEADER																																								
-                            {
-                                commandIndex++;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 2] = 20;
-                                _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
-                                _commandDataPacket[(commandIndex - 1) * 6 + 6] = Convert.ToByte(_deviceMap[d].led - 10);
-                            }
-
-                            if (key.Value != _deviceMap[d].color)
-                            {
-                                _deviceMap[d] = new DeviceMapState(_deviceMap[d].led, key.Value, _deviceMap[d].deviceKey);
-                                _deviceChanged = true;
-                            }
-                            if (key.Key != _commitKey)
-                                break;
+                            commandIndex++;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 10;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = led;
                         }
+                        if (led == 8) // GPU
+                        {
+                            commandIndex++;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 40;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
+                        }
+                        else if (led == 9) // RAM
+                        {
+                            commandIndex++;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 30;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
+                        }
+                        else if (led >= 10) // DLED PIN HEADER																																								
+                        {
+                            commandIndex++;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 20;
+                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = Convert.ToByte(led - 10);
+                        }
+                        _deviceMap[key.Key] = new DeviceMapState(led, key.Value);
+                        _deviceChanged = true;
                     }
 
                     if (key.Key == _commitKey)
