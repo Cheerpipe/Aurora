@@ -35,7 +35,6 @@ namespace Aurora.Devices.RGBFusion
         private string[] _RGBFusionBridgeFiles = new string[]
         {
             "RGBFusionAuroraListener.exe",
-            "LedLib2.dll",
             "RGBFusionBridge.dll"
         };
 
@@ -69,7 +68,7 @@ namespace Aurora.Devices.RGBFusion
                     Global.logger.Warn("RGBFusion Bridge is not installed. Installing.");
                     try
                     {
-                        InstallRGBFusionBridge();
+                        //InstallRGBFusionBridge();
                     }
                     catch
                     {
