@@ -246,7 +246,6 @@ namespace Aurora.Devices.RGBFusion
                         continue;
                     byte led = deviceMapState.led;
 
-
                     if (key.Value != _deviceMap[key.Key].color)
                     {
                         if (led < 8) // MB
