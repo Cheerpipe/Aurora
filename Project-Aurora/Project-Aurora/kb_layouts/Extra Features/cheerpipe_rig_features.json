@@ -676,20 +676,9 @@
     {
       "visualName": "VGA",
       "tag": 801,
-      "margin_left": -320,
+      "margin_left": -245,
       "margin_top": 35,
-      "width": 200.0,
-      "height": 15,
-      "font_size": 10.0,
-      "enabled": true,
-      "absolute_location": true
-    },
-    {
-      "visualName": "Digital Pin Header",
-      "tag": 800,
-      "margin_left": -320,
-      "margin_top": 50,
-      "width": 200.0,
+      "width": 50.0,
       "height": 15,
       "font_size": 10.0,
       "enabled": true,
