@@ -1,4 +1,4 @@
-﻿using Aurora.Profiles;
+using Aurora.Profiles;
 using CSScriptLibrary;
 using System;
 using System.Collections.Generic;
@@ -339,6 +339,17 @@ namespace Aurora.Devices
                 if (device.Device.IsInitialized())
                 {
                     device.Device.Reset();
+                }
+            }
+        }
+        public void ResetDeviceByName(string deviceName)
+        {
+            foreach (DeviceContainer device in devices)
+            {
+                if (device.Device.IsInitialized() && device.Device.GetDeviceName() == deviceName)
+                {
+                    device.Device.Shutdown();
+                    device.Device.Initialize();
                 }
             }
         }

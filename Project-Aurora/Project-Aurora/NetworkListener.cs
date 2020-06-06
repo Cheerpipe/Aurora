@@ -1,4 +1,5 @@
 ﻿using Aurora.Profiles;
+using Corale.Colore.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -382,8 +383,18 @@ namespace Aurora
                 case "restart_devices":
                     Global.dev_manager.ResetDevices();
                     break;
+                case "restart_logitech_devices":
+                    Global.dev_manager.ResetDeviceByName("Logitech");
+                    break;
+                case "restart_nzxt_devices":
+                    Global.dev_manager.ResetDeviceByName("NZXT HUE Ambient Desktop");
+                    Global.dev_manager.ResetDeviceByName("NZXT HUE Ambient Display");
+                    break;
+                case "restart_rgbfusion_devices":
+                    Global.dev_manager.ResetDeviceByName("RGB Fusion");
+                    break;
                 case "close":
-                    System.Windows.Application.Current.Shutdown();
+                    System.Windows.Application.Current.Dispatcher.Invoke(() => ((ConfigUI)System.Windows.Application.Current.MainWindow).exitApp());
                     break;
             }
         }

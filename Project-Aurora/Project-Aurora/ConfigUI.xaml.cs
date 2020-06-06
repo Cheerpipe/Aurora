@@ -317,7 +317,7 @@ namespace Aurora
             }
         }
 
-        private void exitApp()
+        public void exitApp()
         {
             trayicon.Visibility = Visibility.Hidden;
             virtual_keyboard_timer?.Stop();
