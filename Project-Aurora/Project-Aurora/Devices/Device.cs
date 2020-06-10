@@ -2234,6 +2234,12 @@ namespace Aurora.Devices
         [Description("RGBFusion DLED 18")]
         DLEDSTRIP_18 = 828,
 
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Ambiente")]
+        AMBIENT = 829,
+
         /// <summary>
         /// None
         /// </summary>

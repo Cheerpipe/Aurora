@@ -881,6 +881,17 @@
       "font_size": 8.0,
       "enabled": true,
       "absolute_location": true
+    },
+    {
+      "visualName": "Ambiente",
+      "tag": 829,
+      "margin_left": -110,
+      "margin_top": 20,
+      "width": 100,
+      "height": 15.0,
+      "font_size": 8.0,
+      "enabled": true,
+      "absolute_location": true
     }
   ]
 }
