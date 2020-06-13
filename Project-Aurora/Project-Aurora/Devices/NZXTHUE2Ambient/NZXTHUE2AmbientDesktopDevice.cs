@@ -359,9 +359,9 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                         {
                             commandIndex++;
                             _commandDataPacket[(commandIndex - 1) * 5 + 1] = 1;
-                            _commandDataPacket[(commandIndex - 1) * 5 + 2] = Convert.ToByte(key.Value.R * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 5 + 3] = Convert.ToByte(key.Value.G * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 5 + 4] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 5 + 2] = (byte)(key.Value.R * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 5 + 3] = (byte)(key.Value.G * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 5 + 4] = (byte)(key.Value.B * key.Value.A / 255.0f);
                             _commandDataPacket[(commandIndex - 1) * 5 + 5] = deviceMapStateList[d].led;
                             deviceMapStateList[d] = new DeviceMapState(deviceMapStateList[d].led, key.Value);
                             _deviceChanged = true;

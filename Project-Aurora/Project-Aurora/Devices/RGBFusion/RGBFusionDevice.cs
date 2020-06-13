@@ -253,9 +253,9 @@ namespace Aurora.Devices.RGBFusion
                             commandIndex++;
                             _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
                             _commandDataPacket[(commandIndex - 1) * 6 + 2] = 10;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
                             _commandDataPacket[(commandIndex - 1) * 6 + 6] = led;
                         }
                         if (led == 8) // GPU
@@ -263,9 +263,9 @@ namespace Aurora.Devices.RGBFusion
                             commandIndex++;
                             _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
                             _commandDataPacket[(commandIndex - 1) * 6 + 2] = 40;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
                             _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
                         }
                         else if (led == 9) // RAM
@@ -273,9 +273,9 @@ namespace Aurora.Devices.RGBFusion
                             commandIndex++;
                             _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
                             _commandDataPacket[(commandIndex - 1) * 6 + 2] = 30;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
                             _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
                         }
                         else if (led >= 10) // DLED PIN HEADER																																								
@@ -283,10 +283,10 @@ namespace Aurora.Devices.RGBFusion
                             commandIndex++;
                             _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
                             _commandDataPacket[(commandIndex - 1) * 6 + 2] = 20;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = Convert.ToByte(key.Value.R * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = Convert.ToByte(key.Value.G * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = Convert.ToByte(key.Value.B * key.Value.A / 255);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = Convert.ToByte(led - 10);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
+                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = (byte)(led - 10);
                         }
                         _deviceMap[key.Key] = new DeviceMapState(led, key.Value);
                         _deviceChanged = true;
