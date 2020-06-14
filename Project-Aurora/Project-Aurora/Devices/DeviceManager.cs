@@ -350,6 +350,7 @@ namespace Aurora.Devices
                 {
                     device.Device.Shutdown();
                     device.Device.Initialize();
+                    device.Device.Reset();
                 }
             }
         }
