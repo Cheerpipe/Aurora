@@ -119,6 +119,13 @@ namespace Aurora.Devices.HassioLightDevice
             return true;
         }
         private Color currentColor = Color.Black;
+
+        private bool AmbientLightEnabled()
+        {
+            var win_reg = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Aurora");
+            return (string)win_reg.GetValue("AmbientLightEnabled") == "1";
+        }
+
         public bool UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
         {
             if (e.Cancel)
@@ -134,7 +141,6 @@ namespace Aurora.Devices.HassioLightDevice
                     {
                         if (key.Value != currentColor)
                         {
-
                             hassioClient.SetColor(key.Value);
                             currentColor = key.Value;
                         }
@@ -156,6 +162,12 @@ namespace Aurora.Devices.HassioLightDevice
 
         public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
         {
+            if (!AmbientLightEnabled())
+            {
+                _lastUpdateTime = 0;
+                return true;
+            }
+
             _ellapsedTimeWatch.Restart();
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
             _ellapsedTimeWatch.Stop();

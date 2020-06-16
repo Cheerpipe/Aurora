@@ -16,18 +16,11 @@ namespace Aurora.Devices.HassioLightDevice
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
         }
 
-        private bool AmbientLightEnabled()
-        {
-            var win_reg = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Aurora");
-            return (string)win_reg.GetValue("AmbientLightEnabled") == "1";
-        }
+
 
         public async Task SetColor(Color color)
         {
-            if (!AmbientLightEnabled())
-                return;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
-
             string service = "turn_on";
             string postData = "{ \"entity_id\": \"light.pasillo_techo\", \"rgb_color\": [" + color.R.ToString() + "," + color.G.ToString() + "," + color.B.ToString() + "], \"brightness\": 1  }";
 
