@@ -73,18 +73,25 @@ namespace Aurora.Settings.Layers
             _Sequence = new KeySequence();
         }
 
-        public object GetOverride(string propertyName) {
-            try {
+        public object GetOverride(string propertyName)
+        {
+            try
+            {
                 return accessor.Value[Logic, propertyName];
-            } catch (ArgumentOutOfRangeException) {
+            }
+            catch (ArgumentOutOfRangeException)
+            {
                 return null;
             }
         }
 
-        public void SetOverride(string propertyName, object value) {
-            try {
+        public void SetOverride(string propertyName, object value)
+        {
+            try
+            {
                 accessor.Value[Logic, propertyName] = value;
-            } catch (ArgumentOutOfRangeException) { }
+            }
+            catch (ArgumentOutOfRangeException) { }
         }
     }
 
@@ -150,11 +157,12 @@ namespace Aurora.Settings.Layers
 
         public TProperty Properties { get; set; } = Activator.CreateInstance<TProperty>();
 
-        object ILayerHandler.Properties {
+        object ILayerHandler.Properties
+        {
             get => Properties;
             set => Properties = value as TProperty;
         }
-        
+
         public bool EnableSmoothing { get; set; }
 
         // Always return true if the user is overriding the exclusion zone (so that we don't have to present the user with another
@@ -166,13 +174,15 @@ namespace Aurora.Settings.Layers
 
         [JsonIgnore]
         public KeySequence ExclusionMask => Properties.Exclusion;
-        public KeySequence _ExclusionMask {
+        public KeySequence _ExclusionMask
+        {
             get => Properties._Exclusion;
             set => Properties._Exclusion = value;
         }
 
         public float Opacity => Properties.LayerOpacity;
-        public float? _Opacity {
+        public float? _Opacity
+        {
             get => Properties._LayerOpacity;
             set => Properties._LayerOpacity = value;
         }
@@ -228,7 +238,8 @@ namespace Aurora.Settings.Layers
             if (EnableExclusionMask)
                 returnLayer.Exclude(ExclusionMask);
 
-            returnLayer *= Properties.LayerOpacity;
+            if (Properties.LayerOpacity < 1)
+                returnLayer *= Properties.LayerOpacity;
 
             return returnLayer;
         }
@@ -256,7 +267,8 @@ namespace Aurora.Settings.Layers
     }
 
 
-    public interface IValueOverridable {
+    public interface IValueOverridable
+    {
         /// <summary>
         /// Gets the overriden value of the speicifed property.
         /// </summary>
