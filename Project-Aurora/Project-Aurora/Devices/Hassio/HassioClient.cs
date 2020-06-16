@@ -22,7 +22,7 @@ namespace Aurora.Devices.HassioLightDevice
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
             string service = "turn_on";
-            string postData = "{ \"entity_id\": \"light.pasillo_techo\", \"rgb_color\": [" + color.R.ToString() + "," + color.G.ToString() + "," + color.B.ToString() + "], \"brightness\": 1  }";
+            string postData = "{ \"entity_id\": \"light.pasillo_techo\", \"rgb_color\": [" + color.R + "," + color.G + "," + color.B + "], \"brightness\": " + (int)(color.GetBrightness() * 255) + "  }";
 
             if (color.R == 0 && color.G == 0 && color.B == 0)
             {
