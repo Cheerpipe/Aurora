@@ -20,13 +20,15 @@ namespace Aurora.Devices.HassioLightDevice
 {
     public class HassioLightDevice : Device
     {
-        private string _devicename = "Own YeeLight";
+        private string _devicename = "Hassio";
         private bool _isConnected;
         private long _lastUpdateTime = 0;
         private Stopwatch _ellapsedTimeWatch = new Stopwatch();
         private VariableRegistry _variableRegistry = null;
         private HassioClient hassioClient;
 
+
+        public Color CurrentColor { get { return currentColor; } }
         public bool Initialize()
         {
             try
@@ -47,6 +49,7 @@ namespace Aurora.Devices.HassioLightDevice
         {
             Shutdown();
             Initialize();
+            hassioClient.SetColor(currentColor);
         }
 
         public void Shutdown()
@@ -144,9 +147,8 @@ namespace Aurora.Devices.HassioLightDevice
                 }
                 return true;
             }
-            catch (Exception ee)
+            catch (Exception)
             {
-                var x = ee;
                 return false;
             }
         }

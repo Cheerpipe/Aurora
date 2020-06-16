@@ -386,6 +386,9 @@ namespace Aurora
                 case "restart_logitech_devices":
                     Global.dev_manager.ResetDeviceByName("Logitech");
                     break;
+                case "restart_hassio_devices":
+                    Global.dev_manager.ResetDeviceByName("Hassio");
+                    break;
                 case "restart_nzxt_devices":
                     Global.dev_manager.ResetDeviceByName("NZXT HUE Ambient Desktop");
                     Global.dev_manager.ResetDeviceByName("NZXT HUE Ambient Display");
