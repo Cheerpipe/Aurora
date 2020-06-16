@@ -22,6 +22,7 @@ using System.Text;
 using RazerSdkWrapper;
 using RazerSdkWrapper.Utils;
 using RazerSdkWrapper.Data;
+using System.Runtime;
 
 namespace Aurora
 {
@@ -151,6 +152,8 @@ namespace Aurora
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+
             base.OnStartup(e);
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
