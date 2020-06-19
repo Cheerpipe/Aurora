@@ -349,8 +349,6 @@ namespace Aurora.Devices
             {
                 if (device.Device.IsInitialized() && device.Device.GetDeviceName() == deviceName)
                 {
-                    device.Device.Shutdown();
-                    device.Device.Initialize();
                     device.Device.Reset();
                 }
             }

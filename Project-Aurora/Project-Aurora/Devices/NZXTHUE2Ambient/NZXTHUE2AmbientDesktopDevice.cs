@@ -24,6 +24,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         private long _lastUpdateTime = 0;
         private DeviceKeys _commitKey;
         private Color _initialColor = Color.FromArgb(0, 0, 0);
+        private int deviceIndex = 1;
         private Dictionary<DeviceKeys, List<DeviceMapState>> _deviceMap;
         public bool Initialize()
         {
@@ -31,9 +32,10 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 UpdateDeviceMap();
                 KillProcessByName("NZXT CAM.exe");
-                KillProcessByName("NZXTHUEAmbientListener.exe");
-                Thread.Sleep(500);
-                Process.Start(@"D:\Warez\Utiles\NZXTHUEAmbientListener\NZXTHUEAmbientListener.exe");
+                if (!ListenerRunning())
+                {
+                    StartListenerForDevice();
+                }
                 _isConnected = true;
                 return true;
             }
@@ -44,11 +46,29 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
         }
 
+        private void StartListenerForDevice()
+        {
+            Process.Start(@"D:\Warez\Utiles\NZXTHUEAmbientListener\NZXTHUEAmbientListener.exe", "--dev:" + deviceIndex);
+        }
+
+        private bool ListenerRunning()
+        {
+            try
+            {
+                SendArgs(new byte[] { 1, 255, 0, 0, 0, 0 });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         NamedPipeClientStream pipe;
         BinaryWriter stream;
         public void SendArgs(byte[] args)
         {
-            using (var pipe = new NamedPipeClientStream(".", "HUE2AmbientDeviceController1", PipeDirection.Out))
+            using (var pipe = new NamedPipeClientStream(".", "HUE2AmbientDeviceController" + deviceIndex, PipeDirection.Out))
             using (var stream = new BinaryWriter(pipe))
             {
                 pipe.Connect(timeout: 10);
@@ -68,9 +88,14 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
         public void Reset()
         {
-            Shutdown();
-            Thread.Sleep(1000);
-            Initialize();
+            try
+            {
+                SendArgs(new byte[] { 1, 6, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
+            }
+            catch
+            {
+                StartListenerForDevice();
+            }
         }
 
         public void Shutdown()
@@ -84,7 +109,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                 //Just in case Bridge is not responding or already closed
             }
 
-            Thread.Sleep(1000); // Time to shutdown leds and close listener application.
+            Thread.Sleep(100); // Time to shutdown leds and close listener application.
             _isConnected = false;
         }
 

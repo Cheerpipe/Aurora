@@ -12,27 +12,30 @@ using System.Threading;
 using CSScriptLibrary;
 using Aurora.Settings;
 using System.ComponentModel;
+using Mono.CSharp;
 
 namespace Aurora.Devices.NZXTHUE2Ambient
 {
     public class NZXTHUE2AmbientDisplayDevice : Device
     {
         public string devicename = "NZXT HUE Ambient Display";
-        private System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+        private Stopwatch watch = new Stopwatch();
         private bool isConnected;
         private long lastUpdateTime = 0;
         private DeviceKeys _commitKey;
         private Color _initialColor = Color.FromArgb(0, 0, 0);
         private Dictionary<DeviceKeys, DeviceMapState> _deviceMap;
+        private int deviceIndex = 0;
         public bool Initialize()
         {
             try
             {
                 UpdateDeviceMap();
                 KillProcessByName("NZXT CAM.exe");
-                KillProcessByName("NZXTHUEAmbientListener.exe");
-                Thread.Sleep(500);
-                Process.Start(@"D:\Warez\Utiles\NZXTHUEAmbientListener\NZXTHUEAmbientListener.exe");
+                if (!ListenerRunning())
+                {
+                    StartListenerForDevice();
+                }
                 isConnected = true;
                 return true;
             }
@@ -43,9 +46,27 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
         }
 
+        private void StartListenerForDevice()
+        {
+            Process.Start(@"D:\Warez\Utiles\NZXTHUEAmbientListener\NZXTHUEAmbientListener.exe", "--dev:" + deviceIndex);
+        }
+
+        private bool ListenerRunning()
+        {
+            try
+            {
+                SendArgs(new byte[] { 1, 255, 0, 0, 0, 0 });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public void SendArgs(byte[] args)
         {
-            using (var pipe = new NamedPipeClientStream(".", "HUE2AmbientDeviceController0", PipeDirection.Out))
+            using (var pipe = new NamedPipeClientStream(".", "HUE2AmbientDeviceController" + deviceIndex, PipeDirection.Out))
             using (var stream = new BinaryWriter(pipe))
             {
                 pipe.Connect(100);
@@ -65,9 +86,14 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
         public void Reset()
         {
-            Shutdown();
-            Thread.Sleep(1000);
-            Initialize();
+            try
+            { 
+            SendArgs(new byte[] { 1, 6, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
+            }
+            catch
+            {
+                StartListenerForDevice();
+            }
         }
 
         public void Shutdown()
@@ -80,7 +106,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 //Just in case Bridge is not responding or already closed
             }
-            Thread.Sleep(1000); // Time to shutdown leds and close listener application.
+            Thread.Sleep(100); // Time to shutdown leds and close listener application.
             isConnected = false;
         }
 
