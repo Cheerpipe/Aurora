@@ -152,7 +152,6 @@ namespace Aurora.Devices.Logitech
     {
         private String devicename = "Logitech";
         private bool isInitialized = false;
-        private bool ledSDKPresent = false;
 
         private bool keyboard_updated = false;
         private bool peripheral_updated = false;
@@ -181,9 +180,7 @@ namespace Aurora.Devices.Logitech
                     {
                         LogitechGSDK.LGDLL? dll = null;
                         if (Global.Configuration.VarRegistry.GetVariable<bool>($"{devicename}_override_dll"))
-                        {
                             dll = Global.Configuration.VarRegistry.GetVariable<LogitechGSDK.LGDLL>($"{devicename}_override_dll_option");
-                        }
 
                         LogitechGSDK.InitDLL(dll);
 
@@ -191,12 +188,7 @@ namespace Aurora.Devices.Logitech
                         {
                             Global.logger.Error("Logitech LED SDK could not be initialized.");
 
-                            LogitechGSDK.LogiLedShutdown();
-                            LogitechGSDK.ReleaseDLL();
-
                             isInitialized = false;
-                            /* we have the SKD present but neither GHub nor LGS is running */
-                            ledSDKPresent = true;
                             return false;
                         }
 
@@ -224,7 +216,6 @@ namespace Aurora.Devices.Logitech
                             }
 
                             isInitialized = true;
-                            ledSDKPresent = true;
                             return true;
                         }
                         else
@@ -314,17 +305,11 @@ namespace Aurora.Devices.Logitech
 
         private void SendColorsToKeyboard(bool forced = false)
         {
-            bool bOk;
-
             if (!Enumerable.SequenceEqual(bitmap, previous_bitmap) || forced)
             {
-                bOk = LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_PERKEY_RGB);
+                LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_PERKEY_RGB);
 
-                if(!LogitechGSDK.LogiLedSetLightingFromBitmap(bitmap) || !bOk)
-                {
-                    isInitialized = false;
-                }
-
+                LogitechGSDK.LogiLedSetLightingFromBitmap(bitmap);
                 bitmap.CopyTo(previous_bitmap, 0);
                 keyboard_updated = true;
             }
@@ -332,10 +317,9 @@ namespace Aurora.Devices.Logitech
 
         private void SendColorToPeripheral(Color color, bool forced = false)
         {
-            bool bOk;
             if (!previous_peripheral_Color.Equals(color) || forced)
             {
-                bOk = LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_RGB);
+                LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_RGB);
 
                 if (Global.Configuration.allow_peripheral_devices)
                 {
@@ -346,10 +330,7 @@ namespace Aurora.Devices.Logitech
 
                     //System.Diagnostics.Debug.WriteLine("R: " + red_amt + " G: " + green_amt + " B: " + blue_amt);
 
-                    if(!LogitechGSDK.LogiLedSetLighting(red_amt, green_amt, blue_amt) || !bOk)
-                    {
-                        isInitialized = false;
-                    }
+                    LogitechGSDK.LogiLedSetLighting(red_amt, green_amt, blue_amt);
                     previous_peripheral_Color = color;
                     peripheral_updated = true;
                 }
@@ -357,10 +338,7 @@ namespace Aurora.Devices.Logitech
                 {
                     if (peripheral_updated)
                     {
-                        if(LogitechGSDK.LogiLedRestoreLighting() || !bOk)
-                        {
-                            isInitialized = false;
-                        }
+                        LogitechGSDK.LogiLedRestoreLighting();
                         peripheral_updated = false;
                     }
                 }
@@ -369,12 +347,6 @@ namespace Aurora.Devices.Logitech
 
         public bool IsInitialized()
         {
-            if(ledSDKPresent && !isInitialized)
-            {
-                Initialize();
-            }
-
-                
             return this.isInitialized;
         }
 
