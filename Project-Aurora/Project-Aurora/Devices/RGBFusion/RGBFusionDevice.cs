@@ -35,11 +35,7 @@ namespace Aurora.Devices.RGBFusion
         private string _ignoreLedsParam = string.Empty;
         private string _customArgs = string.Empty;
         private byte[] _setColorCommandDataPacket = new byte[1024];
-        private List<string> _RGBFusionBridgeFiles = new List<string>()
-        {
-            {"RGBFusionAuroraListener.exe"},
-            {"RGBFusionBridge.dll"}
-        };
+        private List<string> _RGBFusionBridgeFiles = new List<string>();
         private const string _RGBFusionExeName = "RGBFusion.exe";
         private const string _RGBFusionBridgeExeName = "RGBFusionAuroraListener.exe";
         private const string _defaultProfileFileName = "pro1.xml";

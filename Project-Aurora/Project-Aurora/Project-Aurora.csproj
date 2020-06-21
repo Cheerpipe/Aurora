@@ -1672,12 +1672,6 @@
     <Content Include="RGB.NET.Devices.Asus.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="RGBFusionBridge\RGBFusionAuroraListener.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="RGBFusionBridge\RGBFusionBridge.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="wooting-rgb-sdk.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2518,6 +2512,7 @@
     <Folder Include="Profiles\Slime Rancher\Layers\" />
     <Folder Include="Profiles\Subnautica\Layers\" />
     <Folder Include="Properties\DataSources\" />
+    <Folder Include="RGBFusionBridge\" />
     <Folder Include="Scripts\Devices\" />
     <Folder Include="Settings\Overrides\Logic\Special\" />
   </ItemGroup>
