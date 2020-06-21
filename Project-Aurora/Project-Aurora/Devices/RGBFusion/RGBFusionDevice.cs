@@ -15,6 +15,9 @@ using System.ComponentModel;
 using Aurora.Utils;
 using Mono.CSharp;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml;
+using System.Security.Cryptography;
+using IronPython.Runtime;
 
 namespace Aurora.Devices.RGBFusion
 {
@@ -27,20 +30,21 @@ namespace Aurora.Devices.RGBFusion
         private VariableRegistry _variableRegistry = null;
         private DeviceKeys _commitKey;
         private string _RGBFusionDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\GIGABYTE\\RGBFusion\\";
-        private string _RGBFusionExeName = "RGBFusion.exe";
-        private string _RGBFusionBridgeExeName = "RGBFusionAuroraListener.exe";
         private Dictionary<DeviceKeys, DeviceMapState> _deviceMap;
-        private Color _initialColor = Color.FromArgb(0, 0, 0);
-        private string _defaultProfileFileName = "pro1.xml";
-        private string[] _RGBFusionBridgeFiles = new string[]
+        private Color _initialColor = Color.Black;
+        private string _ignoreLedsParam = string.Empty;
+        private byte[] _setColorCommandDataPacket = new byte[1024];
+        private List<string> _RGBFusionBridgeFiles = new List<string>()
         {
-            "RGBFusionAuroraListener.exe",
-            "RGBFusionBridge.dll"
+            {"RGBFusionAuroraListener.exe"},
+            {"RGBFusionBridge.dll"}
         };
         private const string _RGBFusionExeName = "RGBFusion.exe";
         private const string _RGBFusionBridgeExeName = "RGBFusionAuroraListener.exe";
         private const string _defaultProfileFileName = "pro1.xml";
         private const string _defaultExtProfileFileName = "ExtPro1.xml";
+
+        private HashSet<byte> _rgbFusionLedIndexes;
 
         public bool Initialize()
         {
@@ -65,10 +69,10 @@ namespace Aurora.Devices.RGBFusion
                 }
                 if (!IsRGBFusionBridgeInstalled())
                 {
-                    Global.logger.Warn("RGBFusion Bridge is not installed. Installing.");
+                    Global.logger.Warn("RGBFusion Bridge is not installed. Installing. Installing.");
                     try
                     {
-                        //InstallRGBFusionBridge();
+                        InstallRGBFusionBridge();
                     }
                     catch (Exception ex)
                     {
@@ -80,8 +84,13 @@ namespace Aurora.Devices.RGBFusion
 
                 //Start RGBFusion Bridge
                 Global.logger.Info("Starting RGBFusion Bridge.");
-                Process.Start(_RGBFusionDirectory + _RGBFusionBridgeExeName, @"--kingstondriver --aorusvgadriver --dleddriver --ignoreled:0,4,5,7,8,9");
-                UpdateDeviceMap();
+                Process.Start(_RGBFusionDirectory + _RGBFusionBridgeExeName, ValidateIgnoreLedParam() ? "--ignoreled:" + _ignoreLedsParam : "");
+                if (!TestRGBFusionBridgeListener(10))
+                    throw new Exception("RGBFusion bridge listener didn't start.");
+
+                //If device is restarted, re-send last color command.
+                if (_setColorCommandDataPacket[0] != 0)
+                    SendCommandToRGBFusion(_setColorCommandDataPacket);
                 _isConnected = true;
                 return true;
             }
@@ -93,12 +102,28 @@ namespace Aurora.Devices.RGBFusion
             }
         }
 
-        public void SendCommandToRGBFusion(byte[] args)
+        public void KillProcessByName(string processName)
+        {
+            Process cmd = new Process();
+            cmd.StartInfo.FileName = Environment.SystemDirectory + @"\taskkill.exe";
+            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            cmd.StartInfo.Arguments = string.Format(@"/f /im {0}", processName);
+            cmd.Start();
+            cmd.WaitForExit();
+            cmd.Dispose();
+        }
+
+        public bool SendCommandToRGBFusion(byte[] args)
         {
             try
             {
-                pipe.Connect(timeout: 10);
-                stream.Write(args);
+                using (var pipe = new NamedPipeClientStream(".", "RGBFusionAuroraListener", PipeDirection.Out))
+                using (var stream = new BinaryWriter(pipe))
+                {
+                    pipe.Connect(100);
+                    stream.Write(args);
+                    return true;
+                }
             }
             catch (Exception ex)
             {
@@ -121,23 +146,7 @@ namespace Aurora.Devices.RGBFusion
                     Thread.Sleep(1000); // Time to shutdown leds and close listener application.
                 KillProcessByName("RGBFusionAuroraListener"); //Just in case RGBFusionAuroraListener did not close
             }
-            catch
-            {
-                //Just in case Bridge is not responding or already closed
-            }
-
-            Thread.Sleep(1000); // Time to shutdown leds and close listener application.
             _isConnected = false;
-        }
-
-        public void KillProcessByName(string processName)
-        {
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = @"C:\Windows\System32\taskkill.exe";
-            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            cmd.StartInfo.Arguments = string.Format(@"/f /im {0}", processName);
-            cmd.Start();
-            cmd.Dispose();
         }
 
         private struct DeviceMapState
@@ -153,8 +162,6 @@ namespace Aurora.Devices.RGBFusion
 
         private void UpdateDeviceMap()
         {
-
-
             _deviceMap = new Dictionary<DeviceKeys, DeviceMapState>();
             _deviceMap.Add(DeviceKeys.MBAREA_6, new DeviceMapState(1, _initialColor));
             _deviceMap.Add(DeviceKeys.MBAREA_3, new DeviceMapState(2, _initialColor));
@@ -187,13 +194,38 @@ namespace Aurora.Devices.RGBFusion
 
         public VariableRegistry GetRegisteredVariables()
         {
+            if (_rgbFusionLedIndexes == null)
+            {
+                _rgbFusionLedIndexes = GetLedIndexes();
+            }
+
             if (_variableRegistry == null)
             {
                 var devKeysEnumAsEnumerable = System.Enum.GetValues(typeof(DeviceKeys)).Cast<DeviceKeys>();
                 _variableRegistry = new VariableRegistry();
-                _variableRegistry.Register($"{_devicename}_devicekey", DeviceKeys.Peripheral_Logo, "Key to Use", devKeysEnumAsEnumerable.Max(), devKeysEnumAsEnumerable.Min());
+                _variableRegistry.Register($"{_devicename}_ignore_leds", "", "Area index to be ignored by RGBFusion Bridge", null, null, "Comma separated. Require Aurora restart.");
+                foreach (byte ledIndex in _rgbFusionLedIndexes)
+                {
+                    _variableRegistry.Register($"{_devicename}_area_" + ledIndex.ToString(), DeviceKeys.ESC, "Key to Use for area index " + ledIndex.ToString(), devKeysEnumAsEnumerable.Max(), devKeysEnumAsEnumerable.Min(), "Require Aurora restart.");
+                }
             }
+            _ignoreLedsParam = Global.Configuration.VarRegistry.GetVariable<string>($"{_devicename}_ignore_leds");
             return _variableRegistry;
+        }
+
+        private bool ValidateIgnoreLedParam()
+        {
+            string[] ignoreLedsParam = _ignoreLedsParam.Split(',');
+
+            foreach (string s in ignoreLedsParam)
+            {
+                if (!byte.TryParse(s, out _))
+                {
+                    Global.logger.Error("RGBFusion Bridge --ignoreled bad param {0}. Running Bridge in default mode.", s);
+                    return false;
+                }
+            }
+            return true;
         }
 
         public string GetDeviceName()
@@ -257,42 +289,42 @@ namespace Aurora.Devices.RGBFusion
                         if (led < 8) // MB
                         {
                             commandIndex++;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 10;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = led;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 2] = 10;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 6] = led;
                         }
                         if (led == 8) // GPU
                         {
                             commandIndex++;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 40;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 2] = 40;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
                         }
                         else if (led == 9) // RAM
                         {
                             commandIndex++;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 30;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 2] = 30;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
                         }
                         else if (led >= 10) // DLED PIN HEADER																																								
                         {
                             commandIndex++;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 20;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
-                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = (byte)(led - 10);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 1] = 1;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 2] = 20;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 3] = (byte)(key.Value.R * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 4] = (byte)(key.Value.G * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 5] = (byte)(key.Value.B * key.Value.A / 255.0f);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 6] = (byte)(led - 10);
                         }
                         _deviceMap[key.Key] = new DeviceMapState(led, key.Value);
                         _deviceChanged = true;
@@ -311,7 +343,6 @@ namespace Aurora.Devices.RGBFusion
                             _setColorCommandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
                             _setColorCommandDataPacket[0] = commandIndex;
                             SendCommandToRGBFusion(_setColorCommandDataPacket);
-                            Debug.WriteLine("Set color");
                         }
                         commandIndex = 0;
                         _deviceChanged = false;
@@ -323,18 +354,52 @@ namespace Aurora.Devices.RGBFusion
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _setColorCommandDataPacket[0] = 0; //Invalidate bad command
-                Global.logger.Warn(string.Format("RGBFusion device error while updatind device. Error: {0}", ex.Message));
                 return false;
             }
         }
-        private byte[] _commandDataPacket = new byte[512];
+
+        private HashSet<byte> GetLedIndexes()
+        {
+            HashSet<byte> rgbFusionLedIndexes = new HashSet<byte>();
+
+            string mainProfileFilePath = _RGBFusionDirectory + _defaultProfileFileName;
+            if (!IsRGBFusinMainProfileCreated())
+            {
+                Global.logger.Warn(string.Format("Main profile file not found at {0}. Launch RGBFusion at least one time.", mainProfileFilePath));
+            }
+            else
+            {
+                XmlDocument mainProfileXml = new XmlDocument();
+                mainProfileXml.Load(mainProfileFilePath);
+                XmlNode ledInfoNode = mainProfileXml.DocumentElement.SelectSingleNode("/LED_info");
+                foreach (XmlNode node in ledInfoNode.ChildNodes)
+                {
+                    rgbFusionLedIndexes.Add(Convert.ToByte(node.Attributes["Area_index"]?.InnerText));
+                }
+            }
+            string extMainProfileFilePath = _RGBFusionDirectory + _defaultExtProfileFileName;
+            if (!IsRGBFusinMainExtProfileCreated())
+            {
+                Global.logger.Warn(string.Format("Main external devices profile file not found at {0}. Launch RGBFusion at least one time.", mainProfileFilePath));
+            }
+            else
+            {
+                XmlDocument extMainProfileXml = new XmlDocument();
+                extMainProfileXml.Load(extMainProfileFilePath);
+                XmlNode extLedInfoNode = extMainProfileXml.DocumentElement.SelectSingleNode("/LED_info");
+                foreach (XmlNode node in extLedInfoNode.ChildNodes)
+                {
+                    rgbFusionLedIndexes.Add(Convert.ToByte(node.Attributes["Area_index"]?.InnerText));
+                }
+            }
+            return rgbFusionLedIndexes;
+        }
 
         public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
         {
-            //UpdateDeviceMap();
+            UpdateDeviceMap(); //Is ther any way to know when a config in VariableRegistry change to avoid do this task every time?
             _ellapsedTimeWatch.Restart();
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
             _ellapsedTimeWatch.Stop();
@@ -351,7 +416,7 @@ namespace Aurora.Devices.RGBFusion
 
         private bool IsRGBFusionRunning()
         {
-            return Process.GetProcessesByName(_RGBFusionExeName).Length > 0;
+            return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(_RGBFusionExeName)).Length > 0;
         }
 
         private bool IsRGBFusionBridgeRunning()
@@ -366,15 +431,66 @@ namespace Aurora.Devices.RGBFusion
             return result;
         }
 
+        private bool IsRGBFusinMainExtProfileCreated()
+        {
+
+            string defaulprofileFullpath = _RGBFusionDirectory + _defaultExtProfileFileName;
+            bool result = (File.Exists(defaulprofileFullpath));
+            return result;
+        }
+
         private bool IsRGBFusionBridgeInstalled()
         {
-            string rgbFusionBridgeFullpath = _RGBFusionDirectory + _RGBFusionBridgeExeName;
-            bool result = (File.Exists(rgbFusionBridgeFullpath));
+            bool error = false;
+            foreach (string file in _RGBFusionBridgeFiles)
+            {
+                if (!File.Exists(_RGBFusionDirectory + file))
+                {
+                    Global.logger.Error(String.Format("File {0} not installed.", file));
+                    error = true;
+                }
+                else if (CalculateMD5(_RGBFusionDirectory + file).ToLower() != CalculateMD5("RGBFusionBridge\\" + file).ToLower())
+                {
+                    Global.logger.Error(String.Format("File {0} MD5 incorrect.", file));
+                    error = true;
+                }
+            }
+            return !error;
+        }
+
+        static string CalculateMD5(string filename)
+        {
+            using (var md5 = MD5.Create())
+            {
+                if (!File.Exists(filename))
+                    return string.Empty;
+                using (var stream = File.OpenRead(filename))
+                {
+                    var hash = md5.ComputeHash(stream);
+                    var md5String = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                    return md5String;
+                }
+            }
+        }
+
+        private bool TestRGBFusionBridgeListener(byte secondsTimeOut)
+        {
+            Debug.WriteLine("Scan start");
+            bool result = false;
+            for (int i = 0; i < secondsTimeOut * 2; i++)
+            {
+                if (SendCommandToRGBFusion(new byte[] { 1, 255, 0, 0, 0, 0, 0 }))
+                    return true;
+                //Test listener every 100ms until pipe is up or timeout
+                Thread.Sleep(500);
+            }
+            Debug.WriteLine("Return");
             return result;
         }
 
         private bool InstallRGBFusionBridge()
         {
+            Shutdown();
             foreach (string fileName in _RGBFusionBridgeFiles)
             {
                 try
@@ -388,10 +504,8 @@ namespace Aurora.Devices.RGBFusion
                     return false;
                 }
             }
-
             return true;
         }
-
-        #endregion 
+        #endregion
     }
 }
