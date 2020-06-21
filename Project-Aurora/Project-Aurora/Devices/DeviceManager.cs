@@ -355,6 +355,18 @@ namespace Aurora.Devices
             }
         }
 
+        public void HardResetDeviceByName(string deviceName)
+        {
+            foreach (DeviceContainer device in devices)
+            {
+                if (device.Device.IsInitialized() && device.Device.GetDeviceName() == deviceName)
+                {
+                    device.Device.Shutdown();
+                    device.Device.Initialize();
+                }
+            }
+        }
+
         public void UpdateDevices(DeviceColorComposition composition, bool forced = false)
         {
             foreach (DeviceContainer device in devices)
