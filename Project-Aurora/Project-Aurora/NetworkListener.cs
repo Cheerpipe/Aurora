@@ -1,4 +1,4 @@
-﻿using Aurora.Profiles;
+using Aurora.Profiles;
 using Corale.Colore.Core;
 using System;
 using System.Collections.Generic;
@@ -384,7 +384,7 @@ namespace Aurora
                     Global.dev_manager.ResetDevices();
                     break;
                 case "restart_logitech_devices":
-                    Global.dev_manager.ResetDeviceByName("Logitech");
+                    Global.dev_manager.HardResetDeviceByName("Logitech");
                     break;
                 case "restart_hassio_devices":
                     Global.dev_manager.ResetDeviceByName("Hassio");
