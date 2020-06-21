@@ -20,6 +20,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
     {
         public string _devicename = string.Empty;
         private Stopwatch _watch = new Stopwatch();
+        private VariableRegistry _variableRegistry = null;
         private bool _isConnected;
         private long _lastUpdateTime = 0;
         private DeviceKeys _commitKey;
@@ -27,6 +28,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         private int _deviceIndex = -1;
         private int _connectRetryCountLeft = 3;
         private Dictionary<DeviceKeys, List<DeviceMapState>> _deviceMap;
+        private bool _useFastStartup = false;
         public bool Initialize()
         {
             try
@@ -35,7 +37,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                 if (!ListenerRunning())
                 {
                     Global.logger.Warn(string.Format("{0} device listener not running. Starting.", _devicename));
-                    StartListenerForDevice();
+                    StartListenerForDevice(_useFastStartup ? "--uselastsetting" : "");
                 }
                 _isConnected = true;
                 return true;
@@ -55,10 +57,10 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             _commitKey = _deviceMap.Keys.Max();
         }
 
-        private void StartListenerForDevice()
+        private void StartListenerForDevice(string customArgs = "")
         {
             //TODO Move to registry key
-            Process.Start(@"D:\Warez\Utiles\NZXTHUEAmbientListener\NZXTHUEAmbientListener.exe", "--dev:" + _deviceIndex);
+            Process.Start(@"D:\Warez\Utiles\NZXTHUEAmbientListener\NZXTHUEAmbientListener.exe", "--dev:" + _deviceIndex + " " + customArgs);
         }
 
         private bool ListenerRunning()
@@ -95,6 +97,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             cmd.StartInfo.Arguments = string.Format(@"/f /im {0}", processName);
             cmd.Start();
+            cmd.WaitForExit();
             cmd.Dispose();
         }
 
@@ -106,7 +109,8 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
             catch
             {
-                StartListenerForDevice();
+                KillProcessByName("NZXTHUEAmbientListener.exe");
+                StartListenerForDevice("--uselastsetting");
             }
         }
 
@@ -118,13 +122,11 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
             catch
             {
-                //Just in case Bridge is not responding or already closed
+                KillProcessByName("NZXTHUEAmbientListener.exe");
             }
 
             _isConnected = false;
         }
-
-
 
         bool _deviceChanged = true;
 
@@ -132,6 +134,15 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
         public VariableRegistry GetRegisteredVariables()
         {
+            if (_variableRegistry == null)
+            {
+                _variableRegistry = new VariableRegistry();
+                _variableRegistry.Register($"{_devicename}_use_fast_startup", false, "Use fast startup", null, null, "Use last led detection to avoid detection routine to speedup device initialization.");
+            }
+            _useFastStartup = Global.Configuration.VarRegistry.GetVariable<bool>($"{_devicename}_use_fast_startup");
+            return _variableRegistry;
+
+
             return new VariableRegistry();
         }
         private byte[] _dataPacket = new byte[256];
