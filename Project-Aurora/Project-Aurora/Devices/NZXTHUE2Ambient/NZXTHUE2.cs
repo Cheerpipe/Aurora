@@ -106,9 +106,11 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             try
             {
                 SendArgs(new byte[] { 1, 6, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
+                Global.logger.Warn(string.Format("Soft reseting {0}.", _devicename));
             }
             catch
             {
+                Global.logger.Warn(string.Format("Soft reseting {0} didn't work. Using hard reset", _devicename));
                 KillProcessByName("NZXTHUEAmbientListener.exe");
                 StartListenerForDevice("--uselastsetting");
             }
