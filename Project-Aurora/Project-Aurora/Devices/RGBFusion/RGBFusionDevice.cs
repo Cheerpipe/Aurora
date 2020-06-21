@@ -479,7 +479,6 @@ namespace Aurora.Devices.RGBFusion
 
         private bool TestRGBFusionBridgeListener(byte secondsTimeOut)
         {
-            Debug.WriteLine("Scan start");
             bool result = false;
             for (int i = 0; i < secondsTimeOut * 2; i++)
             {
@@ -488,7 +487,6 @@ namespace Aurora.Devices.RGBFusion
                 //Test listener every 100ms until pipe is up or timeout
                 Thread.Sleep(500);
             }
-            Debug.WriteLine("Return");
             return result;
         }
 
