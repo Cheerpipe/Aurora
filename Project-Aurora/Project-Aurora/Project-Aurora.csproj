@@ -55,6 +55,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>documentation\Aurora.XML</DocumentationFile>
     <WarningLevel>3</WarningLevel>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>C:\Program Files\Aurora\</OutputPath>

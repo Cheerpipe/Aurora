@@ -25,8 +25,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         private DeviceKeys _commitKey;
         private Color _initialColor = Color.Black;
         private int _deviceIndex = -1;
-        private int _connectRetryCount = 0;
-        private int _maxConnectRetryCount = 3;
+        private int _connectRetryCountLeft = 3;
         private Dictionary<DeviceKeys, List<DeviceMapState>> _deviceMap;
         public bool Initialize()
         {
@@ -35,6 +34,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                 KillProcessByName("NZXT CAM.exe");
                 if (!ListenerRunning())
                 {
+                    Global.logger.Warn(string.Format("{0} device listener not running. Starting.", _devicename));
                     StartListenerForDevice();
                 }
                 _isConnected = true;
@@ -221,8 +221,9 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                 }
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Global.logger.Warn(string.Format("{0} error while sending commands. Error: {1}", _devicename, ex.Message));
                 return false;
             }
         }
@@ -236,6 +237,16 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
             _watch.Stop();
             _lastUpdateTime = _watch.ElapsedMilliseconds;
+            if (_lastUpdateTime > 50 && _connectRetryCountLeft > 0)
+            {
+                Reset();
+                _connectRetryCountLeft--;
+                Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
+            }
+            else
+            {
+                _connectRetryCountLeft = 3;
+            }
 
             return update_result;
         }
