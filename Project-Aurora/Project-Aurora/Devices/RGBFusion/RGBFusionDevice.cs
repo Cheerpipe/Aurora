@@ -21,7 +21,7 @@ namespace Aurora.Devices.RGBFusion
     public class RGBFusionDevice : Device
     {
         private string _devicename = "RGB Fusion";
-        private bool _isConnected;
+        private bool _isConnected = false;
         private long _lastUpdateTime = 0;
         private Stopwatch _ellapsedTimeWatch = new Stopwatch();
         private VariableRegistry _variableRegistry = null;
@@ -37,16 +37,16 @@ namespace Aurora.Devices.RGBFusion
             "RGBFusionAuroraListener.exe",
             "RGBFusionBridge.dll"
         };
+        private const string _RGBFusionExeName = "RGBFusion.exe";
+        private const string _RGBFusionBridgeExeName = "RGBFusionAuroraListener.exe";
+        private const string _defaultProfileFileName = "pro1.xml";
+        private const string _defaultExtProfileFileName = "ExtPro1.xml";
 
         public bool Initialize()
         {
             try
             {
-                try
-                {
-                    Shutdown();
-                }
-                catch { }
+                Shutdown();
 
                 if (!IsRGBFusionInstalled())
                 {
@@ -70,9 +70,9 @@ namespace Aurora.Devices.RGBFusion
                     {
                         //InstallRGBFusionBridge();
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        Global.logger.Error("An error has occurred  while installing RGBFusion Bridge.");
+                        Global.logger.Error("RGBFusion Bridge cannot be initialized. Error: " + ex.Message);
                         return false;
                     }
                     return false;
@@ -85,9 +85,9 @@ namespace Aurora.Devices.RGBFusion
                 _isConnected = true;
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                Global.logger.Error("RGBFusion Bridge cannot be initialized.");
+                Global.logger.Error("RGBFusion Bridge cannot be initialized. Error: " + ex.Message);
                 _isConnected = false;
                 return false;
             }
@@ -95,11 +95,15 @@ namespace Aurora.Devices.RGBFusion
 
         public void SendCommandToRGBFusion(byte[] args)
         {
-            using (var pipe = new NamedPipeClientStream(".", "RGBFusionAuroraListener", PipeDirection.Out))
-            using (var stream = new BinaryWriter(pipe))
+            try
             {
                 pipe.Connect(timeout: 10);
                 stream.Write(args);
+            }
+            catch (Exception ex)
+            {
+                Global.logger.Error(string.Format("RGBFusion Device has encountered an error while sending the command {0} to RGBFusion Bridge. Error: {1}", BitConverter.ToString(args), ex.Message));
+                return false;
             }
         }
 
@@ -111,9 +115,11 @@ namespace Aurora.Devices.RGBFusion
 
         public void Shutdown()
         {
-            try
+            if (IsRGBFusionBridgeRunning())
             {
-                SendCommandToRGBFusion(new byte[] { 1, 5, 0, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
+                if (SendCommandToRGBFusion(new byte[] { 1, 5, 0, 0, 0, 0, 0 })) // Operatin code 5 set all leds to black and close the listener application.
+                    Thread.Sleep(1000); // Time to shutdown leds and close listener application.
+                KillProcessByName("RGBFusionAuroraListener"); //Just in case RGBFusionAuroraListener did not close
             }
             catch
             {
@@ -297,14 +303,15 @@ namespace Aurora.Devices.RGBFusion
                         if (_deviceChanged)
                         {
                             commandIndex++;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 1] = 2;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 2] = 0;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 3] = 0;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 4] = 0;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 5] = 0;
-                            _commandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
-                            _commandDataPacket[0] = commandIndex;
-                            SendCommandToRGBFusion(_commandDataPacket);
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 1] = 2;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 2] = 0;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 3] = 0;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 4] = 0;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 5] = 0;
+                            _setColorCommandDataPacket[(commandIndex - 1) * 6 + 6] = 0;
+                            _setColorCommandDataPacket[0] = commandIndex;
+                            SendCommandToRGBFusion(_setColorCommandDataPacket);
+                            Debug.WriteLine("Set color");
                         }
                         commandIndex = 0;
                         _deviceChanged = false;
@@ -316,8 +323,10 @@ namespace Aurora.Devices.RGBFusion
                 }
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _setColorCommandDataPacket[0] = 0; //Invalidate bad command
+                Global.logger.Warn(string.Format("RGBFusion device error while updatind device. Error: {0}", ex.Message));
                 return false;
             }
         }
@@ -345,9 +354,13 @@ namespace Aurora.Devices.RGBFusion
             return Process.GetProcessesByName(_RGBFusionExeName).Length > 0;
         }
 
+        private bool IsRGBFusionBridgeRunning()
+        {
+            return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(_RGBFusionBridgeExeName)).Length > 0;
+        }
+
         private bool IsRGBFusinMainProfileCreated()
         {
-
             string defaulprofileFullpath = _RGBFusionDirectory + _defaultProfileFileName;
             bool result = (File.Exists(defaulprofileFullpath));
             return result;
@@ -367,9 +380,11 @@ namespace Aurora.Devices.RGBFusion
                 try
                 {
                     File.Copy("RGBFusionBridge\\" + fileName, _RGBFusionDirectory + fileName, true);
+                    Global.logger.Info(String.Format("RGBFusion file {0} install  OK.", fileName));
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Global.logger.Error(String.Format("RGBFusion file {0} install error: {1}", fileName, ex.Message));
                     return false;
                 }
             }
