@@ -100,10 +100,11 @@ namespace Aurora.Devices
             //Register only my devices
             devices.Add(new DeviceContainer(new Devices.Logitech.LogitechDevice()));         // Logitech Device
             devices.Add(new DeviceContainer(new Devices.RGBFusion.RGBFusionDevice()));        // RGBFusion Bridge
-            devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2AmbientDisplayDevice()));        // HUE 2 Display
-            devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2AmbientDesktopDevice()));        // HUE 2 Desktop
+            devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2("Desktop", 1, Aurora.Devices.NZXTHUE2Ambient.DeviceMaps.HUE2DesktopDeviceMap.GetDeviceMap(Color.Black))));        // HUE 2 Desktop
+            devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2("Display", 0, Aurora.Devices.NZXTHUE2Ambient.DeviceMaps.HUE2DesktopDeviceMap.GetDeviceMap(Color.Black))));        // HUE 2 Display
             devices.Add(new DeviceContainer(new Devices.HassioLightDevice.HassioLightDevice()));         // HASSIO Client
-           // devices.Add(new DeviceContainer(new Devices.Corsair.CorsairDevice()));           // Corsair Device
+
+            // devices.Add(new DeviceContainer(new Devices.Corsair.CorsairDevice()));           // Corsair Device
             //devices.Add(new DeviceContainer(new Devices.Razer.RazerDevice()));               // Razer Device
             //devices.Add(new DeviceContainer(new Devices.Roccat.RoccatDevice()));             // Roccat Device
             //devices.Add(new DeviceContainer(new Devices.Clevo.ClevoDevice()));               // Clevo Device

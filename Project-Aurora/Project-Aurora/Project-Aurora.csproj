@@ -178,8 +178,10 @@
     <Compile Include="Controls\Window_Prompt.xaml.cs">
       <DependentUpon>Window_Prompt.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\NZXTHUE2Ambient\NZXTHUE2AmbientDesktopDevice.cs" />
-    <Compile Include="Devices\NZXTHUE2Ambient\NZXTHUE2AmbientDisplayDevice.cs" />
+    <Compile Include="Devices\NZXTHUE2Ambient\DeviceMapState.cs" />
+    <Compile Include="Devices\NZXTHUE2Ambient\DeviceMaps\DesktopDeviceMap.cs" />
+    <Compile Include="Devices\NZXTHUE2Ambient\DeviceMaps\DisplayDeviceMap.cs" />
+    <Compile Include="Devices\NZXTHUE2Ambient\NZXTHUE2.cs" />
     <Compile Include="Devices\Hassio\HassioLightDevice.cs" />
     <Compile Include="Devices\Hassio\HassioClient.cs" />
     <Compile Include="Devices\RGBFusion\RGBFusionDevice.cs" />
