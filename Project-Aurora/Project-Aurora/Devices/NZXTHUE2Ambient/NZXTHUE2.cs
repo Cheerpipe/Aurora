@@ -13,6 +13,7 @@ using CSScriptLibrary;
 using Aurora.Settings;
 using System.ComponentModel;
 using NAudio.CoreAudioApi;
+using System.Management;
 
 namespace Aurora.Devices.NZXTHUE2Ambient
 {
@@ -26,9 +27,14 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         private DeviceKeys _commitKey;
         private Color _initialColor = Color.Black;
         private int _deviceIndex = -1;
-        private int _connectRetryCountLeft = 3;
+        private int _connectRetryCountLeft = _maxConnectRetryCountLeft;
         private Dictionary<DeviceKeys, List<DeviceMapState>> _deviceMap;
         private bool _useFastStartup = false;
+
+        private const int _maxConnectRetryCountLeft = 5;
+        private const int _ConnectRetryTimeOut = 50;
+        private const string NZXTHUEAmbientListenerExeName = "NZXTHUEAmbientListener.exe";
+
         public bool Initialize()
         {
             try
@@ -76,21 +82,31 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
         }
 
-        NamedPipeClientStream pipe;
-        BinaryWriter stream;
         public void SendArgs(byte[] args)
         {
             using (var pipe = new NamedPipeClientStream(".", "HUE2AmbientDeviceController" + _deviceIndex, PipeDirection.Out))
             using (var stream = new BinaryWriter(pipe))
             {
-                pipe.Connect(timeout: 10);
+                pipe.Connect(timeout: 100);
                 stream.Write(args);
             }
         }
 
-        public static void KillProcessByName(string processName)
+        public void KillProcessByName(string processName, string args = "")
         {
-            Process cmd = new Process();
+
+            processName = Path.GetFileNameWithoutExtension(processName);
+
+            Process[] process = Process.GetProcessesByName(processName);
+
+            foreach (Process p in process)
+            {
+                if (args != "")
+                    if (GetCommandLine(p).Contains(args))
+                        p.Kill();
+            }
+
+            /*Process cmd = new Process();
             //TODO: Get Weindows path
 
             cmd.StartInfo.FileName = Environment.SystemDirectory + @"\taskkill.exe";
@@ -99,6 +115,17 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             cmd.Start();
             cmd.WaitForExit();
             cmd.Dispose();
+            */
+        }
+
+        private string GetCommandLine(Process process)
+        {
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id))
+            using (ManagementObjectCollection objects = searcher.Get())
+            {
+                return objects.Cast<ManagementBaseObject>().SingleOrDefault()?["CommandLine"]?.ToString();
+            }
+
         }
 
         public void Reset()
@@ -111,7 +138,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             catch
             {
                 Global.logger.Warn(string.Format("Soft reseting {0} didn't work. Using hard reset", _devicename));
-                KillProcessByName("NZXTHUEAmbientListener.exe");
+                KillProcessByName(NZXTHUEAmbientListenerExeName, "--dev:" + _deviceIndex);
                 StartListenerForDevice("--uselastsetting");
             }
         }
@@ -124,7 +151,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
             catch
             {
-                KillProcessByName("NZXTHUEAmbientListener.exe");
+                KillProcessByName(NZXTHUEAmbientListenerExeName);
             }
 
             _isConnected = false;
@@ -258,7 +285,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
             else
             {
-                _connectRetryCountLeft = 3;
+                _connectRetryCountLeft = _maxConnectRetryCountLeft;
             }
 
             return update_result;
