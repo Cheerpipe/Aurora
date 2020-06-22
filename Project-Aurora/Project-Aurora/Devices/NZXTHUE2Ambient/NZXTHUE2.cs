@@ -30,7 +30,6 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         private int _connectRetryCountLeft = _maxConnectRetryCountLeft;
         private Dictionary<DeviceKeys, List<DeviceMapState>> _deviceMap;
         private bool _useFastStartup = false;
-
         private const int _maxConnectRetryCountLeft = 5;
         private const int _ConnectRetryTimeOut = 50;
         private const string NZXTHUEAmbientListenerExeName = "NZXTHUEAmbientListener.exe";
