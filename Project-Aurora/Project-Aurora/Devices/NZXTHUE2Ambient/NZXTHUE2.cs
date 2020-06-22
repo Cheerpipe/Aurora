@@ -39,6 +39,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             try
             {
                 KillProcessByName("NZXT CAM.exe");
+                UpdateConfigVariables();
                 if (!ListenerRunning())
                 {
                     Global.logger.Warn(string.Format("{0} device listener not running. Starting.", _devicename));
@@ -102,19 +103,12 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 if (args != "")
                     if (GetCommandLine(p).Contains(args))
-                        p.Kill();
+                    {
+                        try { p.Kill(); }
+                        catch { }
+                    }
+
             }
-
-            /*Process cmd = new Process();
-            //TODO: Get Weindows path
-
-            cmd.StartInfo.FileName = Environment.SystemDirectory + @"\taskkill.exe";
-            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            cmd.StartInfo.Arguments = string.Format(@"/f /im {0}", processName);
-            cmd.Start();
-            cmd.WaitForExit();
-            cmd.Dispose();
-            */
         }
 
         private string GetCommandLine(Process process)
@@ -122,9 +116,9 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id))
             using (ManagementObjectCollection objects = searcher.Get())
             {
-                return objects.Cast<ManagementBaseObject>().SingleOrDefault()?["CommandLine"]?.ToString();
+                string args = objects.Cast<ManagementBaseObject>().SingleOrDefault()?["CommandLine"]?.ToString();
+                return args != null ? args : "";
             }
-
         }
 
         public void Reset()
@@ -150,9 +144,8 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             }
             catch
             {
-                KillProcessByName(NZXTHUEAmbientListenerExeName);
+                KillProcessByName(NZXTHUEAmbientListenerExeName, "--dev:" + _deviceIndex);
             }
-
             _isConnected = false;
         }
 
@@ -166,13 +159,17 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 _variableRegistry = new VariableRegistry();
                 _variableRegistry.Register($"{_devicename}_use_fast_startup", false, "Use fast startup", null, null, "Use last led detection to avoid detection routine to speedup device initialization.");
+                _variableRegistry.Register($"{_devicename}_device_index", 0, "Device index", 255, 0, "First detected device has index 0.");
             }
-            _useFastStartup = Global.Configuration.VarRegistry.GetVariable<bool>($"{_devicename}_use_fast_startup");
             return _variableRegistry;
-
-
-            return new VariableRegistry();
         }
+
+        private void UpdateConfigVariables()
+        {
+            _useFastStartup = Global.Configuration.VarRegistry.GetVariable<bool>($"{_devicename}_use_fast_startup");
+            _deviceIndex = Global.Configuration.VarRegistry.GetVariable<int>($"{_devicename}_device_index");
+        }
+
         private byte[] _dataPacket = new byte[256];
 
         public string GetDeviceName()
@@ -280,7 +277,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                 _connectRetryCountLeft--;
                 Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
             }
-            else
+            else if (_lastUpdateTime < _ConnectRetryTimeOut)
             {
                 _connectRetryCountLeft = _maxConnectRetryCountLeft;
             }
