@@ -271,9 +271,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
         {
             _watch.Restart();
-
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
-
             _watch.Stop();
             _lastUpdateTime = _watch.ElapsedMilliseconds;
             if (_lastUpdateTime > 50 && _connectRetryCountLeft > 0)
@@ -286,7 +284,6 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 _connectRetryCountLeft = _maxConnectRetryCountLeft;
             }
-
             return update_result;
         }
     }

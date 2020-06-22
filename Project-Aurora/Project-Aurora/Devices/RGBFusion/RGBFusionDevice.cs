@@ -40,6 +40,9 @@ namespace Aurora.Devices.RGBFusion
         private const string _RGBFusionBridgeExeName = "RGBFusionAuroraListener.exe";
         private const string _defaultProfileFileName = "pro1.xml";
         private const string _defaultExtProfileFileName = "ExtPro1.xml";
+        private int _connectRetryCountLeft = _maxConnectRetryCountLeft;
+        private const int _maxConnectRetryCountLeft = 5;
+        private const int _ConnectRetryTimeOut = 50;
 
         private HashSet<byte> _rgbFusionLedIndexes;
 
@@ -68,7 +71,7 @@ namespace Aurora.Devices.RGBFusion
                 if (!IsRGBFusionBridgeInstalled())
                 {
                     Global.logger.Warn("RGBFusion Bridge is not installed. Installing. Installing.");
-                    try
+                    try 
                     {
                         InstallRGBFusionBridge();
                     }
@@ -137,7 +140,7 @@ namespace Aurora.Devices.RGBFusion
 
         public void Reset()
         {
-            Shutdown();
+            HardShutdown();
             Initialize();
         }
 
@@ -147,6 +150,15 @@ namespace Aurora.Devices.RGBFusion
             {
                 SendCommandToRGBFusion(new byte[] { 1, 5, 0, 0, 0, 0, 0 });
                 Thread.Sleep(1000);
+                KillProcessByName(_RGBFusionBridgeExeName);
+            }
+            _isConnected = false;
+        }
+
+        public void HardShutdown()
+        {
+            if (IsRGBFusionBridgeRunning())
+            {
                 KillProcessByName(_RGBFusionBridgeExeName);
             }
             _isConnected = false;
@@ -411,6 +423,16 @@ namespace Aurora.Devices.RGBFusion
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
             _ellapsedTimeWatch.Stop();
             _lastUpdateTime = _ellapsedTimeWatch.ElapsedMilliseconds;
+            if (_lastUpdateTime > 50 && _connectRetryCountLeft > 0)
+            {
+                Reset();
+                _connectRetryCountLeft--;
+                Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
+            }
+            else
+            {
+                _connectRetryCountLeft = _maxConnectRetryCountLeft;
+            }
             return update_result;
         }
         #region RGBFusion Specific Methods
