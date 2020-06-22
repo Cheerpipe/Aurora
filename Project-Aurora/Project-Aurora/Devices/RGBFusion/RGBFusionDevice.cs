@@ -41,6 +41,7 @@ namespace Aurora.Devices.RGBFusion
         private const string _defaultProfileFileName = "pro1.xml";
         private const string _defaultExtProfileFileName = "ExtPro1.xml";
         private int _connectRetryCountLeft = _maxConnectRetryCountLeft;
+        private bool _starting = false;
         private const int _maxConnectRetryCountLeft = 5;
         private const int _ConnectRetryTimeOut = 50;
 
@@ -48,6 +49,7 @@ namespace Aurora.Devices.RGBFusion
 
         public bool Initialize()
         {
+            _starting = true;
             try
             {
                 if (!TestRGBFusionBridgeListener(1))
@@ -71,7 +73,7 @@ namespace Aurora.Devices.RGBFusion
                 if (!IsRGBFusionBridgeInstalled())
                 {
                     Global.logger.Warn("RGBFusion Bridge is not installed. Installing. Installing.");
-                    try 
+                    try
                     {
                         InstallRGBFusionBridge();
                     }
@@ -85,11 +87,8 @@ namespace Aurora.Devices.RGBFusion
 
                 //Start RGBFusion Bridge
                 Global.logger.Info("Starting RGBFusion Bridge.");
-                string pStart = _RGBFusionDirectory + _RGBFusionBridgeExeName;
-                string pArgs = _customArgs + " " + (ValidateIgnoreLedParam() ? "--ignoreled:" + _ignoreLedsParam : "");
-                Process.Start(pStart, pArgs);
-                if (!TestRGBFusionBridgeListener(60))
-                    throw new Exception("RGBFusion bridge listener didn't start on " + _RGBFusionDirectory + _RGBFusionBridgeExeName + " with params ");
+                StartListenerForDevice();
+
                 Global.logger.Info("RGBFusion bridge is listening");
                 //If device is restarted, re-send last color command.
                 if (_setColorCommandDataPacket[0] != 0)
@@ -99,14 +98,27 @@ namespace Aurora.Devices.RGBFusion
 
                 UpdateDeviceMap();
                 _isConnected = true;
+                _starting = false;
                 return true;
             }
             catch (Exception ex)
             {
                 Global.logger.Error("RGBFusion Bridge cannot be initialized. Error: " + ex.Message);
                 _isConnected = false;
+                _starting = false;
                 return false;
             }
+        }
+
+        private void StartListenerForDevice()
+        {
+            _starting = true;
+            string pStart = _RGBFusionDirectory + _RGBFusionBridgeExeName;
+            string pArgs = _customArgs + " " + (ValidateIgnoreLedParam() ? "--ignoreled:" + _ignoreLedsParam : "");
+            Process.Start(pStart, pArgs);
+            if (!TestRGBFusionBridgeListener(60))
+                throw new Exception("RGBFusion bridge listener didn't start on " + _RGBFusionDirectory + _RGBFusionBridgeExeName + " with params ");
+            _starting = false;
         }
 
         public void KillProcessByName(string processName)
@@ -140,8 +152,14 @@ namespace Aurora.Devices.RGBFusion
 
         public void Reset()
         {
-            HardShutdown();
-            Initialize();
+            if (_starting)
+                return;
+
+            if (IsRGBFusionBridgeRunning())
+            {
+                KillProcessByName(_RGBFusionBridgeExeName);
+            }
+            StartListenerForDevice();
         }
 
         public void Shutdown()
@@ -150,15 +168,6 @@ namespace Aurora.Devices.RGBFusion
             {
                 SendCommandToRGBFusion(new byte[] { 1, 5, 0, 0, 0, 0, 0 });
                 Thread.Sleep(1000);
-                KillProcessByName(_RGBFusionBridgeExeName);
-            }
-            _isConnected = false;
-        }
-
-        public void HardShutdown()
-        {
-            if (IsRGBFusionBridgeRunning())
-            {
                 KillProcessByName(_RGBFusionBridgeExeName);
             }
             _isConnected = false;
@@ -295,6 +304,8 @@ namespace Aurora.Devices.RGBFusion
             {
                 return false;
             }
+            if (_starting)
+                return false;
             byte commandIndex = 0;
             try
             {
@@ -423,7 +434,7 @@ namespace Aurora.Devices.RGBFusion
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
             _ellapsedTimeWatch.Stop();
             _lastUpdateTime = _ellapsedTimeWatch.ElapsedMilliseconds;
-            if (_lastUpdateTime > 50 && _connectRetryCountLeft > 0)
+            if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft > 0)
             {
                 Reset();
                 _connectRetryCountLeft--;
