@@ -14,7 +14,6 @@ namespace Aurora.Devices.NZXTHUE2Ambient.DeviceMaps
             Dictionary<DeviceKeys, List<DeviceMapState>> deviceMap = new Dictionary<DeviceKeys, List<DeviceMapState>>
             {
 
-                { DeviceKeys.LEDSTRIPLIGHT1_9, new List<DeviceMapState>{ new DeviceMapState(25,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_0, new List<DeviceMapState>{ new DeviceMapState(0,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_1, new List<DeviceMapState>{ new DeviceMapState(1,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_2, new List<DeviceMapState>{ new DeviceMapState(2,initialColor)}},
