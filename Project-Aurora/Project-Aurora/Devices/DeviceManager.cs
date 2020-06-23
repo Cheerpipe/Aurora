@@ -344,25 +344,18 @@ namespace Aurora.Devices
                 }
             }
         }
-        public void ResetDeviceByName(string deviceName)
+        public void ResetDeviceByName(string deviceName, bool hardReset = false)
         {
             foreach (DeviceContainer device in devices)
             {
                 if (device.Device.IsInitialized() && device.Device.GetDeviceName() == deviceName)
                 {
+                    if (hardReset)
+                    {
+                        device.Device.Shutdown();
+                        device.Device.Initialize();
+                    }
                     device.Device.Reset();
-                }
-            }
-        }
-
-        public void HardResetDeviceByName(string deviceName)
-        {
-            foreach (DeviceContainer device in devices)
-            {
-                if (device.Device.IsInitialized() && device.Device.GetDeviceName() == deviceName)
-                {
-                    device.Device.Shutdown();
-                    device.Device.Initialize();
                 }
             }
         }

@@ -171,7 +171,7 @@ namespace Aurora
                 ServerThread.Abort();
                 ServerThread = null;
             }
-                
+
 
             if (CommandThread != null)
             {
@@ -179,9 +179,9 @@ namespace Aurora
                 CommandThread = null;
             }
 
-            if(IPCpipeStream != null)
+            if (IPCpipeStream != null)
             {
-                if(IPCpipeStream.IsConnected)
+                if (IPCpipeStream.IsConnected)
                     IPCpipeStream.Disconnect();
                 IPCpipeStream.Dispose();
                 IPCpipeStream = null;
@@ -292,11 +292,11 @@ namespace Aurora
                                     //Begin handling the game state outside this loop
                                     HandleNewIPCGameState(temp);
                                 }
-                                catch(Exception exc)
+                                catch (Exception exc)
                                 {
                                     Global.logger.Error("[IPCServer] HandleNewIPCGameState Exception, " + exc);
                                     //if (Global.isDebug)
-                                        Global.logger.Info("Recieved data that caused error:\n\r"+temp);
+                                    Global.logger.Info("Recieved data that caused error:\n\r" + temp);
                                 }
 
                                 //var task = new System.Threading.Tasks.Task(() => HandleNewIPCGameState(temp));
@@ -384,7 +384,7 @@ namespace Aurora
                     Global.dev_manager.ResetDevices();
                     break;
                 case "restart_logitech_devices":
-                    Global.dev_manager.HardResetDeviceByName("Logitech");
+                    Global.dev_manager.ResetDeviceByName("Logitech", true);
                     break;
                 case "restart_hassio_devices":
                     Global.dev_manager.ResetDeviceByName("Hassio");
