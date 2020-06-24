@@ -325,7 +325,7 @@ namespace Aurora.Profiles
 
         private Timer updateTimer;
 
-        private const int defaultTimerInterval = 33;
+        private const int defaultTimerInterval = 16; //60 FPS;
         private int timerInterval = defaultTimerInterval;
 
         private long nextProcessNameUpdate;
