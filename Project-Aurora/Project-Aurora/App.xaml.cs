@@ -358,6 +358,9 @@ namespace Aurora
                 Global.logger.Info("Loading Applications");
                 (Global.LightingStateManager = new LightingStateManager()).Initialize();
 
+                //Select my default profile on Aurora startup
+                Global.LightingStateManager.DesktopProfile.Profile = Global.LightingStateManager.DesktopProfile.Profiles.Where(p => p.ProfileName.ToLower() == "cold" || p.ProfileName.ToLower() == "default").FirstOrDefault();
+
                 if (Global.Configuration.GetPointerUpdates)
                 {
                     Global.logger.Info("Fetching latest pointers");
