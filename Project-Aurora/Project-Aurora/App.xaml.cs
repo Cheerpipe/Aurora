@@ -359,7 +359,10 @@ namespace Aurora
                 (Global.LightingStateManager = new LightingStateManager()).Initialize();
 
                 //Select my default profile on Aurora startup
-                Global.LightingStateManager.DesktopProfile.Profile = Global.LightingStateManager.DesktopProfile.Profiles.Where(p => p.ProfileName.ToLower() == "cold" || p.ProfileName.ToLower() == "default").FirstOrDefault();
+                ApplicationProfile startupProfile = Global.LightingStateManager.DesktopProfile.Profiles.Where(p => p.ProfileName.ToLower() == "cold" || p.ProfileName.ToLower() == "default").FirstOrDefault();
+                (Global.LightingStateManager.DesktopProfile as Aurora.Profiles.Application).SwitchToProfile(startupProfile);
+                //(Global.LightingStateManager.GetCurrentProfile() as Aurora.Profiles.Application).SwitchToProfile(startupProfile);
+                //Global.LightingStateManager.DesktopProfile.Profile = Global.LightingStateManager.DesktopProfile.Profiles.Where(p => p.ProfileName.ToLower() == "cold" || p.ProfileName.ToLower() == "default").FirstOrDefault();
 
                 if (Global.Configuration.GetPointerUpdates)
                 {

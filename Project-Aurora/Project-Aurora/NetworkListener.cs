@@ -1,4 +1,5 @@
 using Aurora.Profiles;
+using Aurora.Settings;
 using Corale.Colore.Core;
 using System;
 using System.Collections.Generic;
@@ -398,6 +399,14 @@ namespace Aurora
                     break;
                 case "close":
                     System.Windows.Application.Current.Dispatcher.Invoke(() => ((ConfigUI)System.Windows.Application.Current.MainWindow).exitApp());
+                    break;
+                default:
+                    if (command.Contains("set_desktop_profile_"))
+                    {
+                        ApplicationProfile startupProfile = Global.LightingStateManager.DesktopProfile.Profiles.Where(p => p.ProfileName.ToLower() == command.Replace("set_desktop_profile_", "") || p.ProfileName.ToLower() == "default").FirstOrDefault();
+                        if (startupProfile != null)
+                            (Global.LightingStateManager.DesktopProfile as Aurora.Profiles.Application)?.SwitchToProfile(startupProfile);
+                    }
                     break;
             }
         }
