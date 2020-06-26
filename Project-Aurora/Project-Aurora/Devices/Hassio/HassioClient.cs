@@ -15,19 +15,16 @@ namespace Aurora.Devices.HassioLightDevice
         {
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
         }
-
-
-
         public async Task SetColor(Color color)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
             string service = "turn_on";
-            string postData = "{ \"entity_id\": \"light.pasillo_techo\", \"rgb_color\": [" + color.R + "," + color.G + "," + color.B + "], \"brightness\": " + (int)(color.GetBrightness() * 255) + "  }";
+            string postData = "{ \"entity_id\": \"light.dormitorio_pequeno_techo\", \"rgb_color\": [" + color.R + "," + color.G + "," + color.B + "], \"brightness\": " + (int)(color.GetBrightness() * 255) + "  }";
 
             if (color.R == 0 && color.G == 0 && color.B == 0)
             {
                 service = "turn_off";
-                postData = "{ \"entity_id\": \"light.pasillo_techo\"}";
+                postData = "{ \"entity_id\": \"light.dormitorio_pequeno_techo\"}";
             }
 
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(string.Format("https://192.168.1.16:8123/api/services/light/{0}", service));

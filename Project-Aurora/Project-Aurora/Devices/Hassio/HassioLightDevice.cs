@@ -137,7 +137,7 @@ namespace Aurora.Devices.HassioLightDevice
             {
                 foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                 {
-                    if (key.Key == Global.Configuration.VarRegistry.GetVariable<DeviceKeys>($"{_devicename}_devicekey"))
+                    if (key.Key == DeviceKeys.AMBIENT)
                     {
                         if (key.Value != currentColor)
                         {
