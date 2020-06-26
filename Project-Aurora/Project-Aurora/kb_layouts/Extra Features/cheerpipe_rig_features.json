@@ -3,6 +3,17 @@
   "origin_region": 1,
   "grouped_keys": [
     {
+      "visualName": "",
+      "tag": 900,
+      "margin_left": -330,
+      "margin_top": 170,
+      "width": 1,
+      "height": 1,
+      "font_size": 8.0,
+      "enabled": true,
+      "absolute_location": true
+    },
+    {
       "visualName": "0",
       "tag": 600,
       "margin_left": -320,
