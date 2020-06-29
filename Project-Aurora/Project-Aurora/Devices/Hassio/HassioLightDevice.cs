@@ -47,8 +47,6 @@ namespace Aurora.Devices.HassioLightDevice
 
         public void Reset()
         {
-            Shutdown();
-            Initialize();
             hassioClient.SetColor(currentColor);
         }
 
