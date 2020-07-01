@@ -138,15 +138,17 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
         public void Shutdown()
         {
+            _isConnected = false;
             try
             {
                 SendArgs(new byte[] { 1, 5, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
             }
             catch
             {
+                Thread.Sleep(1000);
                 KillProcessByName(NZXTHUEAmbientListenerExeName, "--dev:" + _deviceIndex);
             }
-            _isConnected = false;
+
         }
 
         bool _deviceChanged = true;
@@ -271,7 +273,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
             _watch.Stop();
             _lastUpdateTime = _watch.ElapsedMilliseconds;
-            if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft > 0)
+            if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft > 0 && _isConnected)
             {
                 Reset();
                 _connectRetryCountLeft--;
