@@ -27,7 +27,6 @@ namespace Aurora.Devices.HassioLightDevice
         private VariableRegistry _variableRegistry = null;
         private HassioClient hassioClient;
 
-
         public Color CurrentColor { get { return currentColor; } }
         public bool Initialize()
         {
@@ -44,6 +43,13 @@ namespace Aurora.Devices.HassioLightDevice
             }
         }
 
+        private void SaveCurrentColorToRegistry(Color color)
+        {
+            var reg = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Aurora", true);
+            if (reg == null)
+                reg = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Aurora");
+            reg.SetValue("AmbientLightCurrentColor", ColorTranslator.ToHtml(color));
+        }
 
         public void Reset()
         {
@@ -130,6 +136,7 @@ namespace Aurora.Devices.HassioLightDevice
             {
                 return false;
             }
+            bool apply = AmbientLightEnabled();
 
             try
             {
@@ -139,7 +146,13 @@ namespace Aurora.Devices.HassioLightDevice
                     {
                         if (key.Value != currentColor)
                         {
-                            hassioClient.SetColor(key.Value);
+                            SaveCurrentColorToRegistry(key.Value);
+                            if (apply)
+                            {
+                                Debug.WriteLine("Set Color HASSio");
+                                hassioClient.SetColor(key.Value);
+                            }
+                                
                             currentColor = key.Value;
                         }
                     }
@@ -160,12 +173,6 @@ namespace Aurora.Devices.HassioLightDevice
 
         public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
         {
-            if (!AmbientLightEnabled())
-            {
-                _lastUpdateTime = 0;
-                return true;
-            }
-
             _ellapsedTimeWatch.Restart();
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
             _ellapsedTimeWatch.Stop();
