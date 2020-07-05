@@ -49,6 +49,7 @@ namespace Aurora.Devices.HassioLightDevice
             if (reg == null)
                 reg = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Aurora");
             reg.SetValue("AmbientLightCurrentColor", ColorTranslator.ToHtml(color));
+            reg.Dispose();
         }
 
         public void Reset()
@@ -127,7 +128,9 @@ namespace Aurora.Devices.HassioLightDevice
         private bool AmbientLightEnabled()
         {
             var win_reg = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Aurora");
-            return (string)win_reg.GetValue("AmbientLightEnabled") == "1";
+            bool ret = (string)win_reg.GetValue("AmbientLightEnabled") == "1";
+            win_reg.Dispose();
+            return ret;
         }
 
         public bool UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
@@ -152,7 +155,7 @@ namespace Aurora.Devices.HassioLightDevice
                                 Debug.WriteLine("Set Color HASSio");
                                 hassioClient.SetColor(key.Value);
                             }
-                                
+
                             currentColor = key.Value;
                         }
                     }
