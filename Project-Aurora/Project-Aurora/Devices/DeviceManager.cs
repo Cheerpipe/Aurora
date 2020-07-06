@@ -101,6 +101,7 @@ namespace Aurora.Devices
             devices.Add(new DeviceContainer(new Devices.Logitech.LogitechDevice()));         // Logitech Device
             devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2("Desktop", 1, Aurora.Devices.NZXTHUE2Ambient.DeviceMaps.HUE2DesktopDeviceMap.GetDeviceMap(Color.Black))));        // HUE 2 Desktop
             devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2("Display", 0, Aurora.Devices.NZXTHUE2Ambient.DeviceMaps.HUE2DisplayDeviceMap.GetDeviceMap(Color.Black))));        // HUE 2 Display
+            devices.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2("TV", 2, Aurora.Devices.NZXTHUE2Ambient.DeviceMaps.HUE2TVDeviceMap.GetDeviceMap(Color.Black))));        // HUE 2 Display
             devices.Add(new DeviceContainer(new Devices.HassioLightDevice.HassioLightDevice()));         // HASSIO Client
             devices.Add(new DeviceContainer(new Devices.RGBFusion.RGBFusionDevice()));        // RGBFusion Bridge
 

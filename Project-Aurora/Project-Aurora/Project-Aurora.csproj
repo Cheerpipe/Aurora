@@ -180,6 +180,7 @@
       <DependentUpon>Window_Prompt.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\NZXTHUE2Ambient\DeviceMapState.cs" />
+    <Compile Include="Devices\NZXTHUE2Ambient\DeviceMaps\TVDeviceMap.cs" />
     <Compile Include="Devices\NZXTHUE2Ambient\DeviceMaps\DesktopDeviceMap.cs" />
     <Compile Include="Devices\NZXTHUE2Ambient\DeviceMaps\DisplayDeviceMap.cs" />
     <Compile Include="Devices\NZXTHUE2Ambient\NZXTHUE2.cs" />
