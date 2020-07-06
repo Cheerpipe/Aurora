@@ -87,7 +87,12 @@ namespace Aurora.Devices.RGBFusion
 
                 //Start RGBFusion Bridge
                 Global.logger.Info("Starting RGBFusion Bridge.");
-                StartListenerForDevice();
+                if (!StartListenerForDevice())
+                {
+                    _isConnected = false;
+                    _starting = false;
+                    return false;
+                }
 
                 Global.logger.Info("RGBFusion bridge is listening");
                 //If device is restarted, re-send last color command.
@@ -108,17 +113,42 @@ namespace Aurora.Devices.RGBFusion
                 _starting = false;
                 return false;
             }
+            finally
+            {
+                _starting = false;
+            }
         }
 
-        private void StartListenerForDevice()
+        private bool StartListenerForDevice()
         {
-            _starting = true;
-            string pStart = _RGBFusionDirectory + _RGBFusionBridgeExeName;
-            string pArgs = _customArgs + " " + (ValidateIgnoreLedParam() ? "--ignoreled:" + _ignoreLedsParam : "");
-            Process.Start(pStart, pArgs);
-            if (!TestRGBFusionBridgeListener(60))
-                throw new Exception("RGBFusion bridge listener didn't start on " + _RGBFusionDirectory + _RGBFusionBridgeExeName + " with params ");
-            _starting = false;
+            try
+            {
+                _starting = true;
+                string pStart = _RGBFusionDirectory + _RGBFusionBridgeExeName;
+                string pArgs = _customArgs + " " + (ValidateIgnoreLedParam() ? "--ignoreled:" + _ignoreLedsParam : "");
+                Process.Start(pStart, pArgs);
+                bool state;
+                if (!TestRGBFusionBridgeListener(60))
+                {
+                    Global.logger.Error("RGBFusion bridge listener didn't start on " + _RGBFusionDirectory + _RGBFusionBridgeExeName);
+                    _starting = false;
+                    return false;
+                }
+                else
+                {
+                    _starting = false;
+                    return true;
+                }
+            }
+            catch
+            {
+                _starting = false;
+                return false;
+            }
+            finally
+            {
+                _starting = false;
+            }
         }
 
         public void KillProcessByName(string processName)
@@ -309,7 +339,11 @@ namespace Aurora.Devices.RGBFusion
                 return false;
             }
             if (_starting)
+            {
+                Global.logger.Warn("RGBFusion Bridge starting. Ignoring command.");
                 return false;
+            }
+              
             byte commandIndex = 0;
             try
             {
@@ -389,11 +423,33 @@ namespace Aurora.Devices.RGBFusion
                 }
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Global.logger.Error(string.Format("Error sendind commands to RGBFusion Bridge. Error: {0}", ex.Message));
                 return false;
             }
         }
+
+        public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
+        {
+            _ellapsedTimeWatch.Restart();
+            bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
+            _ellapsedTimeWatch.Stop();
+            _lastUpdateTime = _ellapsedTimeWatch.ElapsedMilliseconds;
+            if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft > 0)
+            {
+                Reset();
+                _connectRetryCountLeft--;
+                Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
+            }
+            else
+            {
+                _connectRetryCountLeft = _maxConnectRetryCountLeft;
+            }
+            return update_result;
+        }
+
+        #region RGBFusion Specific Methods
 
         private HashSet<byte> GetLedIndexes()
         {
@@ -431,26 +487,6 @@ namespace Aurora.Devices.RGBFusion
             }
             return rgbFusionLedIndexes;
         }
-
-        public bool UpdateDevice(DeviceColorComposition colorComposition, DoWorkEventArgs e, bool forced = false)
-        {
-            _ellapsedTimeWatch.Restart();
-            bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
-            _ellapsedTimeWatch.Stop();
-            _lastUpdateTime = _ellapsedTimeWatch.ElapsedMilliseconds;
-            if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft > 0)
-            {
-                Reset();
-                _connectRetryCountLeft--;
-                Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
-            }
-            else
-            {
-                _connectRetryCountLeft = _maxConnectRetryCountLeft;
-            }
-            return update_result;
-        }
-        #region RGBFusion Specific Methods
         private bool IsRGBFusionInstalled()
         {
             string RGBFusionDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\GIGABYTE\\RGBFusion\\";
