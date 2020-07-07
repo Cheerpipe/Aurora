@@ -42,7 +42,7 @@ namespace Aurora.Devices.RGBFusion
         private const string _defaultExtProfileFileName = "ExtPro1.xml";
         private int _connectRetryCountLeft = _maxConnectRetryCountLeft;
         private bool _starting = false;
-        private const int _maxConnectRetryCountLeft = 5;
+        private const int _maxConnectRetryCountLeft = 50;
         private const int _ConnectRetryTimeOut = 50;
 
         private HashSet<byte> _rgbFusionLedIndexes;
@@ -104,6 +104,7 @@ namespace Aurora.Devices.RGBFusion
                 UpdateDeviceMap();
                 _isConnected = true;
                 _starting = false;
+                _connectRetryCountLeft = _maxConnectRetryCountLeft;
                 return true;
             }
             catch (Exception ex)
@@ -124,6 +125,7 @@ namespace Aurora.Devices.RGBFusion
             try
             {
                 _starting = true;
+                //GetRegisteredVariables();
                 string pStart = _RGBFusionDirectory + _RGBFusionBridgeExeName;
                 string pArgs = _customArgs + " " + (ValidateIgnoreLedParam() ? "--ignoreled:" + _ignoreLedsParam : "");
                 Process.Start(pStart, pArgs);
@@ -176,6 +178,7 @@ namespace Aurora.Devices.RGBFusion
             }
             catch
             {
+                Thread.Sleep(100);
                 return false;
             }
         }
@@ -343,7 +346,7 @@ namespace Aurora.Devices.RGBFusion
                 Global.logger.Warn("RGBFusion Bridge starting. Ignoring command.");
                 return false;
             }
-              
+
             byte commandIndex = 0;
             try
             {
@@ -556,12 +559,14 @@ namespace Aurora.Devices.RGBFusion
         private bool TestRGBFusionBridgeListener(byte secondsTimeOut)
         {
             bool result = false;
-            for (int i = 0; i < secondsTimeOut * 2; i++)
+            for (int i = 0; i < secondsTimeOut; i++)
             {
                 if (SendCommandToRGBFusion(new byte[] { 1, 255, 0, 0, 0, 0, 0 }))
                     return true;
+                if (!IsRGBFusionBridgeRunning())
+                    return false;
                 //Test listener every 500ms until pipe is up or timeout
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
             return result;
         }
