@@ -21,7 +21,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient.DeviceMaps
                 { DeviceKeys.LEDSTRIPLIGHT1_14, new List<DeviceMapState>{ new DeviceMapState(8,initialColor), new DeviceMapState(9,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_13, new List<DeviceMapState>{ new DeviceMapState(10,initialColor), new DeviceMapState(11,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_12, new List<DeviceMapState>{ new DeviceMapState(12,initialColor), new DeviceMapState(13,initialColor)}},
-                { DeviceKeys.LEDSTRIPLIGHT1_11, new List<DeviceMapState>{ new DeviceMapState(13,initialColor), new DeviceMapState(15,initialColor)}},
+                { DeviceKeys.LEDSTRIPLIGHT1_11, new List<DeviceMapState>{ new DeviceMapState(14,initialColor), new DeviceMapState(15,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_10, new List<DeviceMapState>{ new DeviceMapState(16,initialColor), new DeviceMapState(17,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_9, new List<DeviceMapState>{ new DeviceMapState(18,initialColor), new DeviceMapState(19,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_8, new List<DeviceMapState>{ new DeviceMapState(20,initialColor), new DeviceMapState(21,initialColor)}},
@@ -49,7 +49,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient.DeviceMaps
                 { DeviceKeys.LEDSTRIPLIGHT1_31, new List<DeviceMapState>{ new DeviceMapState(51,initialColor), new DeviceMapState(50,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_32, new List<DeviceMapState>{ new DeviceMapState(49,initialColor), new DeviceMapState(48,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_33, new List<DeviceMapState>{ new DeviceMapState(47,initialColor), new DeviceMapState(46,initialColor)}},
-                { DeviceKeys.LEDSTRIPLIGHT1_34, new List<DeviceMapState>{ new DeviceMapState(45,initialColor), new DeviceMapState(55,initialColor)}},
+                { DeviceKeys.LEDSTRIPLIGHT1_34, new List<DeviceMapState>{ new DeviceMapState(45,initialColor), new DeviceMapState(44,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_35, new List<DeviceMapState>{ new DeviceMapState(43,initialColor), new DeviceMapState(42,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_36, new List<DeviceMapState>{ new DeviceMapState(41,initialColor), new DeviceMapState(40,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_37, new List<DeviceMapState>{ new DeviceMapState(39,initialColor), new DeviceMapState(38,initialColor)}}
