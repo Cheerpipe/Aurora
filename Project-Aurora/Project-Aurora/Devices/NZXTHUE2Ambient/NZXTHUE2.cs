@@ -31,7 +31,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         private Dictionary<DeviceKeys, List<DeviceMapState>> _deviceMap;
         private bool _useFastStartup = false;
         private const int _maxConnectRetryCountLeft = 50;
-        private const int _ConnectRetryTimeOut = 50;
+        private const int _ConnectRetryTimeOut = 90;
         private const string NZXTHUEAmbientListenerExeName = "NZXTHUEAmbientListener.exe";
 
         public bool Initialize()
@@ -273,15 +273,19 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
             _watch.Stop();
             _lastUpdateTime = _watch.ElapsedMilliseconds;
-            if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft > 0 && _isConnected)
+            if (_lastUpdateTime > _ConnectRetryTimeOut && _isConnected)
             {
-                Reset();
                 _connectRetryCountLeft--;
-                Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
             }
             else if (_lastUpdateTime < _ConnectRetryTimeOut)
             {
                 _connectRetryCountLeft = _maxConnectRetryCountLeft;
+            }
+
+            if (_connectRetryCountLeft <= 0 && _isConnected)
+            {
+                Reset();
+                Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
             }
             return update_result;
         }
