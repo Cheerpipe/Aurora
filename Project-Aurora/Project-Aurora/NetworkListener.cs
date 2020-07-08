@@ -391,8 +391,9 @@ namespace Aurora
                     Global.dev_manager.ResetDeviceByName("Hassio");
                     break;
                 case "restart_nzxt_devices":
-                    Global.dev_manager.ResetDeviceByName("NZXT HUE Ambient Desktop");
-                    Global.dev_manager.ResetDeviceByName("NZXT HUE Ambient Display");
+                    Global.dev_manager.ResetDeviceByName("NZXT HUE2 Ambient - (Desktop)");
+                    Global.dev_manager.ResetDeviceByName("NZXT HUE2 Ambient - (Display)");
+                    Global.dev_manager.ResetDeviceByName("NZXT HUE2 Ambient - (TV)");
                     break;
                 case "restart_rgbfusion_devices":
                     Global.dev_manager.ResetDeviceByName("RGB Fusion");
