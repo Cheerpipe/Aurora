@@ -345,6 +345,25 @@ namespace Aurora.Devices
                 }
             }
         }
+
+
+
+        public void ToggleDeviceByName(string deviceName)
+        {
+            foreach (DeviceContainer device in devices)
+            {
+                if (device.Device.IsInitialized() && device.Device.GetDeviceName() == deviceName)
+                {
+                    device.Device.Shutdown();
+                }
+                else if (!device.Device.IsInitialized() && device.Device.GetDeviceName() == deviceName)
+                {
+                    device.Device.Initialize();
+                    device.Device.Reset();
+                }
+            }
+        }
+
         public void ResetDeviceByName(string deviceName, bool hardReset = false)
         {
             foreach (DeviceContainer device in devices)

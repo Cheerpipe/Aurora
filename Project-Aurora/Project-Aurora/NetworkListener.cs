@@ -399,7 +399,17 @@ namespace Aurora
                     Global.dev_manager.ResetDeviceByName("RGB Fusion");
                     break;
                 case "close":
+
                     System.Windows.Application.Current.Dispatcher.Invoke(() => ((ConfigUI)System.Windows.Application.Current.MainWindow).exitApp());
+                    break;
+
+                case "brightness_up":
+                        Global.Configuration.GlobalBrightness = Math.Max(0f, Math.Min(1f, Global.Configuration.GlobalBrightness + 0.05f));
+                        ConfigManager.Save(Global.Configuration);
+                    break;
+                case "brightness_down":
+                    Global.Configuration.GlobalBrightness = Math.Max(0f, Math.Min(1f, Global.Configuration.GlobalBrightness - 0.05f));
+                    ConfigManager.Save(Global.Configuration);
                     break;
                 default:
                     if (command.Contains("set_desktop_profile_"))
@@ -408,6 +418,14 @@ namespace Aurora
                         if (startupProfile != null)
                             (Global.LightingStateManager.DesktopProfile as Aurora.Profiles.Application)?.SwitchToProfile(startupProfile);
                     }
+                    else if (command.Contains("toggle_device_"))
+                    {
+                        string deviceName = command.Replace("toggle_device_", "");
+                        if (deviceName != null)
+                            Global.dev_manager.ToggleDeviceByName(deviceName);
+                    }
+
+
                     break;
             }
         }
