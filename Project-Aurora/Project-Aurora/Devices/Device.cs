@@ -1688,7 +1688,7 @@ namespace Aurora.Devices
         /// </summary>
         [Description("Led strip 1 LED 63")]
         LEDSTRIPLIGHT1_63 = 663,
-        /*
+       
 
         ///<summary>
         /// Calculator Key
@@ -2076,7 +2076,85 @@ namespace Aurora.Devices
         /// </summary>
         [Description("Led strip 2 LED 63")]
         LEDSTRIPLIGHT2_63 = 763,
-        */
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 64")]
+        LEDSTRIPLIGHT2_64 = 764,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 65")]
+        LEDSTRIPLIGHT2_65 = 765,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 66")]
+        LEDSTRIPLIGHT2_66 = 766,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 67")]
+        LEDSTRIPLIGHT2_67 = 767,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 68")]
+        LEDSTRIPLIGHT2_68 = 768,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 69")]
+        LEDSTRIPLIGHT2_69= 769,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 70")]
+        LEDSTRIPLIGHT2_70 = 770,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 71")]
+        LEDSTRIPLIGHT2_71 = 771,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 72")]
+        LEDSTRIPLIGHT2_72 = 772,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 73")]
+        LEDSTRIPLIGHT2_73 = 773,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 74")]
+        LEDSTRIPLIGHT2_74 = 774,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 75")]
+        LEDSTRIPLIGHT2_75 = 775,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Led strip 2 LED 76")]
+        LEDSTRIPLIGHT2_76 = 776,
+
         ///<summary>
         /// Calculator Key
         /// </summary>
