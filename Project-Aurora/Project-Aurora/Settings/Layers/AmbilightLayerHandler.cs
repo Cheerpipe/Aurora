@@ -239,11 +239,22 @@ namespace Aurora.Settings.Layers
             captureTimer.Elapsed += TakeScreenshot;
         }
 
+        //FELIPE
+        static IScreenCapture experimentalScreenCapture;
+
         public void Initialize()
         {
             if (Properties.ExperimentalMode)
             {
-                screenCapture = new DXScreenCapture();
+                if (experimentalScreenCapture == null)
+                {
+                    screenCapture = new DXScreenCapture();
+                    experimentalScreenCapture = screenCapture;
+                }
+                else
+                {
+                    screenCapture = experimentalScreenCapture;
+                }
                 try
                 {
                     //this won't work on some systems
@@ -253,6 +264,7 @@ namespace Aurora.Settings.Layers
                 }
                 catch (SharpDXException e)
                 {
+
                     (screenCapture as DXScreenCapture)?.Dispose();
                     //Console.WriteLine("Error using experimental ambilight mode: " + e);
                     Global.logger.Error("Error using experimental ambilight mode: " + e);
@@ -349,7 +361,7 @@ namespace Aurora.Settings.Layers
                     var average = BitmapUtils.GetRegionColor(screen, cropRegion);
 
                     if (Properties.BrightenImage)
-                        average = ColorUtils.ChangeBrightness(average,  Properties.BrightnessChange);
+                        average = ColorUtils.ChangeBrightness(average, Properties.BrightnessChange);
 
                     if (Properties.SaturateImage)
                         average = ColorUtils.ChangeSaturation(average, Properties.SaturationChange);
