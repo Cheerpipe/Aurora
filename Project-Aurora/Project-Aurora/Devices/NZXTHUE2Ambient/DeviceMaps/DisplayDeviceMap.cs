@@ -53,7 +53,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient.DeviceMaps
                 { DeviceKeys.LEDSTRIPLIGHT1_36, new List<DeviceMapState>{ new DeviceMapState(36,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_37, new List<DeviceMapState>{ new DeviceMapState(37,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_38, new List<DeviceMapState>{ new DeviceMapState(38,initialColor)}},
-                { DeviceKeys.LEDSTRIPLIGHT1_39, new List<DeviceMapState>{ new DeviceMapState(30,initialColor)}},
+                { DeviceKeys.LEDSTRIPLIGHT1_39, new List<DeviceMapState>{ new DeviceMapState(39,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_40, new List<DeviceMapState>{ new DeviceMapState(40,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_41, new List<DeviceMapState>{ new DeviceMapState(41,initialColor)}},
                 { DeviceKeys.LEDSTRIPLIGHT1_42, new List<DeviceMapState>{ new DeviceMapState(42,initialColor)}},
