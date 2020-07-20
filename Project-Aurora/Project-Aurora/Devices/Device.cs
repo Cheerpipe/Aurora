@@ -1301,6 +1301,28 @@ namespace Aurora.Devices
         [Description("Calculator")]
         CALC = 216,
 
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("G560 Front Left")]
+        G560_FRONT_LEFT = 300,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("G560 Front Right")]
+        G560_FRONT_RIGHT = 301,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("G560 Rear Left")]
+        G560_REAR_LEFT = 302,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("G560 Rear Right")]
+        G560_REAR_RIGHT = 303,
 
         ///<summary>
         /// Calculator Key

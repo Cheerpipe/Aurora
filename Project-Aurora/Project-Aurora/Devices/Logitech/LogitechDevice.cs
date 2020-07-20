@@ -1,4 +1,6 @@
 ﻿using Aurora.Settings;
+using Aurora.Utils;
+using CSScriptLibrary;
 using LedCSharp;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,29 @@ using System.Threading.Tasks;
 
 namespace Aurora.Devices.Logitech
 {
+    public enum Logitech_G560_Zones
+    {
+        Front_Left = 0,
+        Front_Right = 1,
+        Rear_Left = 2,
+        Rear_Right = 3
+    }
+
+    public enum Logitech_Mouse_Zones
+    {
+        DPI_Indicator = 0,
+        Logo = 1
+    }
+
+    public enum Logitch_Devices_Id
+    {
+        Keyboard = 0x0,
+        Mouse = 0x3,
+        Mousemat = 0x4,
+        Headset = 0x8,
+        Speaker = 0xe
+    }
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public enum Logitech_keyboardBitmapKeys
     {
@@ -169,6 +194,7 @@ namespace Aurora.Devices.Logitech
         //Previous data
         private byte[] previous_bitmap = new byte[LogitechGSDK.LOGI_LED_BITMAP_SIZE];
         private Color previous_peripheral_Color = Color.Black;
+        private Dictionary<DeviceKeys, Color> previous_peripherals_Color = new Dictionary<DeviceKeys, Color>();
 
         public bool Initialize()
         {
@@ -214,7 +240,12 @@ namespace Aurora.Devices.Logitech
                                 int blue_amt = (int)(((default_color.B * alpha_amt) / 255.0) * 100.0);
                                 LogitechGSDK.LogiLedSetLighting(red_amt, green_amt, blue_amt);
                             }
-
+                            //Workarroud to Mousemat not working. Logitech SDK BUG
+                            mousematWorkarroundTimer.Elapsed += MousematWorkarroundTimer_Elapsed;
+                            mousematWorkarroundTimer.Interval = 10;
+                            mousematWorkarroundTimer.AutoReset = false;
+                            mousematWorkarroundTimer.Enabled = false;
+                            //End Workarround
                             isInitialized = true;
                             return true;
                         }
@@ -240,10 +271,13 @@ namespace Aurora.Devices.Logitech
             }
         }
 
+
+
         public void Shutdown()
         {
             lock (action_lock)
             {
+                previous_peripherals_Color.Clear();
                 if (isInitialized)
                 {
                     this.Reset();
@@ -274,6 +308,7 @@ namespace Aurora.Devices.Logitech
         {
             if (this.IsInitialized() && (keyboard_updated || peripheral_updated))
             {
+                previous_peripherals_Color.Clear();
                 LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
                 LogitechGSDK.LogiLedRestoreLighting();
                 keyboard_updated = false;
@@ -315,11 +350,12 @@ namespace Aurora.Devices.Logitech
             }
         }
 
+
         private void SendColorToPeripheral(Color color, bool forced = false)
         {
             if (!previous_peripheral_Color.Equals(color) || forced)
             {
-                LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_RGB);
+                //LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_RGB);
 
                 if (Global.Configuration.AllowPeripheralDevices)
                 {
@@ -350,14 +386,36 @@ namespace Aurora.Devices.Logitech
             return this.isInitialized;
         }
 
-        private void SetZoneColor(byte deviceType, int zone, byte red, byte green, byte blue)
+        private void SetZoneColor(byte deviceType, int zone, byte red, byte green, byte blue, int targetDeviceType = -1)
         {
+            if (targetDeviceType != -1)
+            {
+                LogitechGSDK.LogiLedSetTargetDevice(targetDeviceType);
+            }
+
             LogitechGSDK.LogiLedSetLightingForTargetZone(deviceType, zone
                 , (int)Math.Round((double)(100 * red) / 255.0f)
                 , (int)Math.Round((double)(100 * green) / 255.0f)
                 , (int)Math.Round((double)(100 * blue) / 255.0f));
         }
 
+
+        //Workarroud to Mousemat not working. Logitech SDK BUG
+        byte workarround_apply_count = 0;
+        System.Timers.Timer mousematWorkarroundTimer = new System.Timers.Timer();
+        private void MousematWorkarroundTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (workarround_apply_count <= 5)
+            {
+                previous_peripherals_Color[DeviceKeys.G560_FRONT_LEFT] = Color.Black;
+                previous_peripherals_Color[DeviceKeys.G560_FRONT_RIGHT] = Color.Black;
+                previous_peripherals_Color[DeviceKeys.G560_REAR_LEFT] = Color.Black;
+                previous_peripherals_Color[DeviceKeys.G560_REAR_RIGHT] = Color.Black;
+                mousematWorkarroundTimer.Start();
+                workarround_apply_count++;
+            }
+        }
+        //End Workarround
         public bool UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
         {
             try
@@ -368,22 +426,72 @@ namespace Aurora.Devices.Logitech
                 {
                     foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
                     {
-                        //FELIPE
-                        //If not in KB range, continue;
+                        //If not in KB or Speaker range, continue;
                         if ((int)key.Key >= 600)
                             continue;
 
                         if (e.Cancel) return false;
 
-
                         Logitech_keyboardBitmapKeys localKey = ToLogitechBitmap(key.Key);
-
-                        if (localKey == Logitech_keyboardBitmapKeys.UNKNOWN &&
-                            (key.Key == DeviceKeys.Peripheral_Logo || key.Key == DeviceKeys.Peripheral))
+                        /*
+                            if (localKey == Logitech_keyboardBitmapKeys.UNKNOWN &&
+                                (key.Key == DeviceKeys.Peripheral_Logo || key.Key == DeviceKeys.Peripheral))
+                            {
+                                if (!Global.Configuration.DevicesDisableMouse ||
+                                    !Global.Configuration.DevicesDisableHeadset)
+                                    SendColorToPeripheral((Color)key.Value, forced || !peripheral_updated);
+                            }
+                        */
+                        //Independent peripherals
+                        LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_RGB);
+                        if (key.Key == DeviceKeys.Peripheral_Logo)
                         {
-                            if (!Global.Configuration.DevicesDisableMouse ||
-                                !Global.Configuration.DevicesDisableHeadset)
-                                SendColorToPeripheral((Color)key.Value, forced || !peripheral_updated);
+                            if (previous_peripherals_Color.GetValueOrDefault(key.Key) != key.Value)
+                            {
+                                //Workarroud to Mousemat not working. Logitech SDK BUG
+                                SendColorToPeripheral((Color)key.Value, true);
+                                //End workarround
+                                //SetZoneColor((byte)Logitch_Devices_Id.Mouse, (int)Logitech_Mouse_Zones.Logo, key.Value.R, key.Value.G, key.Value.B);
+                                //SetZoneColor((byte)Logitch_Devices_Id.Mouse, (int)Logitech_Mouse_Zones.DPI_Indicator, key.Value.R, key.Value.G, key.Value.B);
+                                //SetZoneColor((byte)Logitch_Devices_Id.Mousemat, 0, key.Value.R, key.Value.G, key.Value.B);
+                                //SetZoneColor((byte)Logitch_Devices_Id.Headset, 0, key.Value.R, key.Value.G, key.Value.B);
+                                //SetZoneColor((byte)Logitch_Devices_Id.Headset, 1, key.Value.R, key.Value.G, key.Value.B);
+                                previous_peripherals_Color[key.Key] = key.Value;
+                                workarround_apply_count = 0;
+                                mousematWorkarroundTimer.Start();
+                            }
+                        }
+                        if (key.Key == DeviceKeys.G560_FRONT_LEFT)
+                        {
+                            if (previous_peripherals_Color.GetValueOrDefault(key.Key) != key.Value)
+                            {
+                                SetZoneColor((byte)Logitch_Devices_Id.Speaker, (int)Logitech_G560_Zones.Front_Left, key.Value.R, key.Value.G, key.Value.B);
+                                previous_peripherals_Color[key.Key] = key.Value;
+                            }
+                        }
+                        else if (key.Key == DeviceKeys.G560_FRONT_RIGHT)
+                        {
+                            if (previous_peripherals_Color.GetValueOrDefault(key.Key) != key.Value)
+                            {
+                                SetZoneColor((byte)Logitch_Devices_Id.Speaker, (int)Logitech_G560_Zones.Front_Right, key.Value.R, key.Value.G, key.Value.B);
+                                previous_peripherals_Color[key.Key] = key.Value;
+                            }
+                        }
+                        else if (key.Key == DeviceKeys.G560_REAR_LEFT)
+                        {
+                            if (previous_peripherals_Color.GetValueOrDefault(key.Key) != key.Value)
+                            {
+                                SetZoneColor((byte)Logitch_Devices_Id.Speaker, (int)Logitech_G560_Zones.Rear_Left, key.Value.R, key.Value.G, key.Value.B);
+                                previous_peripherals_Color[key.Key] = key.Value;
+                            }
+                        }
+                        else if (key.Key == DeviceKeys.G560_REAR_RIGHT)
+                        {
+                            if (previous_peripherals_Color.GetValueOrDefault(key.Key) != key.Value)
+                            {
+                                SetZoneColor((byte)Logitch_Devices_Id.Speaker, (int)Logitech_G560_Zones.Rear_Right, key.Value.R, key.Value.G, key.Value.B);
+                                previous_peripherals_Color[key.Key] = key.Value;
+                            }
                         }
                         else if (localKey == Logitech_keyboardBitmapKeys.UNKNOWN)
                         {
@@ -458,7 +566,6 @@ namespace Aurora.Devices.Logitech
                         }
                     }
                 }
-
                 else if (!Global.Configuration.DevicesDisableKeyboard && isZoneKeyboard)
                 {
                     List<Color> leftColor = new List<Color>();
@@ -723,6 +830,7 @@ namespace Aurora.Devices.Logitech
 
             return update_result;
         }
+
 
         public static DeviceKeys ToDeviceKey(keyboardNames key)
         {

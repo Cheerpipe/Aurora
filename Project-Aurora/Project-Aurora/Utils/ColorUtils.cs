@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -571,5 +571,15 @@ namespace Aurora.Utils
 
         public static implicit operator DrawingColor(RealColor c) => c.GetDrawingColor();
         public static implicit operator MediaColor(RealColor c) => c.GetMediaColor();
+    }
+
+    public static class DictionaryUtils
+    {
+        public static U GetValueOrDefault<T, U>(this Dictionary<T, U> dict, T key)
+        {
+            U val;
+            dict.TryGetValue(key, out val);
+            return val;
+        }
     }
 }
