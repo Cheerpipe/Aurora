@@ -1598,6 +1598,28 @@
       "absolute_location": true
     },
     {
+      "visualName": "D23",
+      "tag": 833,
+      "margin_left": -330,
+      "margin_top": 230.0,
+      "width": 15.0,
+      "height": 15.0,
+      "font_size": 8.0,
+      "enabled": true,
+      "absolute_location": true
+    },
+    {
+      "visualName": "D24",
+      "tag": 834,
+      "margin_left": -330,
+      "margin_top": 230.0,
+      "width": 15.0,
+      "height": 15.0,
+      "font_size": 8.0,
+      "enabled": true,
+      "absolute_location": true
+    },
+    {
       "visualName": "Ambiente",
       "tag": 840,
       "margin_left": -320,

@@ -248,6 +248,8 @@ namespace Aurora.Devices.RGBFusion
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_20, new DeviceMapState(29, _initialColor));
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_21, new DeviceMapState(30, _initialColor));
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_22, new DeviceMapState(31, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_23, new DeviceMapState(32, _initialColor));
+            _deviceMap.Add(DeviceKeys.DLEDSTRIP_24, new DeviceMapState(33, _initialColor));
             _commitKey = _deviceMap.Keys.Max();
         }
 

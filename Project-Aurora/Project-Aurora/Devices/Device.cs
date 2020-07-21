@@ -2359,6 +2359,42 @@ namespace Aurora.Devices
         ///<summary>
         /// Calculator Key
         /// </summary>
+        [Description("RGBFusion DLED 18")]
+        DLEDSTRIP_23 = 833,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 18")]
+        DLEDSTRIP_24 = 834,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 18")]
+        DLEDSTRIP_25 = 835,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 18")]
+        DLEDSTRIP_26 = 836,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 18")]
+        DLEDSTRIP_27 = 837,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 18")]
+        DLEDSTRIP_28 = 838,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED 18")]
+        DLEDSTRIP_29 = 839,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
         [Description("Ambiente")]
         AMBIENT = 840,
 
