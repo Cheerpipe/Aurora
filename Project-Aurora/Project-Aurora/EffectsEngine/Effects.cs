@@ -128,7 +128,7 @@ namespace Aurora
         long currentsecond = 0L;
         int renderedframes = 0;
         long render_time = 0L;
-        Timer recordTimer = new Timer(1000D / 15D); // 30fps
+        Timer recordTimer = new Timer(1000D / 30D); // 30fps
         int pushedframes = 0;
         Timer fpsDebugTimer = new Timer(1000D);
 
