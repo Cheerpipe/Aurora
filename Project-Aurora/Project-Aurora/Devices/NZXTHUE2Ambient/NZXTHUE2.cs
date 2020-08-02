@@ -38,6 +38,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         {
             try
             {
+                _starting = true;
                 KillProcessByName("NZXT CAM.exe");
                 UpdateConfigVariables();
                 if (!ListenerRunning())
@@ -52,6 +53,10 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 _isConnected = false;
                 return false;
+            }
+            finally
+            {
+                _starting = false;
             }
         }
 
@@ -94,9 +99,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
 
         public void KillProcessByName(string processName, string args = "")
         {
-
             processName = Path.GetFileNameWithoutExtension(processName);
-
             Process[] process = Process.GetProcessesByName(processName);
 
             foreach (Process p in process)
@@ -120,11 +123,17 @@ namespace Aurora.Devices.NZXTHUE2Ambient
                 return args != null ? args : "";
             }
         }
-
+        bool _starting = false;
         public void Reset()
         {
+            if (_starting)
+            {
+                return;
+            }
+
             try
             {
+                _starting = true;
                 SendArgs(new byte[] { 1, 6, 0, 0, 0, 0 }); // Operatin code 5 set all leds to black and close the listener application.
                 Global.logger.Warn(string.Format("Soft reseting {0}.", _devicename));
             }
@@ -132,7 +141,11 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 Global.logger.Warn(string.Format("Soft reseting {0} didn't work. Using hard reset", _devicename));
                 KillProcessByName(NZXTHUEAmbientListenerExeName, "--dev:" + _deviceIndex);
-                StartListenerForDevice("--uselastsetting");
+                StartListenerForDevice(_useFastStartup ? "--uselastsetting" : "");
+            }
+            finally
+            {
+                _starting = false;
             }
         }
 
@@ -286,6 +299,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             {
                 Reset();
                 Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
+                Thread.Sleep(2000);
             }
             return update_result;
         }

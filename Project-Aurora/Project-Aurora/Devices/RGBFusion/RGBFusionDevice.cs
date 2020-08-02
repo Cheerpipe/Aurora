@@ -129,7 +129,6 @@ namespace Aurora.Devices.RGBFusion
                 string pStart = _RGBFusionDirectory + _RGBFusionBridgeExeName;
                 string pArgs = _customArgs + " " + (ValidateIgnoreLedParam() ? "--ignoreled:" + _ignoreLedsParam : "");
                 Process.Start(pStart, pArgs);
-                bool state;
                 if (!TestRGBFusionBridgeListener(60))
                 {
                     Global.logger.Error("RGBFusion bridge listener didn't start on " + _RGBFusionDirectory + _RGBFusionBridgeExeName);
@@ -186,7 +185,9 @@ namespace Aurora.Devices.RGBFusion
         public void Reset()
         {
             if (_starting)
+            {
                 return;
+            }
 
             if (IsRGBFusionBridgeRunning())
             {
