@@ -1,13 +1,14 @@
-using Aurora.Profiles;
-using CSScriptLibrary;
+﻿using CSScriptLibrary;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
-using Microsoft.Win32;
 
 namespace Aurora.Devices
 {
