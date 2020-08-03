@@ -52,14 +52,14 @@ namespace Aurora.Devices.SteelSeries
                     {
                         gameSenseSDK.init("PROJECTAURORA", "Project Aurora", 7);
 
-                        if (Global.Configuration.SteelseriesFirstTime)
+                        if (Global.Configuration.steelseries_first_time)
                         {
                             App.Current.Dispatcher.Invoke(() =>
                             {
                                 SteelSeriesInstallInstructions instructions = new SteelSeriesInstallInstructions();
                                 instructions.ShowDialog();
                             });
-                            Global.Configuration.SteelseriesFirstTime = false;
+                            Global.Configuration.steelseries_first_time = false;
                             Settings.ConfigManager.Save(Global.Configuration);
                         }
                         isInitialized = true;
@@ -267,20 +267,20 @@ namespace Aurora.Devices.SteelSeries
         {
             if ((!previous_peripheral_Color.Equals(color) || forced))
             {
-                if (Global.Configuration.AllowPeripheralDevices)
+                if (Global.Configuration.allow_peripheral_devices)
                 {
-                    if (!Global.Configuration.DevicesDisableMouse && !Global.Configuration.DevicesDisableHeadset)
+                    if (!Global.Configuration.devices_disable_mouse && !Global.Configuration.devices_disable_headset)
                     {
                         gameSenseSDK.setPeripheryColor(color.R, color.G, color.B, payload);
                     }
                     else
                     {
-                        if (!Global.Configuration.DevicesDisableMouse)
+                        if (!Global.Configuration.devices_disable_mouse)
                         {
                             gameSenseSDK.setMouseColor(color.R, color.G, color.B, payload);
                         }
 
-                        if (!Global.Configuration.DevicesDisableHeadset)
+                        if (!Global.Configuration.devices_disable_headset)
                         {
                             gameSenseSDK.setHeadsetColor(color.R, color.G, color.B, payload);
                         }
@@ -298,7 +298,7 @@ namespace Aurora.Devices.SteelSeries
 
         private void SendColorToPeripheralZone(DeviceKeys zone, Color color, GameSensePayloadPeripheryColorEventJSON payload)
         {
-            if (Global.Configuration.AllowPeripheralDevices && !Global.Configuration.DevicesDisableMouse)
+            if (Global.Configuration.allow_peripheral_devices && !Global.Configuration.devices_disable_mouse)
             {
                 if (zone == DeviceKeys.Peripheral_Logo)
                 {
@@ -328,7 +328,7 @@ namespace Aurora.Devices.SteelSeries
 
         private void SendColorsToKeyboard(List<byte> hids, List<Tuple<byte, byte, byte>> colors, GameSensePayloadPeripheryColorEventJSON payload)
         {
-            if (!Global.Configuration.DevicesDisableKeyboard)
+            if (!Global.Configuration.devices_disable_keyboard)
             {
                 if (hids.Count != 0)
                 {

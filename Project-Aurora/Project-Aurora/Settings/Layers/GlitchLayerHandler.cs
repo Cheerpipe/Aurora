@@ -33,7 +33,6 @@ namespace Aurora.Settings.Layers
         {
             base.Default();
             this._UpdateInterval = 1.0;
-            this._AllowTransparency = false;
             this._Sequence = new KeySequence(Effects.WholeCanvasFreeForm);
         }
     }
@@ -88,10 +87,17 @@ namespace Aurora.Settings.Layers
             _GlitchLayer.OnlyInclude(Properties.Sequence);
             return _GlitchLayer;
         }
+
+        public override void SetApplication(Application profile)
+        {
+            (Control as Control_GlitchLayer).SetProfile(profile);
+            base.SetApplication(profile);
+        }
     }
 
     [LogicOverrideIgnoreProperty("_PrimaryColor")]
     [LogicOverrideIgnoreProperty("_SecondaryColor")]
+    [LogicOverrideIgnoreProperty("_Sequence")]
     public class GlitchLayerHandler : GlitchLayerHandler<GlitchLayerHandlerProperties>
     {
         protected override UserControl CreateControl()

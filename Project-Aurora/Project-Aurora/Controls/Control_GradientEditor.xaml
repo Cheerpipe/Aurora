@@ -5,9 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Aurora.Controls"
              xmlns:ncore="http://schemas.ncore.com/wpf/xaml/colorbox"
+             xmlns:utils="clr-namespace:Aurora.Utils"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="160" d:DesignWidth="240">    
+             d:DesignHeight="160" d:DesignWidth="240">
+    <UserControl.Resources>
+        <utils:EffectBrushToBrushConverter x:Key="BrushConverter" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -24,7 +29,7 @@
 
 
         <Label Content="Brush:" Grid.Row="0" HorizontalAlignment="Right" />
-        <ncore:ColorBox Grid.Row="0" Grid.Column="1" Brush="{Binding Brush, Converter={StaticResource EffectToMediaBrushConv}, Mode=TwoWay}" />
+        <ncore:ColorBox Grid.Row="0" Grid.Column="1" Brush="{Binding Brush, Converter={StaticResource BrushConverter}, Mode=TwoWay}" />
 
         <Label Content="Animation Type:" Grid.Row="1" HorizontalAlignment="Right" />
         <ComboBox x:Name="animTypeCb" Grid.Row="1" Grid.Column="1" Margin="0,0,0,2" DisplayMemberPath="Key" SelectedValuePath="Value"  SelectedValue="{Binding AnimationType}" />

@@ -106,7 +106,7 @@ namespace Aurora
 
         internal void Display()
         {
-            if (App.isSilent || Global.Configuration.StartSilently)
+            if (App.isSilent || Global.Configuration.start_silently)
             {
                 this.Visibility = Visibility.Hidden;
                 this.WindowStyle = WindowStyle.None;
@@ -292,7 +292,7 @@ namespace Aurora
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (Global.Configuration.CloseMode == AppExitMode.Ask)
+            if (Global.Configuration.close_mode == AppExitMode.Ask)
             {
                 MessageBoxResult result = MessageBox.Show("Would you like to Exit Aurora?", "Aurora", MessageBoxButton.YesNo);
 
@@ -306,7 +306,7 @@ namespace Aurora
                     exitApp();
                 }
             }
-            else if (Global.Configuration.CloseMode == AppExitMode.Minimize)
+            else if (Global.Configuration.close_mode == AppExitMode.Minimize)
             {
                 minimizeApp();
                 e.Cancel = true;

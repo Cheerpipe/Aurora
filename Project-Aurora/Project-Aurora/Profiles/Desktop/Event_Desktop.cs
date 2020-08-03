@@ -29,9 +29,9 @@ namespace Aurora.Profiles.Desktop
             //Scripts before interactive and shortcut assistant layers
             //ProfilesManager.DesktopProfile.UpdateEffectScripts(layers);
 
-            if (Global.Configuration.TimeBasedDimmingEnabled)
+            if (Global.Configuration.time_based_dimming_enabled)
             {
-                if (Utils.Time.IsCurrentTimeBetween(Global.Configuration.TimeBasedDimmingStartHour, Global.Configuration.TimeBasedDimmingEndHour)) {
+                if (Utils.Time.IsCurrentTimeBetween(Global.Configuration.time_based_dimming_start_hour, Global.Configuration.time_based_dimming_end_hour)) {
                     layers.Clear();
 
                     EffectLayer time_based_dim_layer = new EffectLayer("Time Based Dim");

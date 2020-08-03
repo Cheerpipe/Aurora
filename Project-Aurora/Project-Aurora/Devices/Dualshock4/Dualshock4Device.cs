@@ -61,14 +61,14 @@ namespace Aurora.Devices.Dualshock
                 if (device != null)
                 {
                     isInitialized = true;
-                    if (Global.Configuration.DualshockFirstTime)
+                    if (Global.Configuration.dualshock_first_time)
                     {
                         App.Current.Dispatcher.Invoke(() =>
                         {
                             DualshockInstallInstructions instructions = new DualshockInstallInstructions();
                             instructions.ShowDialog();
                         });
-                        Global.Configuration.DualshockFirstTime = false;
+                        Global.Configuration.dualshock_first_time = false;
                         Settings.ConfigManager.Save(Global.Configuration);
                     }
                 }
@@ -169,7 +169,7 @@ namespace Aurora.Devices.Dualshock
                 //Global.logger.Info("Stop Ewatch");
             }
 
-            bool isdisabled = Global.Configuration.DevicesDisabled.Contains(typeof(DualshockDevice));
+            bool isdisabled = Global.Configuration.devices_disabled.Contains(typeof(DualshockDevice));
             int auto_connect_cooldown = 3000;
             bool auto_connect_enabled = Global.Configuration.VarRegistry.GetVariable<bool>($"{devicename}_auto_connect");
 

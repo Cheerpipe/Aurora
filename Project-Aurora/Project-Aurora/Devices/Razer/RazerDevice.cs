@@ -93,14 +93,14 @@ namespace Aurora.Devices.Razer
                             /*if (Chroma.Instance.Query(Corale.Colore.Razer.Devices.BladeStealth).Connected || Chroma.Instance.Query(Corale.Colore.Razer.Devices.Blade14).Connected)
                                 bladeLayout = true;*/
 
-                            if (Global.Configuration.RazerFirstTime)
+                            if (Global.Configuration.razer_first_time)
                             {
                                 App.Current.Dispatcher.Invoke(() =>
                                 {
                                     RazerInstallInstructions instructions = new RazerInstallInstructions();
                                     instructions.ShowDialog();
                                 });
-                                Global.Configuration.RazerFirstTime = false;
+                                Global.Configuration.razer_first_time = false;
                                 Settings.ConfigManager.Save(Global.Configuration);
                             }
 
@@ -169,7 +169,7 @@ namespace Aurora.Devices.Razer
         {
             Dictionary<DeviceKeys, int[]> layout = RazerLayoutMap.GenericKeyboard;
 
-            if (Global.Configuration.KeyboardBrand == PreferredKeyboard.Razer_Blade)
+            if (Global.Configuration.keyboard_brand == PreferredKeyboard.Razer_Blade)
                 layout = RazerLayoutMap.Blade;
 
             if (layout.ContainsKey(key))
@@ -305,7 +305,7 @@ namespace Aurora.Devices.Razer
 
         private void SendColorsToKeyboard(bool forced = false)
         {
-            if (keyboard != null && !Global.Configuration.DevicesDisableKeyboard)
+            if (keyboard != null && !Global.Configuration.devices_disable_keyboard)
             {
                 keyboard.SetCustom(grid);
                 keyboard_updated = true;
@@ -314,7 +314,7 @@ namespace Aurora.Devices.Razer
 
         private void SetOneKey(int[] coords, System.Drawing.Color color)
         {
-            if (!Global.Configuration.DevicesDisableKeyboard)
+            if (!Global.Configuration.devices_disable_keyboard)
                 grid[coords[0], coords[1]] = new Color(color.R, color.G, color.B);
         }
 
@@ -325,7 +325,7 @@ namespace Aurora.Devices.Razer
 
             try
             {
-                if (!Global.Configuration.DevicesDisableKeyboard)
+                if (!Global.Configuration.devices_disable_keyboard)
                     grid[key] = new Color(color.R, color.G, color.B);
             }
             catch (Exception exc)
@@ -336,9 +336,9 @@ namespace Aurora.Devices.Razer
 
         private void SendColorToMousepad(int index, System.Drawing.Color color)
         {
-            if (Global.Configuration.AllowPeripheralDevices)
+            if (Global.Configuration.allow_peripheral_devices)
             {
-                if (mousepad != null && !Global.Configuration.DevicesDisableMouse)
+                if (mousepad != null && !Global.Configuration.devices_disable_mouse)
                 {
                     MousepadGrid[index] = new Color(color.R, color.G, color.B);
                     mousepad.SetCustom(MousepadGrid);
@@ -359,21 +359,21 @@ namespace Aurora.Devices.Razer
         {
             if ((!previous_peripheral_Color.Equals(color) || forced))
             {
-                if (Global.Configuration.AllowPeripheralDevices)
+                if (Global.Configuration.allow_peripheral_devices)
                 {
-                    if (mouse != null && !Global.Configuration.DevicesDisableMouse)
+                    if (mouse != null && !Global.Configuration.devices_disable_mouse)
                         mouse.SetAll(new Color(color.R, color.G, color.B));
 
                     //if (mousepad != null && !Global.Configuration.devices_disable_mouse)
                      //   mousepad.SetAll(new Color(color.R, color.G, color.B));
 
-                    if (headset != null && !Global.Configuration.DevicesDisableHeadset)
+                    if (headset != null && !Global.Configuration.devices_disable_headset)
                         headset.SetAll(new Color(color.R, color.G, color.B));
 
-                    if (keypad != null && !Global.Configuration.DevicesDisableKeyboard)
+                    if (keypad != null && !Global.Configuration.devices_disable_keyboard)
                         keypad.SetAll(new Color(color.R, color.G, color.B));
 
-                    if (chromalink != null && !Global.Configuration.DevicesDisableMouse)
+                    if (chromalink != null && !Global.Configuration.devices_disable_mouse)
                         chromalink.SetStatic(new Color(color.R, color.G, color.B));
 
                     previous_peripheral_Color = color;

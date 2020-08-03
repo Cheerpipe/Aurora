@@ -480,7 +480,7 @@ namespace Aurora.Settings
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                LoadBrand(Global.Configuration.KeyboardBrand, Global.Configuration.MousePreference, Global.Configuration.MouseOrientation);
+                LoadBrand(Global.Configuration.keyboard_brand, Global.Configuration.mouse_preference, Global.Configuration.mouse_orientation);
             });
         }
 
@@ -497,7 +497,7 @@ namespace Aurora.Settings
             //Load keyboard layout
             if (Directory.Exists(layoutsPath))
             {
-                PreferredKeyboardLocalization layout = Global.Configuration.KeyboardLocalization;
+                PreferredKeyboardLocalization layout = Global.Configuration.keyboard_localization;
 
                 if (layout == PreferredKeyboardLocalization.iso)
                 {
@@ -1218,7 +1218,7 @@ namespace Aurora.Settings
                     keycap = new Control_GhostKeycap(key, image_path);
                 else
                 {
-                    switch (Global.Configuration.VirtualkeyboardKeycapType)
+                    switch (Global.Configuration.virtualkeyboard_keycap_type)
                     {
                         case KeycapType.Default_backglow:
                             keycap = new Control_DefaultKeycapBackglow(key, image_path);
