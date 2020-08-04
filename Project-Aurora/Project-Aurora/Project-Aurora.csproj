@@ -16,7 +16,7 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <UseWPF>true</UseWPF>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>$(SolutionDir)..\Build\$(Configuration)</OutputPath>
+    <OutputPath>C:\Program Files\Aurora\</OutputPath>
     <ApplicationIcon>Resources\aurora_icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -81,6 +81,7 @@
     <PackageReference Include="NLog" Version="4.7.0" />
     <PackageReference Include="Octokit" Version="0.47.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.2.8" />
+    <PackageReference Include="RestSharp" Version="106.11.4" />
     <PackageReference Include="RGB.NET.Devices.Corsair" Version="0.1.32" />
     <PackageReference Include="RGB.NET.Groups" Version="0.1.32" />
     <PackageReference Include="RGB.NET.Resources.Corsair" Version="0.3.0.234" />
