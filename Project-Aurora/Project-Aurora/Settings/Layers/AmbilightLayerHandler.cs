@@ -240,49 +240,46 @@ namespace Aurora.Settings.Layers
         }
 
         //FELIPE
-        static IScreenCapture experimentalScreenCapture;
+        static Dictionary<int, IScreenCapture> experimentalScreenCaptureArray = new Dictionary<int, IScreenCapture>();
 
         public void Initialize()
         {
-            if (Properties.ExperimentalMode)
+            // if (Properties.ExperimentalMode)
+            // {
+            if (!experimentalScreenCaptureArray.ContainsKey(Properties.AmbilightOutputId))
             {
-                if (experimentalScreenCapture == null)
-                {
-                    screenCapture = new DXScreenCapture();
-                    experimentalScreenCapture = screenCapture;
-                }
-                else
-                {
-                    screenCapture = experimentalScreenCapture;
-                }
-                try
-                {
-                    //this won't work on some systems
-                    screenCapture.SetDisplay(Properties.AmbilightOutputId);
-                    //Console.WriteLine("Started experimental ambilight mode");
-                    Global.logger.Info("Started experimental ambilight mode");
-                }
-                catch (SharpDXException e)
-                {
-
-                    (screenCapture as DXScreenCapture)?.Dispose();
-                    //Console.WriteLine("Error using experimental ambilight mode: " + e);
-                    Global.logger.Error("Error using experimental ambilight mode: " + e);
-                    Properties._ExperimentalMode = false;
-                    InvokePropertyChanged(nameof(UseDX));
-
-                    screenCapture = new GDIScreenCapture();
-                    screenCapture.SetDisplay(Properties.AmbilightOutputId);
-                }
+                screenCapture = new DXScreenCapture();
+                experimentalScreenCaptureArray[Properties.AmbilightOutputId] = screenCapture;
             }
             else
             {
+                screenCapture = experimentalScreenCaptureArray[Properties.AmbilightOutputId];
+                Global.logger.Info("Reusing experimental ambilight mode for Output " + Properties.AmbilightOutputId);
+            }
+            try
+            {
+                //this won't work on some systems
+                screenCapture.SetDisplay(Properties.AmbilightOutputId);
+                Global.logger.Info("Started experimental ambilight mode for Output " + Properties.AmbilightOutputId);
+            }
+            catch (SharpDXException e)
+            {
+
+                (screenCapture as DXScreenCapture)?.Dispose();
+                Global.logger.Error("Error using experimental ambilight in output " + Properties.AmbilightOutputId + " mode: " + e);
+                Properties._ExperimentalMode = false;
+                InvokePropertyChanged(nameof(UseDX));
+
                 screenCapture = new GDIScreenCapture();
                 screenCapture.SetDisplay(Properties.AmbilightOutputId);
-                Global.logger.Info("Started regular ambilight mode");
-                //Console.WriteLine("Started regular ambilight mode");
             }
-
+            //  }
+            //else
+            // {
+            //screenCapture = new GDIScreenCapture();
+            //screenCapture.SetDisplay(Properties.AmbilightOutputId);
+            //Global.logger.Info("Started regular ambilight mode for Output " + Properties.AmbilightOutputId);
+            //}
             cropRegion = screenCapture.CurrentScreenBounds;
             InvokePropertyChanged(nameof(Displays));
         }
