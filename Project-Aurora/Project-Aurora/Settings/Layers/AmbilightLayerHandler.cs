@@ -250,12 +250,14 @@ namespace Aurora.Settings.Layers
             {
                 screenCapture = new DXScreenCapture();
                 experimentalScreenCaptureArray[Properties.AmbilightOutputId] = screenCapture;
+                screenCapture.SetDisplay(Properties.AmbilightOutputId);
             }
             else
             {
                 screenCapture = experimentalScreenCaptureArray[Properties.AmbilightOutputId];
                 Global.logger.Info("Reusing experimental ambilight mode for Output " + Properties.AmbilightOutputId);
             }
+            /*
             try
             {
                 //this won't work on some systems
@@ -273,6 +275,7 @@ namespace Aurora.Settings.Layers
                 screenCapture = new GDIScreenCapture();
                 screenCapture.SetDisplay(Properties.AmbilightOutputId);
             }
+            */
             //  }
             //else
             // {

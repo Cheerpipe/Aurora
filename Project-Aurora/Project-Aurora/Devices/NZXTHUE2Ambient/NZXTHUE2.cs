@@ -27,11 +27,11 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         private DeviceKeys _commitKey;
         private Color _initialColor = Color.Black;
         private int _deviceIndex = -1;
+        private const int _maxConnectRetryCountLeft = 50;
         private int _connectRetryCountLeft = _maxConnectRetryCountLeft;
         private Dictionary<DeviceKeys, List<DeviceMapState>> _deviceMap;
         private bool _useFastStartup = false;
-        private const int _maxConnectRetryCountLeft = 50;
-        private const int _ConnectRetryTimeOut = 90;
+        private const int _ConnectRetryTimeOut = 100;
         private const string NZXTHUEAmbientListenerExeName = "NZXTHUEAmbientListener.exe";
 
         public bool Initialize()
@@ -92,7 +92,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             using (var pipe = new NamedPipeClientStream(".", "HUE2AmbientDeviceController" + _deviceIndex, PipeDirection.Out))
             using (var stream = new BinaryWriter(pipe))
             {
-                pipe.Connect(timeout: 100);
+                pipe.Connect(timeout: 110);
                 stream.Write(args);
             }
         }

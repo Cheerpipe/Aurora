@@ -40,10 +40,10 @@ namespace Aurora.Devices.RGBFusion
         private const string _RGBFusionBridgeExeName = "RGBFusionAuroraListener.exe";
         private const string _defaultProfileFileName = "pro1.xml";
         private const string _defaultExtProfileFileName = "ExtPro1.xml";
+        private const int _maxConnectRetryCountLeft = 50;
         private int _connectRetryCountLeft = _maxConnectRetryCountLeft;
         private bool _starting = false;
-        private const int _maxConnectRetryCountLeft = 50;
-        private const int _ConnectRetryTimeOut = 50;
+        private const int _ConnectRetryTimeOut = 100;
 
         private HashSet<byte> _rgbFusionLedIndexes;
 
@@ -129,7 +129,7 @@ namespace Aurora.Devices.RGBFusion
                 string pStart = _RGBFusionDirectory + _RGBFusionBridgeExeName;
                 string pArgs = _customArgs + " " + (ValidateIgnoreLedParam() ? "--ignoreled:" + _ignoreLedsParam : "");
                 Process.Start(pStart, pArgs);
-                if (!TestRGBFusionBridgeListener(60))
+                if (!TestRGBFusionBridgeListener(110))
                 {
                     Global.logger.Error("RGBFusion bridge listener didn't start on " + _RGBFusionDirectory + _RGBFusionBridgeExeName);
                     _starting = false;
