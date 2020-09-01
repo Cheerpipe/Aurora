@@ -221,12 +221,8 @@ namespace Aurora.Devices.RGBFusion
         private void UpdateDeviceMap()
         {
             _deviceMap = new Dictionary<DeviceKeys, DeviceMapState>();
-            _deviceMap.Add(DeviceKeys.MBAREA_6, new DeviceMapState(1, _initialColor));
-            _deviceMap.Add(DeviceKeys.MBAREA_3, new DeviceMapState(2, _initialColor));
-            _deviceMap.Add(DeviceKeys.MBAREA_2, new DeviceMapState(3, _initialColor));
-            _deviceMap.Add(DeviceKeys.MBAREA_4, new DeviceMapState(6, _initialColor));
-            _deviceMap.Add(DeviceKeys.MBAREA_1, new DeviceMapState(8, _initialColor));
-            _deviceMap.Add(DeviceKeys.MBAREA_5, new DeviceMapState(9, _initialColor));
+            _deviceMap.Add(DeviceKeys.MBAREA_4, new DeviceMapState(0, _initialColor)); //Aorus LOGO
+            _deviceMap.Add(DeviceKeys.MBAREA_3, new DeviceMapState(2, _initialColor)); // SB
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_1, new DeviceMapState(10, _initialColor));
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_2, new DeviceMapState(11, _initialColor));
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_3, new DeviceMapState(12, _initialColor));
