@@ -223,6 +223,7 @@ namespace Aurora.Devices.RGBFusion
             _deviceMap = new Dictionary<DeviceKeys, DeviceMapState>();
             _deviceMap.Add(DeviceKeys.MBAREA_4, new DeviceMapState(0, _initialColor)); //Aorus LOGO
             _deviceMap.Add(DeviceKeys.MBAREA_3, new DeviceMapState(2, _initialColor)); // SB
+            _deviceMap.Add(DeviceKeys.MBAREA_1, new DeviceMapState(8, _initialColor)); // VGA
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_1, new DeviceMapState(10, _initialColor));
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_2, new DeviceMapState(11, _initialColor));
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_3, new DeviceMapState(12, _initialColor));

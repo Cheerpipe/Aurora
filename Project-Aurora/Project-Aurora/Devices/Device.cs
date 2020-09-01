@@ -2396,7 +2396,7 @@ namespace Aurora.Devices
         /// Calculator Key
         /// </summary>
         [Description("Ambiente")]
-        AMBIENT = 840,
+        AMBIENT = 890,
 
         /// <summary>
         /// None
