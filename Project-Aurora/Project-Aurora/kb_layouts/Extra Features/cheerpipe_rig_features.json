@@ -1070,17 +1070,6 @@
       "absolute_location": true
     },
     {
-      "visualName": "XMP",
-      "tag": 806,
-      "margin_left": -175,
-      "margin_top": 0,
-      "width": 50.0,
-      "height": 15,
-      "font_size": 10.0,
-      "enabled": true,
-      "absolute_location": true
-    },
-    {
       "visualName": "RAM",
       "tag": 805,
       "margin_left": -235,
@@ -1128,17 +1117,6 @@
       "visualName": "SB",
       "tag": 803,
       "margin_left": -175,
-      "margin_top": 18,
-      "width": 50.0,
-      "height": 15,
-      "font_size": 10.0,
-      "enabled": true,
-      "absolute_location": true
-    },
-    {
-      "visualName": "ESS",
-      "tag": 802,
-      "margin_left": -295,
       "margin_top": 18,
       "width": 50.0,
       "height": 15,
