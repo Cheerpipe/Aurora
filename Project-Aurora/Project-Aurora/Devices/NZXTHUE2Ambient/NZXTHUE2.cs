@@ -27,11 +27,11 @@ namespace Aurora.Devices.NZXTHUE2Ambient
         private DeviceKeys _commitKey;
         private Color _initialColor = Color.Black;
         private int _deviceIndex = -1;
-        private const int _maxConnectRetryCountLeft = 50;
+        private const int _maxConnectRetryCountLeft = 10;
         private int _connectRetryCountLeft = _maxConnectRetryCountLeft;
         private Dictionary<DeviceKeys, List<DeviceMapState>> _deviceMap;
         private bool _useFastStartup = false;
-        private const int _ConnectRetryTimeOut = 100;
+        private const int _ConnectRetryTimeOut = 190;
         private const string NZXTHUEAmbientListenerExeName = "NZXTHUEAmbientListener.exe";
 
         public bool Initialize()
@@ -92,7 +92,7 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             using (var pipe = new NamedPipeClientStream(".", "HUE2AmbientDeviceController" + _deviceIndex, PipeDirection.Out))
             using (var stream = new BinaryWriter(pipe))
             {
-                pipe.Connect(timeout: 110);
+                pipe.Connect(timeout: 200);
                 stream.Write(args);
             }
         }
@@ -286,11 +286,17 @@ namespace Aurora.Devices.NZXTHUE2Ambient
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
             _watch.Stop();
             _lastUpdateTime = _watch.ElapsedMilliseconds;
-            if (_lastUpdateTime > _ConnectRetryTimeOut && _isConnected)
+            if (_lastUpdateTime > _ConnectRetryTimeOut && _isConnected && _connectRetryCountLeft > 0)
             {
                 _connectRetryCountLeft--;
             }
-            else if (_lastUpdateTime < _ConnectRetryTimeOut)
+            else if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft == 0)
+            {
+                _connectRetryCountLeft = _maxConnectRetryCountLeft;
+                Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
+                Reset();
+            }
+            else
             {
                 _connectRetryCountLeft = _maxConnectRetryCountLeft;
             }

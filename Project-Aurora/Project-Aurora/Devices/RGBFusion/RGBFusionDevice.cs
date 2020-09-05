@@ -40,10 +40,10 @@ namespace Aurora.Devices.RGBFusion
         private const string _RGBFusionBridgeExeName = "RGBFusionAuroraListener.exe";
         private const string _defaultProfileFileName = "pro1.xml";
         private const string _defaultExtProfileFileName = "ExtPro1.xml";
-        private const int _maxConnectRetryCountLeft = 50;
+        private const int _maxConnectRetryCountLeft = 10;
         private int _connectRetryCountLeft = _maxConnectRetryCountLeft;
         private bool _starting = false;
-        private const int _ConnectRetryTimeOut = 100;
+        private const int _ConnectRetryTimeOut = 190;
 
         private HashSet<byte> _rgbFusionLedIndexes;
 
@@ -170,7 +170,7 @@ namespace Aurora.Devices.RGBFusion
                 using (var pipe = new NamedPipeClientStream(".", "RGBFusionAuroraListener", PipeDirection.Out))
                 using (var stream = new BinaryWriter(pipe))
                 {
-                    pipe.Connect(100);
+                    pipe.Connect(200);
                     stream.Write(args);
                     return true;
                 }
@@ -224,6 +224,7 @@ namespace Aurora.Devices.RGBFusion
             _deviceMap.Add(DeviceKeys.MBAREA_4, new DeviceMapState(0, _initialColor)); //Aorus LOGO
             _deviceMap.Add(DeviceKeys.MBAREA_3, new DeviceMapState(2, _initialColor)); // SB
             _deviceMap.Add(DeviceKeys.MBAREA_1, new DeviceMapState(8, _initialColor)); // VGA
+            _deviceMap.Add(DeviceKeys.MBAREA_5, new DeviceMapState(9, _initialColor)); // RAM
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_1, new DeviceMapState(10, _initialColor));
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_2, new DeviceMapState(11, _initialColor));
             _deviceMap.Add(DeviceKeys.DLEDSTRIP_3, new DeviceMapState(12, _initialColor));
@@ -439,11 +440,16 @@ namespace Aurora.Devices.RGBFusion
             bool update_result = UpdateDevice(colorComposition.keyColors, e, forced);
             _ellapsedTimeWatch.Stop();
             _lastUpdateTime = _ellapsedTimeWatch.ElapsedMilliseconds;
-            if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft > 0)
+            if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft > 0 && _isConnected)
             {
-                Reset();
+
                 _connectRetryCountLeft--;
+            }
+            else if (_lastUpdateTime > _ConnectRetryTimeOut && _connectRetryCountLeft == 0)
+            {
+                _connectRetryCountLeft = _maxConnectRetryCountLeft;
                 Global.logger.Warn(string.Format("{0} device reseted automatically.", _devicename));
+                Reset();
             }
             else
             {
