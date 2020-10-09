@@ -1710,7 +1710,7 @@ namespace Aurora.Devices
         /// </summary>
         [Description("Led strip 1 LED 63")]
         LEDSTRIPLIGHT1_63 = 663,
-       
+
 
         ///<summary>
         /// Calculator Key
@@ -2133,7 +2133,7 @@ namespace Aurora.Devices
         /// Calculator Key
         /// </summary>
         [Description("Led strip 2 LED 69")]
-        LEDSTRIPLIGHT2_69= 769,
+        LEDSTRIPLIGHT2_69 = 769,
 
         ///<summary>
         /// Calculator Key
@@ -2246,151 +2246,332 @@ namespace Aurora.Devices
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 1")]
-        DLEDSTRIP_1 = 811,
+        [Description("RGBFusion DLED (CH1) 1")]
+        DLEDSTRIPCH1_1 = 811,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 2")]
-        DLEDSTRIP_2 = 812,
+        [Description("RGBFusion DLED (CH1) 2")]
+        DLEDSTRIPCH1_2 = 812,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 3")]
-        DLEDSTRIP_3 = 813,
+        [Description("RGBFusion DLED (CH1) 3")]
+        DLEDSTRIPCH1_3 = 813,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 4")]
-        DLEDSTRIP_4 = 814,
+        [Description("RGBFusion DLED (CH1) 4")]
+        DLEDSTRIPCH1_4 = 814,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 5")]
-        DLEDSTRIP_5 = 815,
+        [Description("RGBFusion DLED (CH1) 5")]
+        DLEDSTRIPCH1_5 = 815,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 6")]
-        DLEDSTRIP_6 = 816,
+        [Description("RGBFusion DLED (CH1) 6")]
+        DLEDSTRIPCH1_6 = 816,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 7")]
-        DLEDSTRIP_7 = 817,
+        [Description("RGBFusion DLED (CH1) 7")]
+        DLEDSTRIPCH1_7 = 817,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 8")]
-        DLEDSTRIP_8 = 818,
+        [Description("RGBFusion DLED (CH1) 8")]
+        DLEDSTRIPCH1_8 = 818,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 9")]
-        DLEDSTRIP_9 = 819,
+        [Description("RGBFusion DLED (CH1) 9")]
+        DLEDSTRIPCH1_9 = 819,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 10")]
-        DLEDSTRIP_10 = 820,
+        [Description("RGBFusion DLED (CH1) 10")]
+        DLEDSTRIPCH1_10 = 820,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 11")]
-        DLEDSTRIP_11 = 821,
+        [Description("RGBFusion DLED (CH1) 11")]
+        DLEDSTRIPCH1_11 = 821,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 12")]
-        DLEDSTRIP_12 = 822,
+        [Description("RGBFusion DLED (CH1) 12")]
+        DLEDSTRIPCH1_12 = 822,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 13")]
-        DLEDSTRIP_13 = 823,
+        [Description("RGBFusion DLED (CH1) 13")]
+        DLEDSTRIPCH1_13 = 823,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 14")]
-        DLEDSTRIP_14 = 824,
+        [Description("RGBFusion DLED (CH1) 14")]
+        DLEDSTRIPCH1_14 = 824,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 15")]
-        DLEDSTRIP_15 = 825,
+        [Description("RGBFusion DLED (CH1) 15")]
+        DLEDSTRIPCH1_15 = 825,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 16")]
-        DLEDSTRIP_16 = 826,
+        [Description("RGBFusion DLED (CH1) 16")]
+        DLEDSTRIPCH1_16 = 826,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 17")]
-        DLEDSTRIP_17 = 827,
+        [Description("RGBFusion DLED (CH1) 17")]
+        DLEDSTRIPCH1_17 = 827,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_18 = 828,
+        [Description("RGBFusion DLED (CH1) 18")]
+        DLEDSTRIPCH1_18 = 828,
 
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_19 = 829,
+        [Description("RGBFusion DLED (CH1) 19")]
+        DLEDSTRIPCH1_19 = 829,
 
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_20 = 830,
+        [Description("RGBFusion DLED (CH1) 20")]
+        DLEDSTRIPCH1_20 = 830,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_21 = 831,
+        [Description("RGBFusion DLED (CH1) 21")]
+        DLEDSTRIPCH1_21 = 831,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_22 = 832,
+        [Description("RGBFusion DLED (CH1) 22")]
+        DLEDSTRIPCH1_22 = 832,
 
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_23 = 833,
+        [Description("RGBFusion DLED (CH1) 23")]
+        DLEDSTRIPCH1_23 = 833,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_24 = 834,
+        [Description("RGBFusion DLED (CH1) 24")]
+        DLEDSTRIPCH1_24 = 834,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_25 = 835,
+        [Description("RGBFusion DLED (CH1) 25")]
+        DLEDSTRIPCH1_25 = 835,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_26 = 836,
+        [Description("RGBFusion DLED (CH1) 26")]
+        DLEDSTRIPCH1_26 = 836,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_27 = 837,
+        [Description("RGBFusion DLED (CH1) 27")]
+        DLEDSTRIPCH1_27 = 837,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_28 = 838,
+        [Description("RGBFusion DLED (CH1) 28")]
+        DLEDSTRIPCH1_28 = 838,
         ///<summary>
         /// Calculator Key
         /// </summary>
-        [Description("RGBFusion DLED 18")]
-        DLEDSTRIP_29 = 839,
+        [Description("RGBFusion DLED (CH1) 29")]
+        DLEDSTRIPCH1_29 = 839,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH1) 30")]
+        DLEDSTRIPCH1_30 = 840,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH1) 31")]
+        DLEDSTRIPCH1_31 = 841,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH1) 32")]
+        DLEDSTRIPCH1_32 = 842,
+
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 1")]
+        DLEDSTRIPCH2_1 = 843,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 2")]
+        DLEDSTRIPCH2_2 = 844,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 3")]
+        DLEDSTRIPCH2_3 = 845,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 4")]
+        DLEDSTRIPCH2_4 = 846,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 5")]
+        DLEDSTRIPCH2_5 = 847,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 6")]
+        DLEDSTRIPCH2_6 = 848,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 7")]
+        DLEDSTRIPCH2_7 = 849,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 8")]
+        DLEDSTRIPCH2_8 = 850,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 9")]
+        DLEDSTRIPCH2_9 = 851,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 10")]
+        DLEDSTRIPCH2_10 = 852,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 11")]
+        DLEDSTRIPCH2_11 = 853,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 12")]
+        DLEDSTRIPCH2_12 = 854,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 13")]
+        DLEDSTRIPCH2_13 = 855,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 14")]
+        DLEDSTRIPCH2_14 = 856,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 15")]
+        DLEDSTRIPCH2_15 = 857,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 16")]
+        DLEDSTRIPCH2_16 = 858,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 17")]
+        DLEDSTRIPCH2_17 = 859,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 18")]
+        DLEDSTRIPCH2_18 = 860,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 19")]
+        DLEDSTRIPCH2_19 = 861,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 20")]
+        DLEDSTRIPCH2_20 = 862,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 21")]
+        DLEDSTRIPCH2_21 = 863,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 22")]
+        DLEDSTRIPCH2_22 = 864,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 23")]
+        DLEDSTRIPCH2_23 = 865,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 24")]
+        DLEDSTRIPCH2_24 = 866,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 25")]
+        DLEDSTRIPCH2_25 = 867,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 26")]
+        DLEDSTRIPCH2_26 = 868,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 27")]
+        DLEDSTRIPCH2_27 = 869,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 28")]
+        DLEDSTRIPCH2_28 = 870,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 29")]
+        DLEDSTRIPCH2_29 = 871,
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 30")]
+        DLEDSTRIPCH2_30 = 872,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 31")]
+        DLEDSTRIPCH2_31 = 873,
+
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("RGBFusion DLED (CH2) 32")]
+        DLEDSTRIPCH2_32 = 874,
 
         ///<summary>
         /// Calculator Key
