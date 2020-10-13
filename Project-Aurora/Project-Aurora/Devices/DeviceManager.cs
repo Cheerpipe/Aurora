@@ -43,7 +43,7 @@ namespace Aurora.Devices
         private void WorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
             newFrame = false;
-            lock(actionLock)
+            lock (actionLock)
             {
                 Device.UpdateDevice(currentComp.Item1, doWorkEventArgs,
                 currentComp.Item2);
@@ -90,9 +90,18 @@ namespace Aurora.Devices
 
         public DeviceManager()
         {
-            AddDevicesFromAssembly();
-            AddDevicesFromScripts();
-            AddDevicesFromDlls();
+            //Add only my own assemblies
+            //AddDevicesFromAssembly();
+            //AddDevicesFromScripts();
+            //AddDevicesFromDlls();
+            DeviceContainers.Add(new DeviceContainer(new Devices.Logitech.LogitechDevice()));         // Logitech Device
+            DeviceContainers.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2("Desktop", 1, Aurora.Devices.NZXTHUE2Ambient.DeviceMaps.HUE2DesktopDeviceMap.GetDeviceMap(Color.Black))));        // HUE 2 Desktop
+            DeviceContainers.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2("Display", 0, Aurora.Devices.NZXTHUE2Ambient.DeviceMaps.HUE2DisplayDeviceMap.GetDeviceMap(Color.Black))));        // HUE 2 Display
+            DeviceContainers.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2("TV", 2, Aurora.Devices.NZXTHUE2Ambient.DeviceMaps.HUE2TVDeviceMap.GetDeviceMap(Color.Black))));        // HUE 2 Display
+            DeviceContainers.Add(new DeviceContainer(new Devices.HassioLightDevice.HassioLightDevice()));         // HASSIO Client
+            DeviceContainers.Add(new DeviceContainer(new Devices.RGBFusion.RGBFusionDevice()));        // RGBFusion Bridge
+
+
 
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
             SystemEvents.SessionSwitch += SystemEvents_SessionSwitch;
@@ -219,7 +228,7 @@ namespace Aurora.Devices
                     if (dc.Device.IsInitialized || Global.Configuration.DevicesDisabled.Contains(dc.Device.GetType()))
                         continue;
 
-                    lock(dc.actionLock)
+                    lock (dc.actionLock)
                         dc.Device.Initialize();
                 }
                 RetryAttempts--;
@@ -285,6 +294,38 @@ namespace Aurora.Devices
             {
                 lock (dc.actionLock)
                     dc.Device.Reset();
+            }
+        }
+
+        public void ResetDeviceByName(string deviceName, bool hardReset = false)
+        {
+            foreach (DeviceContainer device in InitializedDeviceContainers)
+            {
+                if (device.Device.IsInitialized && device.Device.DeviceName == deviceName)
+                {
+                    if (hardReset)
+                    {
+                        device.Device.Shutdown();
+                        device.Device.Initialize();
+                    }
+                    device.Device.Reset();
+                }
+            }
+        }
+
+        public void ToggleDeviceByName(string deviceName)
+        {
+            foreach (DeviceContainer device in InitializedDeviceContainers)
+            {
+                if (device.Device.IsInitialized && device.Device.DeviceName == deviceName)
+                {
+                    device.Device.Shutdown();
+                }
+                else if (!device.Device.IsInitialized && device.Device.DeviceName == deviceName)
+                {
+                    device.Device.Initialize();
+                    device.Device.Reset();
+                }
             }
         }
 

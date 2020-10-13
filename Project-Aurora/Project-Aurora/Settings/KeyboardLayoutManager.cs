@@ -696,7 +696,7 @@ namespace Aurora.Settings
                 layoutConfigPath = Path.Combine(layoutsPath, "logitech_gpro.json");
             else if (keyboard_preference == PreferredKeyboard.Logitech_G410)
                 layoutConfigPath = Path.Combine(layoutsPath, "logitech_g410.json");
-			else if (keyboard_preference == PreferredKeyboard.Logitech_G815)
+            else if (keyboard_preference == PreferredKeyboard.Logitech_G815)
                 layoutConfigPath = Path.Combine(layoutsPath, "logitech_g815.json");
             else if (keyboard_preference == PreferredKeyboard.Logitech_G513)
                 layoutConfigPath = Path.Combine(layoutsPath, "logitech_g513.json");
@@ -760,7 +760,7 @@ namespace Aurora.Settings
                 layoutConfigPath = Path.Combine(layoutsPath, "drevo_blademaster.json");
             else if (keyboard_preference == PreferredKeyboard.Wooting_Two)
                 layoutConfigPath = Path.Combine(layoutsPath, "wooting_two.json");
- 
+
             else if (keyboard_preference == PreferredKeyboard.Uniwill2ND_35X_1)
                 layoutConfigPath = Path.Combine(layoutsPath, "Uniwill2ND_35X_1.json");
             else if (keyboard_preference == PreferredKeyboard.Uniwill2ND_35X_2)
@@ -783,7 +783,7 @@ namespace Aurora.Settings
                 layoutConfigPath = Path.Combine(layoutsPath, "Uniwill2P2_650_BR.json");
             else if (keyboard_preference == PreferredKeyboard.Uniwill2P2_650_JP)
                 layoutConfigPath = Path.Combine(layoutsPath, "Uniwill2P2_650_JP.json");
- 
+
             else if (keyboard_preference == PreferredKeyboard.Ducky_Shine_7)
                 layoutConfigPath = Path.Combine(layoutsPath, "ducky_shine_7.json");
             else if (keyboard_preference == PreferredKeyboard.Ducky_One_2_RGB_TKL)
@@ -794,6 +794,11 @@ namespace Aurora.Settings
                 layoutConfigPath = Path.Combine(layoutsPath, "omen_four_zone.json");
             else if (keyboard_preference == PreferredKeyboard.HyperX_Alloy_Elite_RGB)
                 layoutConfigPath = Path.Combine(layoutsPath, "hyperx_alloy_elite_rgb.json");
+
+            //Own layout
+            else if (keyboard_preference == PreferredKeyboard.Cheerpipe_rig)
+                layoutConfigPath = Path.Combine(layoutsPath, "Cheerpipe_rig.json");
+
 
             else
             {

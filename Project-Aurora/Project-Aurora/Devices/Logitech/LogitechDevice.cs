@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -72,10 +73,15 @@ namespace Aurora.Devices.Logitech
                     IsInitialized &= LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(logiKey, key.Value);
                 if (LedMaps.PeripheralMap.TryGetValue(key.Key, out var peripheral))
                 {
-                    if ((peripheral.type == DeviceType.Headset && !Global.Configuration.DevicesDisableHeadset)
-                    || (peripheral.type == DeviceType.Mouse && !Global.Configuration.DevicesDisableMouse))
+                    if (((peripheral.type == DeviceType.Headset || peripheral.type == DeviceType.Speaker) && !Global.Configuration.DevicesDisableHeadset)
+                    || ((peripheral.type == DeviceType.Mouse || peripheral.type == DeviceType.Mousemat) && !Global.Configuration.DevicesDisableMouse))
                     {
                         LogitechGSDK.LogiLedSetLightingForTargetZone(peripheral.type, peripheral.zone, key.Value);
+                    }
+                    //Workarround to Powerplay not working with Logitech SDK
+                    if (key.Key == DeviceKeys.Peripheral_Logo)
+                    {
+                        Task.Run(() => { SendCommandToRGBFusion(new byte[3] { key.Value.R, key.Value.G, key.Value.B }); });
                     }
                 }
 
@@ -88,6 +94,25 @@ namespace Aurora.Devices.Logitech
                 IsInitialized &= LogitechGSDK.LogiLedSetLightingFromBitmap(logitechBitmap);
 
             return IsInitialized;
+        }
+
+        public bool SendCommandToRGBFusion(byte[] args)
+        {
+            try
+            {
+                using (var pipe = new NamedPipeClientStream(".", "PowerPlayLedController", PipeDirection.Out))
+                using (var stream = new BinaryWriter(pipe))
+                {
+                    pipe.Connect(15);
+                    stream.Write(args);
+                    return true;
+                }
+            }
+            catch
+            {
+                Thread.Sleep(100);
+                return false;
+            }
         }
 
         protected override void RegisterVariables(VariableRegistry variableRegistry)

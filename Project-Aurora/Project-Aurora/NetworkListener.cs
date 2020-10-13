@@ -1,4 +1,5 @@
 ﻿using Aurora.Profiles;
+using Aurora.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -170,7 +171,7 @@ namespace Aurora
                 ServerThread.Abort();
                 ServerThread = null;
             }
-                
+
 
             if (CommandThread != null)
             {
@@ -178,9 +179,9 @@ namespace Aurora
                 CommandThread = null;
             }
 
-            if(IPCpipeStream != null)
+            if (IPCpipeStream != null)
             {
-                if(IPCpipeStream.IsConnected)
+                if (IPCpipeStream.IsConnected)
                     IPCpipeStream.Disconnect();
                 IPCpipeStream.Dispose();
                 IPCpipeStream = null;
@@ -291,11 +292,11 @@ namespace Aurora
                                     //Begin handling the game state outside this loop
                                     HandleNewIPCGameState(temp);
                                 }
-                                catch(Exception exc)
+                                catch (Exception exc)
                                 {
                                     Global.logger.Error("[IPCServer] HandleNewIPCGameState Exception, " + exc);
                                     //if (Global.isDebug)
-                                        Global.logger.Info("Recieved data that caused error:\n\r"+temp);
+                                    Global.logger.Info("Recieved data that caused error:\n\r" + temp);
                                 }
 
                                 //var task = new System.Threading.Tasks.Task(() => HandleNewIPCGameState(temp));
@@ -378,6 +379,49 @@ namespace Aurora
                 case "restore":
                     Global.logger.Info("Initiating command restore");
                     System.Windows.Application.Current.Dispatcher.Invoke(() => ((ConfigUI)System.Windows.Application.Current.MainWindow).ShowWindow());
+                    break;
+                case "restart_devices":
+                    Global.dev_manager.ResetDevices();
+                    break;
+                case "restart_logitech_devices":
+                    Global.dev_manager.ResetDeviceByName("Logitech", true);
+                    break;
+                case "restart_hassio_devices":
+                    Global.dev_manager.ResetDeviceByName("Hassio");
+                    break;
+                case "restart_nzxt_devices":
+                    Global.dev_manager.ResetDeviceByName("NZXT HUE2 Ambient - (Desktop)");
+                    Global.dev_manager.ResetDeviceByName("NZXT HUE2 Ambient - (Display)");
+                    Global.dev_manager.ResetDeviceByName("NZXT HUE2 Ambient - (TV)");
+                    break;
+                case "restart_rgbfusion_devices":
+                    Global.dev_manager.ResetDeviceByName("RGB Fusion");
+                    break;
+                case "close":
+                    System.Windows.Application.Current.Dispatcher.Invoke(() => ((ConfigUI)System.Windows.Application.Current.MainWindow).exitApp());
+                    break;
+
+                case "brightness_up":
+                    Global.Configuration.GlobalBrightness = Math.Max(0f, Math.Min(1f, Global.Configuration.GlobalBrightness + 0.05f));
+                    ConfigManager.Save(Global.Configuration);
+                    break;
+                case "brightness_down":
+                    Global.Configuration.GlobalBrightness = Math.Max(0f, Math.Min(1f, Global.Configuration.GlobalBrightness - 0.05f));
+                    ConfigManager.Save(Global.Configuration);
+                    break;
+                default:
+                    if (command.Contains("set_desktop_profile_"))
+                    {
+                        ApplicationProfile startupProfile = Global.LightingStateManager.DesktopProfile.Profiles.Where(p => p.ProfileName.ToLower() == command.Replace("set_desktop_profile_", "") || p.ProfileName.ToLower() == "default").FirstOrDefault();
+                        if (startupProfile != null)
+                            (Global.LightingStateManager.DesktopProfile as Aurora.Profiles.Application)?.SwitchToProfile(startupProfile);
+                    }
+                    else if (command.Contains("toggle_device_"))
+                    {
+                        string deviceName = command.Replace("toggle_device_", "");
+                        if (deviceName != null)
+                            Global.dev_manager.ToggleDeviceByName(deviceName);
+                    }
                     break;
             }
         }

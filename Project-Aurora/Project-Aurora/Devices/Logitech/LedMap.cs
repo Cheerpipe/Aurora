@@ -164,15 +164,15 @@ namespace Aurora.Devices.Logitech
             //g703 => 0 is scroll
             //gpro => 0 is everything
             //other mice are not documented on the sdk
-            [DeviceKeys.PERIPHERAL_DPI] =  (DeviceType.Mouse, 0),
+            [DeviceKeys.PERIPHERAL_DPI] = (DeviceType.Mouse, 0),
             [DeviceKeys.Peripheral_Logo] = (DeviceType.Mouse, 1),
             [DeviceKeys.Peripheral_ScrollWheel] = (DeviceType.Mouse, 2),
             [DeviceKeys.MOUSEPADLIGHT1] = (DeviceType.Mousemat, 0),
 
-            [DeviceKeys.PERIPHERAL_LIGHT1] = (DeviceType.Speaker,0),
-            [DeviceKeys.PERIPHERAL_LIGHT2] = (DeviceType.Speaker, 1),
-            [DeviceKeys.PERIPHERAL_LIGHT3] = (DeviceType.Speaker, 2),
-            [DeviceKeys.PERIPHERAL_LIGHT4] = (DeviceType.Speaker, 3),
+            [DeviceKeys.G560_FRONT_LEFT] = (DeviceType.Speaker, 0),
+            [DeviceKeys.G560_FRONT_RIGHT] = (DeviceType.Speaker, 1),
+            [DeviceKeys.G560_REAR_LEFT] = (DeviceType.Speaker, 2),
+            [DeviceKeys.G560_REAR_RIGHT] = (DeviceType.Speaker, 3),
             [DeviceKeys.PERIPHERAL_LIGHT5] = (DeviceType.Headset, 0),
             [DeviceKeys.PERIPHERAL_LIGHT6] = (DeviceType.Headset, 1),
         };

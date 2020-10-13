@@ -1,0 +1,8 @@
+{
+  "keys_to_remove": [],
+  "key_modifications": {},
+  "included_features": [
+    "cheerpipe_rig_logitech_g815_features.json",
+    "cheerpipe_rig_features.json"
+  ]
+}

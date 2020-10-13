@@ -101,7 +101,7 @@ namespace Aurora
             GenerateProfileStack();
             settingsControl.DataContext = this;
 
-            
+
         }
 
         internal void Display()
@@ -124,7 +124,7 @@ namespace Aurora
             profilePresenter.Profile = profile;
 
             if (_selectedManager.Equals(this.ctrlProfileManager))
-                SelectedControl = profilePresenter;   
+                SelectedControl = profilePresenter;
         }
 
         private void CtrlLayerManager_ProfileOverviewRequest(UserControl profile_control)
@@ -166,7 +166,7 @@ namespace Aurora
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
+
 
             if (!settingsloaded)
             {
@@ -287,7 +287,7 @@ namespace Aurora
 
         private void Window_Initialized(object sender, EventArgs e)
         {
-            
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -317,7 +317,7 @@ namespace Aurora
             }
         }
 
-        private void exitApp()
+        public void exitApp()
         {
             trayicon.Visibility = Visibility.Hidden;
             virtual_keyboard_timer?.Stop();
@@ -362,7 +362,7 @@ namespace Aurora
 
         private BitmapImage _visible = new BitmapImage(new Uri(@"Resources/Visible.png", UriKind.Relative));
         private BitmapImage _not_visible = new BitmapImage(new Uri(@"Resources/Not Visible.png", UriKind.Relative));
-        
+
         private void GenerateProfileStack(string focusedKey = null)
         {
             selected_item = null;
@@ -635,8 +635,9 @@ namespace Aurora
         private void AddProfile_MouseDown(object sender, MouseButtonEventArgs e)
         {
 
-            Window_ProcessSelection dialog = new Window_ProcessSelection { CheckCustomPathExists = true, ButtonLabel = "Add Profile", Title ="Add Profile" };
-            if (dialog.ShowDialog() == true && !string.IsNullOrWhiteSpace(dialog.ChosenExecutablePath)) { // do not need to check if dialog is already in excluded_programs since it is a Set and only contains unique items by definition
+            Window_ProcessSelection dialog = new Window_ProcessSelection { CheckCustomPathExists = true, ButtonLabel = "Add Profile", Title = "Add Profile" };
+            if (dialog.ShowDialog() == true && !string.IsNullOrWhiteSpace(dialog.ChosenExecutablePath))
+            { // do not need to check if dialog is already in excluded_programs since it is a Set and only contains unique items by definition
 
                 string filename = Path.GetFileName(dialog.ChosenExecutablePath.ToLowerInvariant());
 
@@ -683,7 +684,7 @@ namespace Aurora
             UpdateProfileStackBackground(sender as FrameworkElement);
         }
         private void cmbtnOpenBitmapWindow_Clicked(object sender, RoutedEventArgs e) => Window_BitmapView.Open();
-        private void cmbtnOpenHttpDebugWindow_Clicked(object sender, RoutedEventArgs e) =>Window_GSIHttpDebug.Open();
+        private void cmbtnOpenHttpDebugWindow_Clicked(object sender, RoutedEventArgs e) => Window_GSIHttpDebug.Open();
 
 
         private void UpdateProfileStackBackground(FrameworkElement item)
@@ -734,7 +735,7 @@ namespace Aurora
                     if (y + height > profiles_background.ActualHeight - 40)
                         height -= (y + height) - (profiles_background.ActualHeight - 40);
                 }
-                
+
                 if (height > 0 && width > 0)
                 {
                     GeometryDrawing transparent_region =
@@ -781,16 +782,16 @@ namespace Aurora
 
         private void UpdateManagerStackFocus(object focusedElement, bool forced = false)
         {
-            if(focusedElement != null && focusedElement is FrameworkElement && (!focusedElement.Equals(_selectedManager) || forced))
+            if (focusedElement != null && focusedElement is FrameworkElement && (!focusedElement.Equals(_selectedManager) || forced))
             {
                 _selectedManager = focusedElement as FrameworkElement;
-                if(gridManagers.ActualHeight != 0)
+                if (gridManagers.ActualHeight != 0)
                     stackPanelManagers.Height = gridManagers.ActualHeight;
                 double totalHeight = stackPanelManagers.Height;
 
                 foreach (FrameworkElement child in stackPanelManagers.Children)
                 {
-                    if(child.Equals(focusedElement))
+                    if (child.Equals(focusedElement))
                         child.Height = totalHeight - (28.0 * (stackPanelManagers.Children.Count - 1));
                     else
                         child.Height = 25.0;
@@ -806,7 +807,8 @@ namespace Aurora
             UpdateManagerStackFocus(sender);
         }
 
-        private void ctrlOverlayLayerManager_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+        private void ctrlOverlayLayerManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
             if (!sender.Equals(_selectedManager))
                 SelectedControl = this.FocusedApplication.Profile.OverlayLayers.Count > 0 ? layerPresenter : this.FocusedApplication.Control;
             UpdateManagerStackFocus(sender);
@@ -825,7 +827,8 @@ namespace Aurora
 
         }
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e) {
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
             UpdateManagerStackFocus(_selectedManager, true);
         }
 
@@ -846,7 +849,8 @@ namespace Aurora
         /// Sets a field and calls <see cref="NotifyChanged(string)"/> with the calling member name and any additional properties.
         /// Designed for setting a field from a property.
         /// </summary>
-        private void SetField<T>(ref T var, T value, string[] additional = null, [CallerMemberName] string name = null) {
+        private void SetField<T>(ref T var, T value, string[] additional = null, [CallerMemberName] string name = null)
+        {
             var = value;
             NotifyChanged(name);
             if (additional != null)
@@ -857,13 +861,16 @@ namespace Aurora
 
         #region Properties
         /// <summary>A reference to the currently selected layer in either the regular or overlay layer list. When set, will update the <see cref="SelectedControl"/> property.</summary>
-        public Layer SelectedLayer {
+        public Layer SelectedLayer
+        {
             get => selectedLayer;
-            set {
+            set
+            {
                 SetField(ref selectedLayer, value);
                 if (value == null)
                     SelectedControl = FocusedApplication?.Control;
-                else {
+                else
+                {
                     layerPresenter.Layer = value;
                     SelectedControl = layerPresenter;
                 }
@@ -871,7 +878,7 @@ namespace Aurora
         }
         private Layer selectedLayer;
 
-       /// <summary>The control that is currently displayed underneath they device preview panel. This could be an overview control or a layer presenter etc.</summary>
+        /// <summary>The control that is currently displayed underneath they device preview panel. This could be an overview control or a layer presenter etc.</summary>
         public Control SelectedControl { get => selectedControl; set => SetField(ref selectedControl, value); }
         private Control selectedControl;
         #endregion
