@@ -315,7 +315,7 @@ namespace Aurora.Devices
 
         public void ToggleDeviceByName(string deviceName)
         {
-            foreach (DeviceContainer device in InitializedDeviceContainers)
+            foreach (DeviceContainer device in DeviceContainers)
             {
                 if (device.Device.IsInitialized && device.Device.DeviceName == deviceName)
                 {
