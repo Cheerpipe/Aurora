@@ -73,16 +73,26 @@ namespace Aurora.Devices.Logitech
                     IsInitialized &= LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(logiKey, key.Value);
                 if (LedMaps.PeripheralMap.TryGetValue(key.Key, out var peripheral))
                 {
-                    if (((peripheral.type == DeviceType.Headset || peripheral.type == DeviceType.Speaker) && !Global.Configuration.DevicesDisableHeadset)
+                    if (((peripheral.type == DeviceType.Headset /*|| peripheral.type == DeviceType.Speaker*/) && !Global.Configuration.DevicesDisableHeadset)
                     || ((peripheral.type == DeviceType.Mouse || peripheral.type == DeviceType.Mousemat) && !Global.Configuration.DevicesDisableMouse))
                     {
                         LogitechGSDK.LogiLedSetLightingForTargetZone(peripheral.type, peripheral.zone, key.Value);
                     }
+
+                    if (peripheral.type == DeviceType.Speaker)
+                    {
+                        Task.Run(() =>
+                        {
+                            SendCommandToListener(new byte[4] { key.Value.R, key.Value.G, key.Value.B, (byte)peripheral.zone }, "G560LedListener");
+                        });
+                        // LogitechGSDK.LogiLedSetLightingForTargetZone(peripheral.type, peripheral.zone, key.Value);
+                    }
                     //Workarround to Powerplay not working with Logitech SDK
                     if (key.Key == DeviceKeys.Peripheral_Logo)
                     {
-                        Task.Run(() => { SendCommandToRGBFusion(new byte[3] { key.Value.R, key.Value.G, key.Value.B }); });
+                        Task.Run(() => { SendCommandToListener(new byte[3] { key.Value.R, key.Value.G, key.Value.B }, "PowerPlayLedController"); });
                     }
+
                 }
 
                 //TargetZone returns false if the targer device does not have the zone with the specified index
@@ -96,11 +106,11 @@ namespace Aurora.Devices.Logitech
             return IsInitialized;
         }
 
-        public bool SendCommandToRGBFusion(byte[] args)
+        public bool SendCommandToListener(byte[] args, string listenerPipeName)
         {
             try
             {
-                using (var pipe = new NamedPipeClientStream(".", "PowerPlayLedController", PipeDirection.Out))
+                using (var pipe = new NamedPipeClientStream(".", listenerPipeName, PipeDirection.Out))
                 using (var stream = new BinaryWriter(pipe))
                 {
                     pipe.Connect(15);
