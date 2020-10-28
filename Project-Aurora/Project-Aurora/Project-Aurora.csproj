@@ -16,7 +16,7 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <UseWPF>true</UseWPF>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>$(SolutionDir)..\Build\$(Configuration)</OutputPath>
+    <OutputPath>C:\Program Files\Aurora\</OutputPath>
     <ApplicationIcon>Resources\aurora_icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -63,7 +63,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Bloody.NET" Version="1.0.4"/>
+	<PackageReference Include="Bloody.NET" Version="1.0.4" />
     <PackageReference Include="Colore" Version="5.2.0" />
     <PackageReference Include="CorsairRGB.NET" Version="1.1.0" />
     <PackageReference Include="CS-Script" Version="3.30.0" />
@@ -188,6 +188,15 @@
     <Resource Include="Resources\Win64\Aurora-LightFXWrapper.dll" />
     <Resource Include="Resources\Win64\Aurora-LogiLEDWrapper.dll" />
     <Resource Include="Resources\Win64\Aurora-RazerLEDWrapper.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="kb_layouts\Extra Features\cheerpipe_rig_features.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="kb_layouts\Extra Features\cheerpipe_rig_logitech_g815_features.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
