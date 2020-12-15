@@ -1565,6 +1565,17 @@
       "absolute_location": true
     },
     {
+      "visualName": "Back Table",
+      "tag": 891,
+      "margin_left": 660,
+      "margin_top": -250,
+      "width": 100,
+      "height": 20.0,
+      "font_size": 8.0,
+      "enabled": true,
+      "absolute_location": true
+    },
+    {
       "visualName": "SPK RL",
       "tag": 302,
       "margin_left": -40,

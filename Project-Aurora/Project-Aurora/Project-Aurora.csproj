@@ -44,6 +44,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\LibreHardwareMonitorLib.dll</HintPath>
     </Reference>
+    <Reference Include="MagicHome">
+      <HintPath>MagicHome.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
     <Reference Include="OmenFourZoneLighting, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\OmenFourZoneLighting.dll</HintPath>

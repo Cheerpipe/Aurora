@@ -2703,6 +2703,13 @@ namespace Aurora.Devices
 
 
 
+        ///<summary>
+        /// Calculator Key
+        /// </summary>
+        [Description("Back Table")]
+        BACKTABLE = 891,
+
+
         /// <summary>
         /// None
         /// </summary>

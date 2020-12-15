@@ -100,6 +100,7 @@ namespace Aurora.Devices
             DeviceContainers.Add(new DeviceContainer(new Devices.NZXTHUE2Ambient.NZXTHUE2("TV", 2, Aurora.Devices.NZXTHUE2Ambient.DeviceMaps.HUE2TVDeviceMap.GetDeviceMap(Color.Black))));        // HUE 2 Display
             DeviceContainers.Add(new DeviceContainer(new Devices.HassioLightDevice.HassioLightDevice()));         // HASSIO Client
             DeviceContainers.Add(new DeviceContainer(new Devices.RGBFusion.RGBFusionDevice()));        // RGBFusion Bridge
+            DeviceContainers.Add(new DeviceContainer(new Devices.MagicHomeDevice.MagicHomeDevice()));        // Magic Home Strip
 
 
 
